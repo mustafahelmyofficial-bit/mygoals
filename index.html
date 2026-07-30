@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم الشخصية | Architect Dashboard</title>
+  
+  <!-- PWA Manifest Integration -->
+  <link rel="manifest" id="manifest-placeholder">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js for Statistics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #F4EFEA;
+      --bg-gradient: linear-gradient(135deg, #EFE8DF 0%, #E3D7C7 100%);
+      --glass-bg: rgba(255, 255, 255, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.6);
+      --glass-shadow: 0 8px 32px 0 rgba(60, 48, 38, 0.08);
+      
+      --text-main: #2D221E;
+      --text-muted: #7A6A5D;
+      --accent-gold: #C59B27;
+      --accent-gold-dark: #A37F1E;
+      --accent-brown: #5C4333;
+      --accent-green: #4A6B53;
+      --accent-red: #A84949;
+      
+      --card-radius: 20px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body.dark-mode {
+      --bg-primary: #1C1816;
+      --bg-gradient: linear-gradient(135deg, #1A1614 0%, #29221D 100%);
+      --glass-bg: rgba(45, 34, 30, 0.55);
+      --glass-border: rgba(212, 175, 55, 0.15);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      
+      --text-main: #EFE8DF;
+      --text-muted: #B0A093;
+      --accent-gold: #E5B83B;
+      --accent-brown: #8D6E58;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    /* Glassmorphism Card Style */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--glass-shadow);
+      padding: 22px;
+      transition: var(--transition);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(60, 48, 38, 0.12);
+    }
+
+    /* Top Navigation / Dashboard Header */
+    header.dashboard-header {
+      grid-column: span 12;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .welcome-box h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-brown);
+    }
+    body.dark-mode .welcome-box h1 { color: var(--accent-gold); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .badge-streak {
+      background: rgba(197, 155, 39, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-dark);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      background: var(--accent-gold);
+      color: #fff;
+    }
+
+    /* Quote Banner */
+    .quote-card {
+      grid-column: span 12;
+      text-align: center;
+      border-right: 4px solid var(--accent-gold);
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Layout Sections */
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+
+    @media (max-width: 992px) {
+      .col-4, .col-6, .col-8 { grid-column: span 12; }
+    }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent-brown);
+      border-bottom: 2px solid rgba(197, 155, 39, 0.2);
+      padding-bottom: 8px;
+    }
+    body.dark-mode .section-title { color: var(--accent-gold); }
+
+    /* Progress Bar */
+    .progress-container {
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown));
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: 20px;
+    }
+
+    /* Checklist Tasks */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: var(--transition);
+    }
+    .task-item:hover {
+      background: rgba(255, 255, 255, 0.45);
+    }
+    .task-item label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      flex-grow: 1;
+    }
+    .task-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+
+    /* Counter Control Buttons */
+    .counter-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn-counter {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent-brown);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-counter:hover { background: var(--accent-gold); }
+    .number-input {
+      width: 70px;
+      text-align: center;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.5);
+      font-weight: bold;
+    }
+
+    /* Buttons */
+    .btn-action {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover { opacity: 0.9; transform: scale(1.02); }
+
+    .btn-panic {
+      background: linear-gradient(135deg, #D9534F, #C9302C);
+      color: white;
+    }
+
+    /* Pomodoro Timer Style */
+    .timer-display {
+      font-size: 2.8rem;
+      font-weight: 800;
+      text-align: center;
+      font-family: monospace;
+      color: var(--accent-brown);
+      margin: 10px 0;
+    }
+    body.dark-mode .timer-display { color: var(--accent-gold); }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Dashboard Header -->
+    <header class="glass-card dashboard-header">
+      <div class="welcome-box">
+        <h1>👋 مرحباً بك، باشمهندس!</h1>
+        <p id="live-date" class="text-muted" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;"></p>
+      </div>
+
+      <div class="header-actions">
+        <div class="badge-streak">
+          <i class="fa-solid fa-fire"></i>
+          <span id="streak-count">7 أيّام متواصلة</span>
+        </div>
+        <div style="text-align: left; margin: 0 10px;">
+          <div id="live-clock" style="font-size: 1.2rem; font-weight: bold; color: var(--accent-brown);"></div>
+        </div>
+        <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="icon-btn btn-panic" id="distract-btn" title="أنا مشتت!">
+          <i class="fa-solid fa-brain"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Daily Quote -->
+    <div class="glass-card quote-card">
+      <p id="daily-quote">"التزامك اليوم .. يصنع نجاحك غداً"</p>
+    </div>
+
+    <!-- Daily Tasks Checklist -->
+    <section class="glass-card col-6">
+      <div class="section-title">
+        <i class="fa-solid fa-list-check"></i> المهام اليومية
+      </div>
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة الإنجاز اليومي:</span>
+        <div class="progress-container">
+          <div class="progress-bar" id="tasks-progress"></div>
+        </div>
+      </div>
+      <div class="task-list" id="tasks-container">
+        <!-- Dynamic Tasks via JS -->
+      </div>
+    </section>
+
+    <!-- Prayers Tracker -->
+    <section class="glass-card col-6">
+      <div class="section-title">
+        <i class="fa-solid fa-mosque"></i> الصلوات الخمس
+      </div>
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
+        <div class="progress-container">
+          <div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div>
+        </div>
+      </div>
+      <div class="task-list" id="prayers-container">
+        <!-- Dynamic Prayers via JS -->
+      </div>
+    </section>
+
+    <!-- Surah Al-Baqarah Tracker -->
+    <section class="glass-card col-4">
+      <div class="section-title">
+        <i class="fa-solid fa-book-quran"></i> سورة البقرة
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">الصفحات المحفوظة / المقروءة:</p>
+      <div class="counter-control">
+        <button class="btn-counter" onclick="updateQuran(-1)">-</button>
+        <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
+        <button class="btn-counter" onclick="updateQuran(1)">+</button>
+        <span>من 48 صفحة</span>
+      </div>
+      <div class="progress-container" style="margin-top: 15px;">
+        <div class="progress-bar" id="quran-progress"></div>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;" id="quran-status">آخر صفحة وصلت لها: 0</p>
+    </section>
+
+    <!-- Courses Trackers -->
+    <section class="glass-card col-4">
+      <div class="section-title">
+        <i class="fa-solid fa-compass-drafting"></i> كورس الديكور والتشطيبات
+      </div>
+      
+      <!-- Decor -->
+      <div style="margin-bottom: 15px;">
+        <p font-weight: bold;>🎨 كورس الديكور</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+          <label><input type="checkbox" id="decor-today" onchange="saveCoursesData()"> تمت ذاكرة اليوم</label>
+          <div class="counter-control" style="margin: 0;">
+            <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
+            <span id="decor-lesson-val" style="font-weight: bold;">0</span>
+            <button class="btn-counter" onclick="updateLesson('decor', 1)">+</button>
+          </div>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px dashed var(--glass-border); margin: 10px 0;">
+      <!-- Finishing -->
+      <div>
+        <p font-weight: bold;>🛠️ كورس التشطيبات</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+          <label><input type="checkbox" id="finishing-today" onchange="saveCoursesData()"> تمت ذاكرة اليوم</label>
+          <div class="counter-control" style="margin: 0;">
+            <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
+            <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
+            <button class="btn-counter" onclick="updateLesson('finishing', 1)">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- English Tracker -->
+    <section class="glass-card col-4">
+      <div class="section-title">
+        <i class="fa-solid fa-language"></i> تطوير الإنجليزية
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span>عدد الدروس المكتملة:</span>
+          <input type="number" id="eng-lessons" class="number-input" value="0" onchange="saveEngData()">
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>ساعات المذاكرة:</span>
+          <input type="number" id="eng-hours" class="number-input" value="0" onchange="saveEngData()">
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>آخر درس:</span>
+          <input type="text" id="eng-last" placeholder="اسم/رقم الدرس" style="border-radius: 8px; border: 1px solid var(--glass-border); padding: 4px 8px; width: 50%;" onchange="saveEngData()">
+        </div>
+      </div>
+    </section>
+
+    <!-- iPhone Savings Tracker -->
+    <section class="glass-card col-6">
+      <div class="section-title">
+        <i class="fa-solid fa-mobile-screen-button"></i> الادخار للآيفون 🍎
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <span>المبلغ الحالي: <strong id="savings-current">0</strong> ج.م</span>
+        <span>المستهدف: <strong id="savings-target">50000</strong> ج.م</span>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar" id="savings-progress"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+        <div class="counter-control" style="margin:0;">
+          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
+          <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted);" id="savings-estimate">التوقع: --</span>
+      </div>
+    </section>
+
+    <!-- Social Goal 10K -->
+    <section class="glass-card col-6">
+      <div class="section-title">
+        <i class="fa-solid fa-bullhorn"></i> هدف 10K متابع 🎯
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span>المتابعين الحاليين:</span>
+        <input type="number" id="followers-count" class="number-input" value="1200" style="width: 100px;" onchange="updateFollowers()">
+      </div>
+      <div class="progress-container" style="margin-top: 15px;">
+        <div class="progress-bar" id="followers-progress" style="background: linear-gradient(90deg, #E1306C, #FD1D1D);"></div>
+      </div>
+      <p style="font-size: 0.85rem; text-align: center; margin-top: 8px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
+    </section>
+
+    <!-- Pomodoro Timer -->
+    <section class="glass-card col-4">
+      <div class="section-title">
+        <i class="fa-solid fa-stopwatch"></i> مؤقت البومودورو 🍅
+      </div>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div style="display: flex; justify-content: center; gap: 10px;">
+        <button class="btn-action" id="start-timer-btn" onclick="toggleTimer()">بدء</button>
+        <button class="btn-action" style="background: var(--text-muted);" onclick="resetTimer()">إعادة ضبط</button>
+      </div>
+    </section>
+
+    <!-- Daily Notes -->
+    <section class="glass-card col-8">
+      <div class="section-title">
+        <i class="fa-solid fa-note-sticky"></i> ملاحظات اليوم 📝
+      </div>
+      <textarea id="daily-notes" placeholder="اكتب ملاحظاتك، أفكارك للتصميم، أو المهام الجانبية هنا..." style="width: 100%; height: 100px; border-radius: 12px; border: 1px solid var(--glass-border); padding: 10px; background: rgba(255,255,255,0.3); resize: none; font-family: inherit;" oninput="saveNotes()"></textarea>
+    </section>
+
+    <!-- Statistics Chart -->
+    <section class="glass-card col-12">
+      <div class="section-title">
+        <i class="fa-solid fa-chart-line"></i> الإحصائيات والأداء 📊
+      </div>
+      <div style="max-height: 250px; position: relative;">
+        <canvas id="statsChart"></canvas>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Distraction Modal -->
+  <div class="modal" id="distract-modal">
+    <div class="glass-card modal-content">
+      <h2 style="color: var(--accent-brown); margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h2>
+      <p style="margin-bottom: 20px; color: var(--text-muted);">التشتت طبيعي! خذ 4 ثوان للشهيق، و4 ثوان للزفير، ثم عد لتركيزك في مهمتك الحالية.</p>
+      <button class="btn-action" onclick="closeModal()">أنا جاهز للعودة 💪</button>
+    </div>
+  </div>
+
+  <script>
+    // App State / Data Store
+    const defaultTasks = [
+      { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
+      { id: 'english', title: '🇬🇧 تعلم الإنجليزية' },
+      { id: 'sketchup', title: '📐 SketchUp' },
+      { id: 'autocad', title: '🖥️ AutoCAD' },
+      { id: 'd5', title: '🎬 D5 Render' },
+      { id: 'gym', title: '💪 الجيم' },
+      { id: 'content', title: '🎥 صناعة المحتوى' }
+    ];
+
+    const prayersList = [
+      { id: 'fajr', title: '🌅 صلاة الفجر' },
+      { id: 'dhuhr', title: '☀️ صلاة الظهر' },
+      { id: 'asr', title: '🌤️ صلاة العصر' },
+      { id: 'maghrib', title: '🌅 صلاة المغرب' },
+      { id: 'isha', title: '🌙 صلاة العشاء' }
+    ];
+
+    const quotes = [
+      "التزامك اليوم .. يصنع نجاحك غداً 🏛️",
+      "التفاصيل الصغيرة هي التي تصنع التصميم العظيم ✨",
+      "خطوة صغيرة يومياً تؤدي لإنجازات استثنائية 🚀",
+      "استمر، حتى النجاح يصبح عادة يومية ☕"
+    ];
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      initClock();
+      initQuotes();
+      renderTasks();
+      renderPrayers();
+      loadSavedData();
+      initChart();
+      setupPWA();
+    });
+
+    // Clock & Date
+    function initClock() {
+      const update = () => {
+        const now = new Date();
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    // Quotes
+    function initQuotes() {
+      const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+      document.getElementById('daily-quote').innerText = `"${quotes[dayOfYear % quotes.length]}"`;
+    }
+
+    // Render Checklist
+    function renderTasks() {
+      const container = document.getElementById('tasks-container');
+      const saved = JSON.parse(localStorage.getItem('daily_tasks') || '{}');
+      
+      container.innerHTML = defaultTasks.map(t => `
+        <div class="task-item">
+          <label>
+            <input type="checkbox" onchange="toggleTask('${t.id}')" ${saved[t.id] ? 'checked' : ''}>
+            <span>${t.title}</span>
+          </label>
+        </div>
+      `).join('');
+      updateProgress('tasks-progress', defaultTasks, saved);
+    }
+
+    function renderPrayers() {
+      const container = document.getElementById('prayers-container');
+      const saved = JSON.parse(localStorage.getItem('prayers_tasks') || '{}');
+      
+      container.innerHTML = prayersList.map(p => `
+        <div class="task-item">
+          <label>
+            <input type="checkbox" onchange="togglePrayer('${p.id}')" ${saved[p.id] ? 'checked' : ''}>
+            <span>${p.title}</span>
+          </label>
+        </div>
+      `).join('');
+      updateProgress('prayers-progress', prayersList, saved);
+    }
+
+    function toggleTask(id) {
+      const saved = JSON.parse(localStorage.getItem('daily_tasks') || '{}');
+      saved[id] = !saved[id];
+      localStorage.setItem('daily_tasks', JSON.stringify(saved));
+      updateProgress('tasks-progress', defaultTasks, saved);
+    }
+
+    function togglePrayer(id) {
+      const saved = JSON.parse(localStorage.getItem('prayers_tasks') || '{}');
+      saved[id] = !saved[id];
+      localStorage.setItem('prayers_tasks', JSON.stringify(saved));
+      updateProgress('prayers-progress', prayersList, saved);
+    }
+
+    function updateProgress(barId, list, savedObj) {
+      const completed = list.filter(item => savedObj[item.id]).length;
+      const percent = Math.round((completed / list.length) * 100);
+      document.getElementById(barId).style.width = percent + '%';
+    }
+
+    // Quran Tracker
+    function updateQuran(val) {
+      const input = document.getElementById('quran-page-input');
+      let curr = parseInt(input.value) || 0;
+      curr = Math.max(0, Math.min(48, curr + val));
+      input.value = curr;
+      setQuranPage(curr);
+    }
+
+    function setQuranPage(val) {
+      val = Math.max(0, Math.min(48, parseInt(val) || 0));
+      localStorage.setItem('quran_page', val);
+      document.getElementById('quran-progress').style.width = ((val / 48) * 100) + '%';
+      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${val}`;
+    }
+
+    // Courses & English Trackers
+    function updateLesson(course, val) {
+      const el = document.getElementById(`${course}-lesson-val`);
+      let curr = parseInt(el.innerText) || 0;
+      curr = Math.max(0, curr + val);
+      el.innerText = curr;
+      saveCoursesData();
+    }
+
+    function saveCoursesData() {
+      const data = {
+        decorToday: document.getElementById('decor-today').checked,
+        decorVal: document.getElementById('decor-lesson-val').innerText,
+        finishingToday: document.getElementById('finishing-today').checked,
+        finishingVal: document.getElementById('finishing-lesson-val').innerText
+      };
+      localStorage.setItem('courses_data', JSON.stringify(data));
+    }
+
+    function saveEngData() {
+      const data = {
+        lessons: document.getElementById('eng-lessons').value,
+        hours: document.getElementById('eng-hours').value,
+        last: document.getElementById('eng-last').value
+      };
+      localStorage.setItem('eng_data', JSON.stringify(data));
+    }
+
+    // Savings
+    function adjustSavings(amt) {
+      let curr = parseInt(localStorage.getItem('savings') || '15000');
+      curr = Math.max(0, curr + amt);
+      localStorage.setItem('savings', curr);
+      renderSavings();
+    }
+
+    function renderSavings() {
+      const curr = parseInt(localStorage.getItem('savings') || '15000');
+      const target = 50000;
+      document.getElementById('savings-current').innerText = curr.toLocaleString();
+      document.getElementById('savings-progress').style.width = Math.min(100, (curr / target) * 100) + '%';
+      
+      const rem = target - curr;
+      const monthsLeft = Math.ceil(rem / 3000); // 3000 saving per month assumption
+      document.getElementById('savings-estimate').innerText = rem <= 0 ? '🎉 مكتمل!' : `متوقع الإنجاز خلال ~${monthsLeft} أشهر`;
+    }
+
+    // Followers Goal
+    function updateFollowers() {
+      const val = parseInt(document.getElementById('followers-count').value) || 0;
+      localStorage.setItem('followers', val);
+      const pct = Math.min(100, Math.round((val / 10000) * 100));
+      document.getElementById('followers-progress').style.width = pct + '%';
+      document.getElementById('followers-percent').innerText = `${pct}% مكتمل من الهدف (10,000)`;
+    }
+
+    // Notes
+    function saveNotes() {
+      localStorage.setItem('daily_notes', document.getElementById('daily-notes').value);
+    }
+
+    // Load Data
+    function loadSavedData() {
+      // Quran
+      const qPage = localStorage.getItem('quran_page') || 0;
+      document.getElementById('quran-page-input').value = qPage;
+      setQuranPage(qPage);
+
+      // Courses
+      const cData = JSON.parse(localStorage.getItem('courses_data') || '{}');
+      if (cData.decorToday) document.getElementById('decor-today').checked = true;
+      if (cData.decorVal) document.getElementById('decor-lesson-val').innerText = cData.decorVal;
+      if (cData.finishingToday) document.getElementById('finishing-today').checked = true;
+      if (cData.finishingVal) document.getElementById('finishing-lesson-val').innerText = cData.finishingVal;
+
+      // English
+      const eData = JSON.parse(localStorage.getItem('eng_data') || '{}');
+      if (eData.lessons) document.getElementById('eng-lessons').value = eData.lessons;
+      if (eData.hours) document.getElementById('eng-hours').value = eData.hours;
+      if (eData.last) document.getElementById('eng-last').value = eData.last;
+
+      // Savings
+      renderSavings();
+
+      // Followers
+      const fVal = localStorage.getItem('followers') || 1200;
+      document.getElementById('followers-count').value = fVal;
+      updateFollowers();
+
+      // Notes
+      document.getElementById('daily-notes').value = localStorage.getItem('daily_notes') || '';
+    }
+
+    // Theme Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+
+    // Panic Modal
+    document.getElementById('distract-btn').onclick = () => {
+      document.getElementById('distract-modal').style.display = 'flex';
+    };
+    function closeModal() {
+      document.getElementById('distract-modal').style.display = 'none';
+    }
+
+    // Pomodoro Timer
+    let timerState = { seconds: 1500, running: false, interval: null };
+    function toggleTimer() {
+      const btn = document.getElementById('start-timer-btn');
+      if (timerState.running) {
+        clearInterval(timerState.interval);
+        timerState.running = false;
+        btn.innerText = 'استئناف';
+      } else {
+        timerState.running = true;
+        btn.innerText = 'إيقاف مؤقت';
+        timerState.interval = setInterval(() => {
+          if (timerState.seconds > 0) {
+            timerState.seconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerState.interval);
+            alert('انتهت جلسة التركيز! خذ استراحة قصيرة.');
+            resetTimer();
+          }
+        }, 1000);
+      }
+    }
+    function resetTimer() {
+      clearInterval(timerState.interval);
+      timerState.running = false;
+      timerState.seconds = 1500;
+      document.getElementById('start-timer-btn').innerText = 'بدء';
+      updateTimerDisplay();
+    }
+    function updateTimerDisplay() {
+      const m = String(Math.floor(timerState.seconds / 60)).padStart(2, '0');
+      const s = String(timerState.seconds % 60).padStart(2, '0');
+      document.getElementById('timer-display').innerText = `${m}:${s}`;
+    }
+
+    // Analytics Chart
+    function initChart() {
+      const ctx = document.getElementById('statsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+          datasets: [{
+            label: 'معدل الإنجاز الأسبوعي %',
+            data: [75, 85, 60, 90, 80, 95, 70],
+            borderColor: '#C59B27',
+            backgroundColor: 'rgba(197, 155, 39, 0.15)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { min: 0, max: 100 }
+          }
+        }
+      });
+    }
+
+    // PWA Manifest Generation Inline
+    function setupPWA() {
+      const manifest = {
+        name: "Architect Dashboard",
+        short_name: "Dashboard",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#F4EFEA",
+        theme_color: "#5C4333",
+        icons: [{ src: "https://cdn-icons-png.flaticon.com/512/1048/1048927.png", sizes: "512x512", type: "image/png" }]
+      };
+      const stringManifest = JSON.stringify(manifest);
+      const blob = new Blob([stringManifest], {type: 'application/json'});
+      const manifestURL = URL.createObjectURL(blob);
+      document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
+    }
+  </script>
+<script>console.log("v1 loaded");</script></body>
+</html>
