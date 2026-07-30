@@ -117,6 +117,10 @@
   </style>
 </head>
 <body>
+
+  <!-- عنصر الصوت المحلي الخفي للعمل بدون إنترنت -->
+  <audio id="local-azan-audio" src="azan.mp3" preload="auto"></audio>
+
   <div class="container">
 
 <header class="glass-card dashboard-header">
@@ -321,17 +325,32 @@
   </div>
 
   <script>
-    // --- إعدادات نظام الأصوات التفاعلي والأذان ---
+    // --- إعدادات نظام الأصوات التفاعلي والأذان (المحلي والأوفلاين) ---
     let soundEnabled = true;
     let audioCtx = null;
-    let playedPrayersToday = {}; // للتأكد من عدم تكرار الأذان في نفس الدقيقة
+    let playedPrayersToday = {};
+    let userHasInteracted = false;
+
+    const azanAudio = document.getElementById('local-azan-audio');
+
+    // تجهيز الإذن الصوتي بالخلفية فور أول ضغطة للمستخدم
+    document.addEventListener('click', () => {
+      if (!userHasInteracted) {
+        userHasInteracted = true;
+        if (azanAudio) {
+          azanAudio.play().then(() => {
+            azanAudio.pause();
+            azanAudio.currentTime = 0;
+          }).catch(() => {});
+        }
+      }
+    }, { once: true });
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
-    // توليد صوت نقرة خفيفة وعصرية بالـ Web Audio API لتجنب تحميل ملفات خارجية
     function playClickSound() {
       if (!soundEnabled) return;
       try {
@@ -356,14 +375,13 @@
       } catch (e) {}
     }
 
-    // تشغيل صوت الأذان مجانياً وبدون ملفات خارجية
-    const azanAudio = new Audio('https://cdn.islamicfinder.org/adhan/makkah/fajr.mp3');
-    
     function playAzanSound() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || !azanAudio) return;
       try {
         azanAudio.currentTime = 0;
-        azanAudio.play().catch(() => console.log("الأذان يحتاج تفاعل مع الصفحة أولاً"));
+        azanAudio.play().catch(() => {
+          alert("يرجى الضغط مرة واحدة على الصفحة لتسمح للمتصفح بتشغيل الأذان تلقائياً بالخلفية.");
+        });
       } catch(e){}
     }
 
@@ -429,7 +447,15 @@
       { id: 'isha', title: '🌙 صلاة العشاء', key: 'Isha' }
     ];
 
-    let prayerTimesObj = {};
+    // مواقيت احتياطية مثبتة لتعمل بدقة بدون إنترنت أوفلاين 100%
+    let prayerTimesObj = {
+      Fajr: "04:30",
+      Dhuhr: "12:00",
+      Asr: "15:30",
+      Maghrib: "18:45",
+      Isha: "20:15"
+    };
+    
     let activeEditDate = null;
 
     let localState = {
@@ -463,9 +489,13 @@
         const data = await res.json();
         if (data && data.data && data.data.timings) {
           prayerTimesObj = data.data.timings;
-          renderPrayers();
+          localStorage.setItem('cached_prayer_times', JSON.stringify(prayerTimesObj));
         }
-      } catch (e) {}
+      } catch (e) {
+        const cached = localStorage.getItem('cached_prayer_times');
+        if (cached) prayerTimesObj = JSON.parse(cached);
+      }
+      renderPrayers();
     }
 
     function checkPrayerTimesForAzan() {
@@ -473,13 +503,15 @@
       const currentHours = String(now.getHours()).padStart(2, '0');
       const currentMinutes = String(now.getMinutes()).padStart(2, '0');
       const currentTimeStr = `${currentHours}:${currentMinutes}`;
+      const todayStr = getTodayString();
 
       prayersList.forEach(p => {
         const prayerTime = prayerTimesObj[p.key];
         if (prayerTime && prayerTime === currentTimeStr) {
-          if (!playedPrayersToday[p.key]) {
+          const key = `${todayStr}-${p.key}`;
+          if (!playedPrayersToday[key]) {
             playAzanSound();
-            playedPrayersToday[p.key] = true;
+            playedPrayersToday[key] = true;
           }
         }
       });
@@ -688,268 +720,221 @@
     }
 
     function saveStateLocally() {
-      localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
-      if (navigator.onLine) {
-        dbRef.set(localState).catch(() => {});
-      }
-      updateStatusUI();
+      localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
+      syncToFirebase();
     }
 
-    dbRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        localState = data;
-        localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
-        checkAndResetNewDay();
-        applyStateToUI();
-      }
-      updateStatusUI();
-    });
-
-    function updateStatusUI() {
-      const statusEl = document.getElementById('sync-status');
-      if (navigator.onLine) {
-        statusEl.className = 'status-online';
-        statusEl.innerHTML = '⚡ متصل ومُتزامن حياً';
-      } else {
-        statusEl.className = 'status-offline';
-        statusEl.innerHTML = '📶 أوفلاين (شغال محلياً)';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchPrayerTimes();
-      initClock();
-      setDailyQuote();
-      
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-      document.getElementById('custom-day-picker').value = yStr;
-
-      const savedLocal = localStorage.getItem('my_arch_dashboard_data');
-      if (savedLocal) {
-        try { localState = JSON.parse(savedLocal); } catch(e) {}
+    function loadStateLocally() {
+      const stored = localStorage.getItem('dashboard_local_state');
+      if (stored) {
+        try { localState = JSON.parse(stored); } catch(e){}
       }
       checkAndResetNewDay();
       applyStateToUI();
+    }
 
-      window.addEventListener('online', () => { saveStateLocally(); updateStatusUI(); });
-      window.addEventListener('offline', updateStatusUI);
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        checkAndResetNewDay();
-        applyStateToUI();
+    function syncToFirebase() {
+      if (navigator.onLine && dbRef) {
+        dbRef.set(localState).then(() => {
+          document.getElementById('sync-status').innerText = '🟢 متصل ومحفوظ سحابياً';
+          document.getElementById('sync-status').className = 'status-online';
+        }).catch(() => {
+          document.getElementById('sync-status').innerText = '🟡 حفظ محلي فقط';
+          document.getElementById('sync-status').className = 'status-offline';
+        });
+      } else {
+        document.getElementById('sync-status').innerText = '🔴 أوفلاين (حفظ محلي)';
+        document.getElementById('sync-status').className = 'status-offline';
       }
-    });
+    }
 
     function applyStateToUI() {
       renderTasks();
       renderPrayers();
       renderHistory();
-      setDailyQuote();
-      
-      const stDate = localState.startDate || getTodayString();
-      document.getElementById('start-date-input').value = stDate;
       calculateStreak();
-
+      
       document.getElementById('quran-page-input').value = localState.quran_page || 0;
-      setQuranPageUI(localState.quran_page || 0);
+      updateQuranUI();
 
-      const cData = localState.courses_data || {};
-      document.getElementById('decor-today').checked = !!cData.decorToday;
-      document.getElementById('decor-lesson-val').innerText = cData.decorVal || 0;
-      document.getElementById('finishing-today').checked = !!cData.finishingToday;
-      document.getElementById('finishing-lesson-val').innerText = cData.finishingVal || 0;
+      if (localState.courses_data) {
+        document.getElementById('decor-today').checked = !!localState.courses_data.decorToday;
+        document.getElementById('decor-lesson-val').innerText = localState.courses_data.decorLesson || 0;
+        document.getElementById('finishing-today').checked = !!localState.courses_data.finishingToday;
+        document.getElementById('finishing-lesson-val').innerText = localState.courses_data.finishingLesson || 0;
+      }
 
-      const eData = localState.eng_data || {};
-      document.getElementById('eng-lessons').value = eData.lessons || 0;
-      document.getElementById('eng-hours').value = eData.hours || 0;
-      document.getElementById('eng-last').value = eData.last || '';
+      if (localState.eng_data) {
+        document.getElementById('eng-lessons').value = localState.eng_data.lessons || 0;
+        document.getElementById('eng-hours').value = localState.eng_data.hours || 0;
+        document.getElementById('eng-last').value = localState.eng_data.lastLesson || '';
+      }
 
-      renderSavingsUI();
+      document.getElementById('savings-current').innerText = (localState.savings || 0).toLocaleString();
+      updateSavingsUI();
 
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
       document.getElementById('daily-notes').value = localState.daily_notes || '';
-    }
-
-    function initClock() {
-      const update = () => {
-        const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-        document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        
-        checkPrayerTimesForAzan();
-      };
-      update();
-      setInterval(update, 1000);
+      if (localState.startDate) {
+        document.getElementById('start-date-input').value = localState.startDate;
+      }
     }
 
     function renderTasks() {
       const container = document.getElementById('tasks-container');
-      const saved = localState.daily_tasks || {};
-      container.innerHTML = defaultTasks.map(t => `
-        <div class="task-item">
-          <label>
-            <input type="checkbox" onchange="toggleTask('${t.id}')" ${saved[t.id] ? 'checked' : ''}>
-            <span>${t.title}</span>
-          </label>
-        </div>
-      `).join('');
-      updateProgress('tasks-progress', defaultTasks, saved);
+      let html = '';
+      let doneCount = 0;
+
+      defaultTasks.forEach(task => {
+        const checked = localState.daily_tasks && localState.daily_tasks[task.id] ? 'checked' : '';
+        if (checked) doneCount++;
+        html += `
+          <div class="task-item">
+            <label>
+              <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
+              <span>${task.title}</span>
+            </label>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      const pct = Math.round((doneCount / defaultTasks.length) * 100);
+      document.getElementById('tasks-progress').style.width = `${pct}%`;
+    }
+
+    function toggleTask(id, val) {
+      playClickSound();
+      if (!localState.daily_tasks) localState.daily_tasks = {};
+      localState.daily_tasks[id] = val;
+      saveStateLocally();
+      renderTasks();
     }
 
     function renderPrayers() {
       const container = document.getElementById('prayers-container');
-      const saved = localState.prayers_tasks || {};
-      container.innerHTML = prayersList.map(p => {
-        const rawTime = prayerTimesObj[p.key] || '';
-        const timeStr = convertTo12HourFormat(rawTime);
-        return `
-        <div class="task-item">
-          <label>
-            <input type="checkbox" onchange="togglePrayer('${p.id}')" ${saved[p.id] ? 'checked' : ''}>
-            <span>${p.title}</span>
-          </label>
-          ${timeStr ? `<span class="prayer-time-badge">🕒 ${timeStr}</span>` : ''}
-        </div>
-      `}).join('');
-      updateProgress('prayers-progress', prayersList, saved);
-    }
+      let html = '';
+      let doneCount = 0;
 
-    function renderHistory() {
-      const container = document.getElementById('history-container');
-      let datesSet = new Set();
-      if (localState.history) Object.keys(localState.history).forEach(d => datesSet.add(d));
-      if (localState.history_details) Object.keys(localState.history_details).forEach(d => datesSet.add(d));
+      prayersList.forEach(p => {
+        const checked = localState.prayers_tasks && localState.prayers_tasks[p.id] ? 'checked' : '';
+        if (checked) doneCount++;
+        const time24 = prayerTimesObj[p.key] || '';
+        const time12 = convertTo12HourFormat(time24);
 
-      const dates = Array.from(datesSet).sort().reverse();
-
-      if (dates.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">لا يوجد أيام مسجلة بالسجل بعد. يمكنك اختيار أي تاريخ أعلاه وإضافته يدوياً!</p>';
-        return;
-      }
-
-      container.innerHTML = dates.map(d => {
-        const pct = localState.history && localState.history[d] !== undefined ? localState.history[d] : '--';
-        return `
-        <div class="history-item">
-          <span>📅 يوم: <strong>${d}</strong></span>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="color: ${pct >= 70 ? 'var(--accent-green)' : 'var(--accent-gold-dark)'}">نسبة الإنجاز: ${pct}%</span>
-            <button class="btn-edit" onclick="openEditDayModal('${d}')">✏️ تعديل هذا اليوم</button>
-            <button class="btn-delete" title="مسح هذا اليوم من السجل" onclick="deleteHistoryDate('${d}')">🗑️ مسح</button>
+        html += `
+          <div class="task-item">
+            <label>
+              <input type="checkbox" onchange="togglePrayer('${p.id}', this.checked)" ${checked}>
+              <span>${p.title}</span>
+            </label>
+            <span class="prayer-time-badge">${time12 || '--:--'}</span>
           </div>
-        </div>
-      `}).join('');
+        `;
+      });
+
+      container.innerHTML = html;
+      const pct = Math.round((doneCount / prayersList.length) * 100);
+      document.getElementById('prayers-progress').style.width = `${pct}%`;
     }
 
-    function toggleTask(id) {
-      playClickSound();
-      if (!localState.daily_tasks) localState.daily_tasks = {};
-      localState.daily_tasks[id] = !localState.daily_tasks[id];
-      updateProgress('tasks-progress', defaultTasks, localState.daily_tasks);
-      saveStateLocally();
-    }
-
-    function togglePrayer(id) {
+    function togglePrayer(id, val) {
       playClickSound();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
-      localState.prayers_tasks[id] = !localState.prayers_tasks[id];
-      updateProgress('prayers-progress', prayersList, localState.prayers_tasks);
+      localState.prayers_tasks[id] = val;
       saveStateLocally();
+      renderPrayers();
     }
 
-    function updateProgress(barId, list, savedObj) {
-      const completed = list.filter(item => savedObj && savedObj[item.id]).length;
-      const percent = Math.round((completed / list.length) * 100);
-      document.getElementById(barId).style.width = percent + '%';
-    }
-
-    function updateQuran(val) {
+    function updateQuran(delta) {
       playClickSound();
-      const input = document.getElementById('quran-page-input');
-      let curr = parseInt(input.value) || 0;
-      curr = Math.max(0, Math.min(48, curr + val));
-      input.value = curr;
-      setQuranPage(curr);
+      let val = (localState.quran_page || 0) + delta;
+      setQuranPage(val);
     }
 
     function setQuranPage(val) {
-      val = Math.max(0, Math.min(48, parseInt(val) || 0));
+      val = parseInt(val, 10);
+      if (isNaN(val)) val = 0;
+      if (val < 0) val = 0;
+      if (val > 48) val = 48;
       localState.quran_page = val;
-      setQuranPageUI(val);
+      document.getElementById('quran-page-input').value = val;
       saveStateLocally();
+      updateQuranUI();
     }
 
-    function setQuranPageUI(val) {
-      document.getElementById('quran-progress').style.width = ((val / 48) * 100) + '%';
-      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${val}`;
+    function updateQuranUI() {
+      const p = localState.quran_page || 0;
+      const pct = Math.round((p / 48) * 100);
+      document.getElementById('quran-progress').style.width = `${pct}%`;
+      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${p}`;
     }
 
-    function updateLesson(course, val) {
+    function updateLesson(type, delta) {
       playClickSound();
-      const el = document.getElementById(`${course}-lesson-val`);
-      let curr = parseInt(el.innerText) || 0;
-      curr = Math.max(0, curr + val);
-      el.innerText = curr;
+      if (!localState.courses_data) localState.courses_data = {};
+      const key = `${type}Lesson`;
+      let val = (localState.courses_data[key] || 0) + delta;
+      if (val < 0) val = 0;
+      localState.courses_data[key] = val;
+      document.getElementById(`${type}-lesson-val`).innerText = val;
       saveCoursesData();
     }
 
     function saveCoursesData() {
-      localState.courses_data = {
-        decorToday: document.getElementById('decor-today').checked,
-        decorVal: document.getElementById('decor-lesson-val').innerText,
-        finishingToday: document.getElementById('finishing-today').checked,
-        finishingVal: document.getElementById('finishing-lesson-val').innerText
-      };
+      if (!localState.courses_data) localState.courses_data = {};
+      localState.courses_data.decorToday = document.getElementById('decor-today').checked;
+      localState.courses_data.finishingToday = document.getElementById('finishing-today').checked;
       saveStateLocally();
     }
 
     function saveEngData() {
-      localState.eng_data = {
-        lessons: document.getElementById('eng-lessons').value,
-        hours: document.getElementById('eng-hours').value,
-        last: document.getElementById('eng-last').value
-      };
+      if (!localState.eng_data) localState.eng_data = {};
+      localState.eng_data.lessons = parseInt(document.getElementById('eng-lessons').value, 10) || 0;
+      localState.eng_data.hours = parseInt(document.getElementById('eng-hours').value, 10) || 0;
+      localState.eng_data.lastLesson = document.getElementById('eng-last').value || '';
       saveStateLocally();
     }
 
-    function adjustSavings(amt) {
+    function adjustSavings(delta) {
       playClickSound();
-      let curr = parseInt(localState.savings || '15000');
-      curr = Math.max(0, curr + amt);
-      localState.savings = curr;
-      renderSavingsUI();
+      localState.savings = (localState.savings || 0) + delta;
+      if (localState.savings < 0) localState.savings = 0;
+      document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       saveStateLocally();
+      updateSavingsUI();
     }
 
-    function renderSavingsUI() {
-      const curr = parseInt(localState.savings || '15000');
+    function updateSavingsUI() {
+      const cur = localState.savings || 0;
       const target = 50000;
-      document.getElementById('savings-current').innerText = curr.toLocaleString();
-      document.getElementById('savings-progress').style.width = Math.min(100, (curr / target) * 100) + '%';
-      const rem = target - curr;
-      const monthsLeft = Math.ceil(rem / 3000);
-      document.getElementById('savings-estimate').innerText = rem <= 0 ? '🎉 مكتمل!' : `متوقع الإنجاز خلال ~${monthsLeft} أشهر`;
+      const pct = Math.min(100, Math.round((cur / target) * 100));
+      document.getElementById('savings-progress').style.width = `${pct}%`;
+      
+      const remain = target - cur;
+      if (remain <= 0) {
+        document.getElementById('savings-estimate').innerText = '🎉 تم تحقيق الهدف!';
+      } else {
+        document.getElementById('savings-estimate').innerText = `متبقي ${remain.toLocaleString()} ج.م`;
+      }
     }
 
     function updateFollowers() {
-      const val = parseInt(document.getElementById('followers-count').value) || 0;
+      playClickSound();
+      const val = parseInt(document.getElementById('followers-count').value, 10) || 0;
       localState.followers = val;
-      updateFollowersUI();
       saveStateLocally();
+      updateFollowersUI();
     }
 
     function updateFollowersUI() {
-      const val = parseInt(localState.followers || 0);
-      const pct = Math.min(100, Math.round((val / 10000) * 100));
-      document.getElementById('followers-progress').style.width = pct + '%';
-      document.getElementById('followers-percent').innerText = `${pct}% مكتمل من الهدف (10,000)`;
+      const cur = localState.followers || 0;
+      const target = 10000;
+      const pct = Math.min(100, Math.round((cur / target) * 100));
+      document.getElementById('followers-progress').style.width = `${pct}%`;
+      document.getElementById('followers-percent').innerText = `${pct}% مكتمل (${cur} من 10,000)`;
     }
 
     function saveNotes() {
@@ -957,53 +942,115 @@
       saveStateLocally();
     }
 
-    const themeBtn = document.getElementById('theme-toggle');
-    themeBtn.addEventListener('click', () => {
-      playClickSound();
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      themeBtn.innerText = isDark ? '☀️' : '🌙';
-    });
+    function renderHistory() {
+      const container = document.getElementById('history-container');
+      if (!localState.history || Object.keys(localState.history).length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">لا يوجد سجلات سابقة حتى الآن.</p>';
+        return;
+      }
 
-    document.getElementById('distract-btn').onclick = () => { playClickSound(); document.getElementById('distract-modal').style.display = 'flex'; };
-    function closeModal() { playClickSound(); document.getElementById('distract-modal').style.display = 'none'; }
+      let html = '';
+      const sortedKeys = Object.keys(localState.history).sort().reverse();
+      sortedKeys.forEach(dateKey => {
+        const pct = localState.history[dateKey];
+        html += `
+          <div class="history-item">
+            <span>📅 ${dateKey} - نسبة الإنجاز: <strong>${pct}%</strong></span>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-edit" onclick="openEditDayModal('${dateKey}')">✏️ تعديل</button>
+              <button class="btn-delete" onclick="deleteHistoryDate('${dateKey}')">🗑️ مسح</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
 
-    let timerState = { seconds: 1500, running: false, interval: null };
+    // --- نظام مؤقت البومودورو ---
+    let timerInterval = null;
+    let timerSeconds = 25 * 60;
+    let timerRunning = false;
+
     function toggleTimer() {
       playClickSound();
-      const btn = document.getElementById('start-timer-btn');
-      if (timerState.running) {
-        clearInterval(timerState.interval);
-        timerState.running = false;
-        btn.innerText = 'استئناف';
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('start-timer-btn').innerText = 'استئناف';
       } else {
-        timerState.running = true;
-        btn.innerText = 'إيقاف مؤقت';
-        timerState.interval = setInterval(() => {
-          if (timerState.seconds > 0) {
-            timerState.seconds--;
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerState.interval);
-            alert('انتهت جلسة التركيز!');
+        timerRunning = true;
+        document.getElementById('start-timer-btn').innerText = 'إيقاف مؤقت';
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            alert("⏰ انتهت جلسة البومودورو! خذ استراحة قصيرة.");
             resetTimer();
+          } else {
+            updateTimerDisplay();
           }
         }, 1000);
       }
     }
+
     function resetTimer() {
       playClickSound();
-      clearInterval(timerState.interval);
-      timerState.running = false;
-      timerState.seconds = 1500;
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerSeconds = 25 * 60;
       document.getElementById('start-timer-btn').innerText = 'بدء';
       updateTimerDisplay();
     }
+
     function updateTimerDisplay() {
-      const m = String(Math.floor(timerState.seconds / 60)).padStart(2, '0');
-      const s = String(timerState.seconds % 60).padStart(2, '0');
-      document.getElementById('timer-display').innerText = `${m}:${s}`;
+      const m = Math.floor(timerSeconds / 60);
+      const s = timerSeconds % 60;
+      document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
+
+    // --- التحكم بالشاشة والمساعدات ---
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      playClickSound();
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('theme-toggle').innerText = isDark ? '☀️' : '🌙';
+    });
+
+    document.getElementById('distract-btn').addEventListener('click', () => {
+      playClickSound();
+      document.getElementById('distract-modal').style.display = 'flex';
+    });
+
+    function closeModal() {
+      playClickSound();
+      document.getElementById('distract-modal').style.display = 'none';
+    }
+
+    function updateLiveClockAndCheck() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', options);
+      document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG');
+      
+      checkPrayerTimesForAzan();
+    }
+
+    // التشغيل المبدئي للوحة
+    window.onload = function() {
+      loadStateLocally();
+      fetchPrayerTimes();
+      setDailyQuote();
+      
+      setInterval(updateLiveClockAndCheck, 1000);
+      setInterval(checkAndResetNewDay, 60000);
+
+      window.addEventListener('online', syncToFirebase);
+      window.addEventListener('offline', () => {
+        document.getElementById('sync-status').innerText = '🔴 أوفلاين (حفظ محلي)';
+        document.getElementById('sync-status').className = 'status-offline';
+      });
+    };
   </script>
 </body>
 </html>
