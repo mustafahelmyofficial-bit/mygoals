@@ -102,7 +102,6 @@
     #sync-status { font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; transition: var(--transition); }
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3); }
     .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); border: 1px solid rgba(217, 83, 79, 0.3); }
-    .status-syncing { color: #c59b27; background: rgba(197, 155, 39, 0.15); border: 1px solid rgba(197, 155, 39, 0.3); }
   </style>
 </head>
 <body>
@@ -111,7 +110,7 @@
 <!-- Header -->
 <header class="glass-card dashboard-header">
   <div class="welcome-box">
-    <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-syncing">🔄 جاري الاتصال...</span></h1>
+    <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">⚡ يعمل أوفلاين/أونلاين</span></h1>
     <p id="live-date" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;"></p>
   </div>
 
@@ -279,11 +278,32 @@
     </div>
   </div>
 
-  <!-- Firebase Scripts -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
+    // تفعيل خاصية تخزين الصفحات أوفلاين كـ Service Worker
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'dashboard-v1';
+        self.addEventListener('install', e => {
+          e.waitUntil(
+            caches.open(CACHE_NAME).then(cache => {
+              return cache.addAll(['./', location.href]);
+            })
+          );
+        });
+        self.addEventListener('fetch', e => {
+          e.respondWith(
+            caches.match(e.request).then(response => response || fetch(e.request))
+          );
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyCKzDjyFuuasovCB_163vNZf4_QAWsCRU8",
       authDomain: "my-goals-ed6c2.firebaseapp.com",
@@ -294,12 +314,16 @@
       appId: "1:550190058724:web:84f5fc27c7af95bc5370f1"
     };
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    
-    const database = firebase.database();
-    const dashboardRef = database.ref('dashboard_data');
+    let database = null;
+    let dashboardRef = null;
+
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        dashboardRef = database.ref('dashboard_data');
+      }
+    } catch(e) { console.log('Firebase Offline Mode'); }
 
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
@@ -332,48 +356,58 @@
 
     let isUpdatingFromRemote = false;
 
+    function saveStateLocally() {
+      localStorage.setItem('my_dashboard_local_data', JSON.stringify(localState));
+    }
+
     function syncToFirebase() {
-      localStorage.setItem('local_dashboard_backup', JSON.stringify(localState));
-      if (!isUpdatingFromRemote) {
-        dashboardRef.set(localState);
+      saveStateLocally();
+      if (navigator.onLine && dashboardRef && !isUpdatingFromRemote) {
+        dashboardRef.set(localState).catch(() => {});
       }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
       
-      const localBackup = localStorage.getItem('local_dashboard_backup');
-      if (localBackup) {
-        try {
-          localState = JSON.parse(localBackup);
-        } catch(e) {}
+      // 1. تحميل البيانات من جهازك فوراً
+      const stored = localStorage.getItem('my_dashboard_local_data');
+      if (stored) {
+        try { localState = JSON.parse(stored); } catch(e){}
       }
-      
       applyStateToUI();
       initChart();
 
-      const connectedRef = database.ref('.info/connected');
-      connectedRef.on('value', (snap) => {
+      // 2. تحديث مؤشر الاتصال
+      const updateOnlineStatus = () => {
         const statusEl = document.getElementById('sync-status');
-        if (snap.val() === true) {
+        if (navigator.onLine) {
           statusEl.className = 'status-online';
           statusEl.innerHTML = '⚡ متصل ومُتزامن';
+          if (dashboardRef) dashboardRef.set(localState).catch(()=>{});
         } else {
           statusEl.className = 'status-offline';
-          statusEl.innerHTML = '📶 غير متصل (Offline)';
+          statusEl.innerHTML = '📶 يعمل بدون إنترنت (ملاحظة: البيانات محفوظة دائمًا)';
         }
-      });
+      };
 
-      dashboardRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          isUpdatingFromRemote = true;
-          localState = data;
-          localStorage.setItem('local_dashboard_backup', JSON.stringify(localState));
-          applyStateToUI();
-          isUpdatingFromRemote = false;
-        }
-      });
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      updateOnlineStatus();
+
+      // 3. المزامنة من السيرفر عند وجود إنترنت
+      if (dashboardRef) {
+        dashboardRef.on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data && navigator.onLine) {
+            isUpdatingFromRemote = true;
+            localState = data;
+            saveStateLocally();
+            applyStateToUI();
+            isUpdatingFromRemote = false;
+          }
+        });
+      }
     });
 
     function applyStateToUI() {
