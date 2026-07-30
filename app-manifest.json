@@ -1,21 +1,22 @@
 {
-  "short_name": "لوحتي",
-  "name": "لوحة التحكم الشخصية - Architect Dashboard",
+  "name": "Architect Dashboard",
+  "short_name": "My Goals",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1C1B1C",
+  "theme_color": "#1C1B1C",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "src": "logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "src": "logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "./index.html",
-  "background_color": "#F4EFEA",
-  "theme_color": "#C59B27",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }
