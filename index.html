@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
-<link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="app-manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
@@ -70,7 +70,7 @@
       display: grid; 
       grid-template-columns: repeat(12, 1fr); 
       gap: 20px; 
-    }
+    } 
     
     .glass-card {
       background: var(--glass-bg);
@@ -176,6 +176,8 @@
     #sync-status { font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; }
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); }
     .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); }
+
+    .history-item { display: flex; justify-content: space-between; padding: 8px 12px; margin-bottom: 6px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -188,7 +190,7 @@
   </div>
 
   <div class="header-actions">
-    <div class="badge-streak">🔥 <span id="streak-count">7 أيّام</span></div>
+    <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
     <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
     <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">🌙</button>
     <button class="icon-btn btn-panic" id="distract-btn" title="أنا مشتت!">🧠</button>
@@ -241,7 +243,7 @@
   <div style="margin-bottom: 15px;">
     <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData()"> تمت المذاكرة</label>
+      <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData()"> تمت المذاكرة اليوم</label>
       <div class="counter-control" style="margin: 0;">
         <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
         <span id="decor-lesson-val" style="font-weight: bold;">0</span>
@@ -253,7 +255,7 @@
   <div>
     <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData()"> تمت المذاكرة</label>
+      <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData()"> تمت المذاكرة اليوم</label>
       <div class="counter-control" style="margin: 0;">
         <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
         <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
@@ -328,6 +330,14 @@
   <textarea id="daily-notes" placeholder="اكتب ملاحظاتك هنا..." style="width: 100%; height: 90px; border-radius: 12px; border: 1px solid var(--glass-border); padding: 10px; background: rgba(255,255,255,0.4); resize: none; font-family: inherit;" oninput="saveNotes()"></textarea>
 </section>
 
+<!-- History Section -->
+<section class="glass-card col-12">
+  <div class="section-title">📜 سجل الأيام السابقة (آخر 7 أيام)</div>
+  <div id="history-container">
+    <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي.</p>
+  </div>
+</section>
+
   </div>
 
   <div class="modal" id="distract-modal">
@@ -373,6 +383,7 @@
     ];
 
     let localState = {
+      lastDate: '',
       daily_tasks: {},
       prayers_tasks: {},
       quran_page: 0,
@@ -380,10 +391,42 @@
       eng_data: {},
       savings: 15000,
       followers: 1200,
-      daily_notes: ''
+      daily_notes: '',
+      history: {}
     };
 
-    // حفظ البيانات في localStorage للحفظ الأوفلاين والسيرفر للتزامن
+    function getTodayString() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function checkAndResetNewDay() {
+      const today = getTodayString();
+      
+      if (localState.lastDate && localState.lastDate !== today) {
+        // حساب إنجاز اليوم اللي فات قبل ما يتقفل
+        const tDone = defaultTasks.filter(t => localState.daily_tasks && localState.daily_tasks[t.id]).length;
+        const pDone = prayersList.filter(p => localState.prayers_tasks && localState.prayers_tasks[p.id]).length;
+        
+        const totalPct = Math.round(((tDone + pDone) / (defaultTasks.length + prayersList.length)) * 100);
+
+        if (!localState.history) localState.history = {};
+        localState.history[localState.lastDate] = totalPct;
+
+        // تصفير اليوميات
+        localState.daily_tasks = {};
+        localState.prayers_tasks = {};
+        if (localState.courses_data) {
+          localState.courses_data.decorToday = false;
+          localState.courses_data.finishingToday = false;
+        }
+        localState.daily_notes = '';
+      }
+
+      localState.lastDate = today;
+      saveStateLocally();
+    }
+
     function saveStateLocally() {
       localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
       if (navigator.onLine) {
@@ -392,12 +435,12 @@
       updateStatusUI();
     }
 
-    // الاستماع للتغييرات المباشرة من السيرفر للتزامن مع الموبايل
     dbRef.on('value', (snapshot) => {
       const data = snapshot.val();
       if (data) {
         localState = data;
         localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
+        checkAndResetNewDay();
         applyStateToUI();
       }
       updateStatusUI();
@@ -420,9 +463,11 @@
       if (savedLocal) {
         try {
           localState = JSON.parse(savedLocal);
-          applyStateToUI();
         } catch(e) {}
       }
+      checkAndResetNewDay();
+      applyStateToUI();
+
       window.addEventListener('online', () => {
         saveStateLocally();
         updateStatusUI();
@@ -430,9 +475,17 @@
       window.addEventListener('offline', updateStatusUI);
     });
 
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkAndResetNewDay();
+        applyStateToUI();
+      }
+    });
+
     function applyStateToUI() {
       renderTasks();
       renderPrayers();
+      renderHistory();
       
       document.getElementById('quran-page-input').value = localState.quran_page || 0;
       setQuranPageUI(localState.quran_page || 0);
@@ -492,6 +545,26 @@
         </div>
       `).join('');
       updateProgress('prayers-progress', prayersList, saved);
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history-container');
+      const hist = localState.history || {};
+      const dates = Object.keys(hist).sort().reverse().slice(0, 7);
+
+      if (dates.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي.</p>';
+        return;
+      }
+
+      container.innerHTML = dates.map(d => `
+        <div class="history-item">
+          <span>📅 يوم ${d}</span>
+          <span style="font-weight: bold; color: ${hist[d] >= 70 ? 'var(--accent-green)' : 'var(--accent-gold-dark)'}">${hist[d]}% إنجاز كامل</span>
+        </div>
+      `).join('');
+
+      document.getElementById('streak-count').innerText = `${dates.length + 1} أيّام`;
     }
 
     function toggleTask(id) {
