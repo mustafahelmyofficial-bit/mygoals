@@ -6,10 +6,15 @@
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="app-manifest.json">
+  
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./app-sw.js').catch(() => {});
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.update();
+          }
+        }).catch(() => {});
       });
     }
   </script>
@@ -443,7 +448,6 @@
       localState.history[dateLabel] = totalPct;
     }
 
-    // فتح التاريخ المحدد يدوياً عبر خانة اختيار التاريخ
     function openSelectedCustomDate() {
       const customDate = document.getElementById('custom-day-picker').value;
       if (!customDate) {
@@ -613,7 +617,6 @@
       fetchPrayerTimes();
       initClock();
       
-      // ضبط تاريخ خانة الإضافة اليدوية الافتراضي على يوم الأمس
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
