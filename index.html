@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
+
+  <!-- إعدادات التشغيل أوفلاين كـ تطبيق -->
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+
   <style>
     :root {
       --bg-primary: #F4EFEA;
@@ -256,25 +267,6 @@
   </div>
 
   <script>
-    // 1. تسجيل كود الخدمة الحافظ للتطبيق (Service Worker Inline Data)
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE_NAME = 'arch-dashboard-v2';
-        self.addEventListener('install', e => {
-          e.waitUntil(
-            caches.open(CACHE_NAME).then(cache => cache.addAll(['./']))
-          );
-        });
-        self.addEventListener('fetch', e => {
-          e.respondWith(
-            caches.match(e.request).then(res => res || fetch(e.request).catch(() => caches.match('./')))
-          );
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-    }
-
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
       { id: 'english', title: '🇬🇧 تعلم الإنجليزية' },
@@ -311,7 +303,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
       
-      // تحميل البيانات المحلية فوراً وبدون أي انتظار للشبكة
       const stored = localStorage.getItem('my_dashboard_local_data');
       if (stored) {
         try { localState = JSON.parse(stored); } catch(e){}
