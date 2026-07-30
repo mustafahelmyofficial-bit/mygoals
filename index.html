@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
-  <link rel="manifest" id="manifest-placeholder">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -23,7 +22,6 @@
       --accent-gold-dark: #A37F1E;
       --accent-brown: #5C4333;
       --accent-green: #4A6B53;
-      --accent-red: #A84949;
       --card-radius: 20px;
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
@@ -300,10 +298,8 @@
       firebase.initializeApp(firebaseConfig);
     }
     
-    // تفعيل خاصية الحفظ أثناء انقطاع النت (Offline Cache)
     const database = firebase.database();
-    dashboardRef = database.ref('dashboard_data');
-    dashboardRef.keepSynced(true); // لضمان المزامنة التلقائية فور عودة الإنترنت
+    const dashboardRef = database.ref('dashboard_data');
 
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
@@ -337,9 +333,7 @@
     let isUpdatingFromRemote = false;
 
     function syncToFirebase() {
-      // حفظ في الـ Local Storage أولاً لمنع الفقدان بدقة 100%
       localStorage.setItem('local_dashboard_backup', JSON.stringify(localState));
-      
       if (!isUpdatingFromRemote) {
         dashboardRef.set(localState);
       }
@@ -348,19 +342,16 @@
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
       
-      // استرجاع البيانات المحلية فورياً أول ما الصفحة تفتح حتى بدون إنترنت
       const localBackup = localStorage.getItem('local_dashboard_backup');
       if (localBackup) {
-        localState = JSON.parse(localBackup);
-        applyStateToUI();
-      } else {
-        renderTasks();
-        renderPrayers();
+        try {
+          localState = JSON.parse(localBackup);
+        } catch(e) {}
       }
-
+      
+      applyStateToUI();
       initChart();
 
-      // مراقبة حالة الاتصال بالإنترنت
       const connectedRef = database.ref('.info/connected');
       connectedRef.on('value', (snap) => {
         const statusEl = document.getElementById('sync-status');
@@ -369,11 +360,10 @@
           statusEl.innerHTML = '⚡ متصل ومُتزامن';
         } else {
           statusEl.className = 'status-offline';
-          statusEl.innerHTML = '📶 يعمل بدون إنترنت (Offline)';
+          statusEl.innerHTML = '📶 غير متصل (Offline)';
         }
       });
 
-      // Realtime Database Listener
       dashboardRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
