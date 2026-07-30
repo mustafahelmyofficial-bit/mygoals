@@ -144,7 +144,7 @@
       margin-bottom: 16px; 
       display: flex; 
       align-items: center; 
-      gap: 8px; 
+      justify-content: space-between;
       color: var(--accent-brown); 
       border-bottom: 2px solid rgba(197, 155, 39, 0.2); 
       padding-bottom: 8px; 
@@ -177,7 +177,7 @@
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); }
     .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); }
 
-    .history-item { display: flex; justify-content: space-between; padding: 8px 12px; margin-bottom: 6px; background: rgba(255,255,255,0.2); border-radius: 8px; font-size: 0.85rem; }
+    .history-item { display: flex; justify-content: space-between; padding: 10px 14px; margin-bottom: 8px; background: rgba(255,255,255,0.3); border-radius: 10px; font-size: 0.9rem; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -203,7 +203,7 @@
 
 <!-- Daily Tasks -->
 <section class="glass-card col-6">
-  <div class="section-title">📋 المهام اليومية</div>
+  <div class="section-title"><span>📋 المهام اليومية</span></div>
   <div style="margin-bottom: 12px;">
     <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة الإنجاز اليومي:</span>
     <div class="progress-container"><div class="progress-bar" id="tasks-progress"></div></div>
@@ -213,7 +213,7 @@
 
 <!-- Prayers -->
 <section class="glass-card col-6">
-  <div class="section-title">🕌 الصلوات الخمس</div>
+  <div class="section-title"><span>🕌 الصلوات الخمس</span></div>
   <div style="margin-bottom: 12px;">
     <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
     <div class="progress-container"><div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div></div>
@@ -332,9 +332,12 @@
 
 <!-- History Section -->
 <section class="glass-card col-12">
-  <div class="section-title">📜 سجل الأيام السابقة (آخر 7 أيام)</div>
+  <div class="section-title">
+    <span>📜 سجل الأيام السابقة (آخر 7 أيام)</span>
+    <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="forceNewDay()">🔄 تقفيل وتصفير اليوم يدوياً</button>
+  </div>
   <div id="history-container">
-    <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي.</p>
+    <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي أو الضغط على زر التقفيل اليدوي أعلاه.</p>
   </div>
 </section>
 
@@ -349,7 +352,6 @@
   </div>
 
   <script>
-    // إعدادات مشروعك الخاصة
     const firebaseConfig = {
       apiKey: "AIzaSyCKzDjyFuuasovCB_163vNZf4_QAWsCRU8",
       authDomain: "my-goals-ed6c2.firebaseapp.com",
@@ -403,28 +405,48 @@
     function checkAndResetNewDay() {
       const today = getTodayString();
       
-      if (localState.lastDate && localState.lastDate !== today) {
-        // حساب إنجاز اليوم اللي فات قبل ما يتقفل
-        const tDone = defaultTasks.filter(t => localState.daily_tasks && localState.daily_tasks[t.id]).length;
-        const pDone = prayersList.filter(p => localState.prayers_tasks && localState.prayers_tasks[p.id]).length;
-        
-        const totalPct = Math.round(((tDone + pDone) / (defaultTasks.length + prayersList.length)) * 100);
-
-        if (!localState.history) localState.history = {};
-        localState.history[localState.lastDate] = totalPct;
-
-        // تصفير اليوميات
-        localState.daily_tasks = {};
-        localState.prayers_tasks = {};
-        if (localState.courses_data) {
-          localState.courses_data.decorToday = false;
-          localState.courses_data.finishingToday = false;
-        }
-        localState.daily_notes = '';
+      if (!localState.lastDate) {
+        localState.lastDate = today;
+        saveStateLocally();
+        return;
       }
 
-      localState.lastDate = today;
-      saveStateLocally();
+      if (localState.lastDate !== today) {
+        performDayReset(localState.lastDate);
+        localState.lastDate = today;
+        saveStateLocally();
+      }
+    }
+
+    function performDayReset(dateLabel) {
+      const tDone = defaultTasks.filter(t => localState.daily_tasks && localState.daily_tasks[t.id]).length;
+      const pDone = prayersList.filter(p => localState.prayers_tasks && localState.prayers_tasks[p.id]).length;
+      const totalPct = Math.round(((tDone + pDone) / (defaultTasks.length + prayersList.length)) * 100);
+
+      if (!localState.history) localState.history = {};
+      localState.history[dateLabel] = totalPct;
+
+      // تصفير اليوميات
+      localState.daily_tasks = {};
+      localState.prayers_tasks = {};
+      if (localState.courses_data) {
+        localState.courses_data.decorToday = false;
+        localState.courses_data.finishingToday = false;
+      }
+      localState.daily_notes = '';
+    }
+
+    // زرار للتقفيل اليدوي فوراً (للتجربة أو التقفيل المباشر)
+    function forceNewDay() {
+      if (confirm("هل تريد تقفيل إنجاز اليوم الحالي ونقله للأيام السابقة وتصفير المهام لليوم الجديد؟")) {
+        const currentDate = localState.lastDate || getTodayString();
+        performDayReset(currentDate);
+        
+        // تغيير تاريخ اليوم لليوم الحالي بشكل مظبوط
+        localState.lastDate = getTodayString();
+        saveStateLocally();
+        applyStateToUI();
+      }
     }
 
     function saveStateLocally() {
@@ -553,14 +575,14 @@
       const dates = Object.keys(hist).sort().reverse().slice(0, 7);
 
       if (dates.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">سيبدأ السجل بالظهور تلقائياً عند انتهاء اليوم الحالي أو الضغط على زر التقفيل اليدوي أعلاه.</p>';
         return;
       }
 
       container.innerHTML = dates.map(d => `
         <div class="history-item">
-          <span>📅 يوم ${d}</span>
-          <span style="font-weight: bold; color: ${hist[d] >= 70 ? 'var(--accent-green)' : 'var(--accent-gold-dark)'}">${hist[d]}% إنجاز كامل</span>
+          <span>📅 تاريخ: ${d}</span>
+          <span style="color: ${hist[d] >= 70 ? 'var(--accent-green)' : 'var(--accent-gold-dark)'}">نسبة الإنجاز: ${hist[d]}%</span>
         </div>
       `).join('');
 
