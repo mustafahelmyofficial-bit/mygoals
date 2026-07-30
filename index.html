@@ -5,15 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
 
-  <!-- إعدادات التشغيل أوفلاين كـ تطبيق -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="app-manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('./app-sw.js').catch(() => {});
       });
     }
   </script>
+
+  <!-- مكتبات Firebase السحابية والتزامن -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
     :root {
@@ -44,9 +47,30 @@
       --accent-brown: #8D6E58;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
-    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 20px; transition: var(--transition); }
-    .container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+      user-select: none; 
+    }
+
+    body { 
+      background: var(--bg-gradient); 
+      background-attachment: fixed; 
+      color: var(--text-main); 
+      min-height: 100vh; 
+      padding: 20px; 
+      transition: var(--transition); 
+    }
+
+    .container { 
+      max-width: 1300px; 
+      margin: 0 auto; 
+      display: grid; 
+      grid-template-columns: repeat(12, 1fr); 
+      gap: 20px; 
+    }
     
     .glass-card {
       background: var(--glass-bg);
@@ -57,13 +81,53 @@
       transition: var(--transition);
     }
 
-    header.dashboard-header { grid-column: span 12; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-    .welcome-box h1 { font-size: 1.5rem; font-weight: 800; color: var(--accent-brown); }
+    header.dashboard-header { 
+      grid-column: span 12; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-wrap: wrap; 
+      gap: 15px; 
+    }
+
+    .welcome-box h1 { 
+      font-size: 1.5rem; 
+      font-weight: 800; 
+      color: var(--accent-brown); 
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     body.dark-mode .welcome-box h1 { color: var(--accent-gold); }
+
     .header-actions { display: flex; align-items: center; gap: 12px; }
 
-    .badge-streak { background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold-dark); padding: 8px 16px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
+    .badge-streak { 
+      background: rgba(197, 155, 39, 0.15); 
+      border: 1px solid var(--accent-gold); 
+      color: var(--accent-gold-dark); 
+      padding: 8px 16px; 
+      border-radius: 50px; 
+      font-weight: 700; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+    }
+
+    .icon-btn { 
+      background: var(--glass-bg); 
+      border: 1px solid var(--glass-border); 
+      color: var(--text-main); 
+      width: 42px; 
+      height: 42px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      font-size: 1.2rem; 
+    }
 
     .quote-card { grid-column: span 12; text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); }
 
@@ -74,7 +138,18 @@
 
     @media (max-width: 992px) { .col-4, .col-6, .col-8 { grid-column: span 12; } }
 
-    .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--accent-brown); border-bottom: 2px solid rgba(197, 155, 39, 0.2); padding-bottom: 8px; }
+    .section-title { 
+      font-size: 1.1rem; 
+      font-weight: 700; 
+      margin-bottom: 16px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      color: var(--accent-brown); 
+      border-bottom: 2px solid rgba(197, 155, 39, 0.2); 
+      padding-bottom: 8px; 
+    }
+
     body.dark-mode .section-title { color: var(--accent-gold); }
 
     .progress-container { background: rgba(0, 0, 0, 0.08); border-radius: 20px; height: 10px; width: 100%; overflow: hidden; margin: 10px 0; }
@@ -106,10 +181,9 @@
 <body>
   <div class="container">
 
-<!-- Header -->
 <header class="glass-card dashboard-header">
   <div class="welcome-box">
-    <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">⚡ وضع الأوفلاين نشط</span></h1>
+    <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">🔄 جاري الاتصال...</span></h1>
     <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
   </div>
 
@@ -121,7 +195,6 @@
   </div>
 </header>
 
-<!-- Quote -->
 <div class="glass-card quote-card">
   <p id="daily-quote">"التزامك اليوم .. يصنع نجاحك غداً"</p>
 </div>
@@ -257,7 +330,6 @@
 
   </div>
 
-  <!-- Modal -->
   <div class="modal" id="distract-modal">
     <div class="modal-content">
       <h2 style="color: var(--accent-brown); margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h2>
@@ -267,6 +339,21 @@
   </div>
 
   <script>
+    // إعدادات مشروعك الخاصة
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKzDjyFuuasovCB_163vNZf4_QAWsCRU8",
+      authDomain: "my-goals-ed6c2.firebaseapp.com",
+      databaseURL: "https://my-goals-ed6c2-default-rtdb.firebaseio.com",
+      projectId: "my-goals-ed6c2",
+      storageBucket: "my-goals-ed6c2.firebasestorage.app",
+      messagingSenderId: "550190058724",
+      appId: "1:550190058724:web:84f5fc27c7af95bc5370f1",
+      measurementId: "G-KQGBT49TF9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref('dashboard_data');
+
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
       { id: 'english', title: '🇬🇧 تعلم الإنجليزية' },
@@ -296,33 +383,51 @@
       daily_notes: ''
     };
 
+    // حفظ البيانات في localStorage للحفظ الأوفلاين والسيرفر للتزامن
     function saveStateLocally() {
-      localStorage.setItem('my_dashboard_local_data', JSON.stringify(localState));
+      localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
+      if (navigator.onLine) {
+        dbRef.set(localState).catch(() => {});
+      }
+      updateStatusUI();
+    }
+
+    // الاستماع للتغييرات المباشرة من السيرفر للتزامن مع الموبايل
+    dbRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        localState = data;
+        localStorage.setItem('my_arch_dashboard_data', JSON.stringify(localState));
+        applyStateToUI();
+      }
+      updateStatusUI();
+    });
+
+    function updateStatusUI() {
+      const statusEl = document.getElementById('sync-status');
+      if (navigator.onLine) {
+        statusEl.className = 'status-online';
+        statusEl.innerHTML = '⚡ متصل ومُتزامن حياً';
+      } else {
+        statusEl.className = 'status-offline';
+        statusEl.innerHTML = '📶 أوفلاين (شغال محلياً)';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
-      
-      const stored = localStorage.getItem('my_dashboard_local_data');
-      if (stored) {
-        try { localState = JSON.parse(stored); } catch(e){}
+      const savedLocal = localStorage.getItem('my_arch_dashboard_data');
+      if (savedLocal) {
+        try {
+          localState = JSON.parse(savedLocal);
+          applyStateToUI();
+        } catch(e) {}
       }
-      applyStateToUI();
-
-      const updateOnlineStatus = () => {
-        const statusEl = document.getElementById('sync-status');
-        if (navigator.onLine) {
-          statusEl.className = 'status-online';
-          statusEl.innerHTML = '⚡ متصل بالشبكة';
-        } else {
-          statusEl.className = 'status-offline';
-          statusEl.innerHTML = '📶 يعمل أوفلاين (البيانات محفوظة)';
-        }
-      };
-
-      window.addEventListener('online', updateOnlineStatus);
-      window.addEventListener('offline', updateOnlineStatus);
-      updateOnlineStatus();
+      window.addEventListener('online', () => {
+        saveStateLocally();
+        updateStatusUI();
+      });
+      window.addEventListener('offline', updateStatusUI);
     });
 
     function applyStateToUI() {
