@@ -14,7 +14,7 @@
     }
   </script>
 
-  <!-- مكتبات Firebase السحابية والتزامن -->
+  <!-- مكتبات Firebase السحابية -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -22,15 +22,15 @@
     :root {
       --bg-primary: #F4EFEA;
       --bg-gradient: linear-gradient(135deg, #EFE8DF 0%, #E3D7C7 100%);
-      --glass-bg: rgba(255, 255, 255, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.8);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.85);
       --glass-shadow: 0 8px 32px 0 rgba(60, 48, 38, 0.08);
       --text-main: #2D221E;
       --text-muted: #7A6A5D;
       --accent-gold: #C59B27;
       --accent-gold-dark: #A37F1E;
       --accent-brown: #5C4333;
-      --accent-green: #4A6B53;
+      --accent-green: #2E7D32;
       --card-radius: 20px;
       --transition: all 0.3s ease;
     }
@@ -38,96 +38,28 @@
     body.dark-mode {
       --bg-primary: #1C1816;
       --bg-gradient: linear-gradient(135deg, #1A1614 0%, #29221D 100%);
-      --glass-bg: rgba(45, 34, 30, 0.75);
-      --glass-border: rgba(212, 175, 55, 0.2);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --glass-bg: rgba(45, 34, 30, 0.8);
+      --glass-border: rgba(212, 175, 55, 0.25);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
       --text-main: #EFE8DF;
       --text-muted: #B0A093;
       --accent-gold: #E5B83B;
       --accent-brown: #8D6E58;
     }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-      user-select: none; 
-    }
-
-    body { 
-      background: var(--bg-gradient); 
-      background-attachment: fixed; 
-      color: var(--text-main); 
-      min-height: 100vh; 
-      padding: 20px; 
-      transition: var(--transition); 
-    }
-
-    .container { 
-      max-width: 1300px; 
-      margin: 0 auto; 
-      display: grid; 
-      grid-template-columns: repeat(12, 1fr); 
-      gap: 20px; 
-    } 
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 20px; transition: var(--transition); }
+    .container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; } 
     
-    .glass-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--card-radius);
-      box-shadow: var(--glass-shadow);
-      padding: 22px;
-      transition: var(--transition);
-    }
+    .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--card-radius); box-shadow: var(--glass-shadow); padding: 22px; transition: var(--transition); }
 
-    header.dashboard-header { 
-      grid-column: span 12; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      flex-wrap: wrap; 
-      gap: 15px; 
-    }
-
-    .welcome-box h1 { 
-      font-size: 1.5rem; 
-      font-weight: 800; 
-      color: var(--accent-brown); 
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    header.dashboard-header { grid-column: span 12; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .welcome-box h1 { font-size: 1.5rem; font-weight: 800; color: var(--accent-brown); display: flex; align-items: center; gap: 10px; }
     body.dark-mode .welcome-box h1 { color: var(--accent-gold); }
-
     .header-actions { display: flex; align-items: center; gap: 12px; }
 
-    .badge-streak { 
-      background: rgba(197, 155, 39, 0.15); 
-      border: 1px solid var(--accent-gold); 
-      color: var(--accent-gold-dark); 
-      padding: 8px 16px; 
-      border-radius: 50px; 
-      font-weight: 700; 
-      display: flex; 
-      align-items: center; 
-      gap: 8px; 
-    }
-
-    .icon-btn { 
-      background: var(--glass-bg); 
-      border: 1px solid var(--glass-border); 
-      color: var(--text-main); 
-      width: 42px; 
-      height: 42px; 
-      border-radius: 50%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      cursor: pointer; 
-      font-size: 1.2rem; 
-    }
+    .badge-streak { background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold-dark); padding: 8px 16px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
 
     .quote-card { grid-column: span 12; text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); }
 
@@ -138,36 +70,18 @@
 
     @media (max-width: 992px) { .col-4, .col-6, .col-8 { grid-column: span 12; } }
 
-    .section-title { 
-      font-size: 1.1rem; 
-      font-weight: 700; 
-      margin-bottom: 16px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between;
-      color: var(--accent-brown); 
-      border-bottom: 2px solid rgba(197, 155, 39, 0.2); 
-      padding-bottom: 8px; 
-    }
-
+    .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; color: var(--accent-brown); border-bottom: 2px solid rgba(197, 155, 39, 0.2); padding-bottom: 8px; }
     body.dark-mode .section-title { color: var(--accent-gold); }
 
     .progress-container { background: rgba(0, 0, 0, 0.08); border-radius: 20px; height: 10px; width: 100%; overflow: hidden; margin: 10px 0; }
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
     .task-list { display: flex; flex-direction: column; gap: 10px; }
-    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.4); }
-    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-grow: 1; }
-    .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-gold); cursor: pointer; }
+    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.35); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.4); }
+    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-grow: 1; font-weight: 600; }
+    .task-item input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--accent-gold); cursor: pointer; }
     
-    .prayer-time-badge {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: var(--accent-brown);
-      background: rgba(197, 155, 39, 0.2);
-      padding: 4px 10px;
-      border-radius: 8px;
-    }
+    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; color: var(--accent-brown); background: rgba(197, 155, 39, 0.2); padding: 4px 10px; border-radius: 8px; }
 
     .counter-control { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .btn-counter { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--accent-brown); color: #fff; font-weight: bold; cursor: pointer; }
@@ -175,9 +89,9 @@
 
     .btn-action { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #fff; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; }
     .btn-undo { background: #5C4333; color: white; }
-    .btn-edit { background: rgba(197, 155, 39, 0.2); color: var(--accent-brown); border: 1px solid var(--accent-gold); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+    .btn-edit { background: rgba(197, 155, 39, 0.2); color: var(--accent-brown); border: 1px solid var(--accent-gold); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
     .btn-edit:hover { background: var(--accent-gold); color: white; }
-    .btn-delete { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid #d9534f; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+    .btn-delete { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid #d9534f; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
     .btn-delete:hover { background: #d9534f; color: white; }
 
     .timer-display { font-size: 2.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-brown); margin: 10px 0; }
@@ -190,18 +104,9 @@
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); }
     .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); }
 
-    .history-item { display: flex; justify-content: space-between; padding: 12px 16px; margin-bottom: 10px; background: rgba(255,255,255,0.35); border-radius: 12px; font-size: 0.95rem; font-weight: 600; align-items: center; border: 1px solid rgba(255,255,255,0.5); }
+    .history-item { display: flex; justify-content: space-between; padding: 12px 16px; margin-bottom: 10px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.95rem; font-weight: 600; align-items: center; border: 1px solid rgba(255,255,255,0.6); }
     
-    .date-picker-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-      padding: 10px 14px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
+    .date-picker-box { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 10px 14px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -371,7 +276,7 @@
   </div>
 
   <div id="history-container">
-    <!-- الأيام تظهر هنا تلقائياً -->
+    <!-- الأيام السابقة تظهر هنا -->
   </div>
 </section>
 
@@ -383,7 +288,7 @@
       <h2 style="color: var(--accent-brown); margin-bottom: 15px;" id="edit-modal-title">تعديل يوم</h2>
       <div id="edit-tasks-list" class="task-list" style="margin-bottom: 20px;"></div>
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--glass-border); padding-top: 15px;">
-        <button class="btn-action" onclick="saveEditedDay()">💾 حفظ التعديلات</button>
+        <button class="btn-action" onclick="saveEditedDay()">💾 حفظ وتحديث نسبة اليوم</button>
         <button class="btn-action" style="background: var(--text-muted);" onclick="closeEditModal()">إلغاء</button>
       </div>
     </div>
@@ -460,7 +365,7 @@
       return `${hours}:${minutes} ${period}`;
     }
 
-    // جلب مواقيت الصلاة من API
+    // جلب مواقيت الصلاة
     async function fetchPrayerTimes() {
       try {
         const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5');
@@ -469,9 +374,7 @@
           prayerTimesObj = data.data.timings;
           renderPrayers();
         }
-      } catch (e) {
-        console.log("Offline prayer time mode");
-      }
+      } catch (e) { console.log("Offline prayer time mode"); }
     }
 
     function getTodayString() {
@@ -532,9 +435,10 @@
       localState.history[dateLabel] = totalPct;
     }
 
+    // تظليل وعرض نافذة التعديل لأي يوم سابق
     function openEditDayModal(dateKey) {
       activeEditDate = dateKey;
-      document.getElementById('edit-modal-title').innerText = `✏️ عرض وتعديل مهام يوم: (${dateKey})`;
+      document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
       
       if (!localState.history_details) localState.history_details = {};
       if (!localState.history_details[dateKey]) {
@@ -544,7 +448,7 @@
       const dayData = localState.history_details[dateKey];
       const listEl = document.getElementById('edit-tasks-list');
 
-      let html = '<p style="font-weight:bold; margin-bottom:10px; color:var(--accent-brown);">📋 المهام اليومية:</p>';
+      let html = '<p style="font-weight:bold; margin-bottom:10px; color:var(--accent-brown);">📋 المهام اليومية لهذا اليوم:</p>';
       defaultTasks.forEach(t => {
         const checked = dayData.daily_tasks && dayData.daily_tasks[t.id] ? 'checked' : '';
         html += `
@@ -557,7 +461,7 @@
         `;
       });
 
-      html += '<p style="font-weight:bold; margin:20px 0 10px 0; color:var(--accent-green);">🕌 الصلوات الخمس:</p>';
+      html += '<p style="font-weight:bold; margin:20px 0 10px 0; color:var(--accent-green);">🕌 الصلوات الخمس لهذا اليوم:</p>';
       prayersList.forEach(p => {
         const checked = dayData.prayers_tasks && dayData.prayers_tasks[p.id] ? 'checked' : '';
         html += `
@@ -592,7 +496,7 @@
       saveStateLocally();
       renderHistory();
       closeEditModal();
-      alert(`تم تعديل يوم (${activeEditDate}) وتحديث نسبة الإنجاز بنجاح! 🎉`);
+      alert(`تم حفظ وتحديث نسبة إنجاز يوم (${activeEditDate}) بنجاح! 🎉`);
     }
 
     function closeEditModal() {
@@ -785,7 +689,6 @@
     function renderHistory() {
       const container = document.getElementById('history-container');
       
-      // التأكد من جلب السجل الحالي أو الأيام المحفوظة
       let datesSet = new Set();
       if (localState.history) Object.keys(localState.history).forEach(d => datesSet.add(d));
       if (localState.history_details) Object.keys(localState.history_details).forEach(d => datesSet.add(d));
@@ -793,7 +696,7 @@
       const dates = Array.from(datesSet).sort().reverse();
 
       if (dates.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">لا يوجد أيام سابقة مسجلة بعد. عند انتهاء اليوم أو الضغط على زر التقفيل سيظهر السجل هنا.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">لا يوجد أيام سابقة بعد. عند انتهاء اليوم أو التقفيل اليدوي سيظهر السجل هنا ويمكنك تعديله في أي وقت.</p>';
         return;
       }
 
@@ -804,7 +707,7 @@
           <span>📅 يوم: <strong>${d}</strong></span>
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="color: ${pct >= 70 ? 'var(--accent-green)' : 'var(--accent-gold-dark)'}">نسبة الإنجاز: ${pct}%</span>
-            <button class="btn-edit" onclick="openEditDayModal('${d}')">✏️ عرض وتعديل المهام</button>
+            <button class="btn-edit" onclick="openEditDayModal('${d}')">✏️ تعديل هذا اليوم</button>
             <button class="btn-delete" title="مسح هذا اليوم من السجل" onclick="deleteHistoryDate('${d}')">🗑️ مسح</button>
           </div>
         </div>
