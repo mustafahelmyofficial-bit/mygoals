@@ -1,14 +1,25 @@
-// Version 2.0 - Forced Update
-const CACHE_NAME = 'my-goals-v2';
-
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(fetch(event.request));
-});
+{
+  "id": "/mygoals/",
+  "name": "Architect Dashboard",
+  "short_name": "My Goals",
+  "description": "لوحة تحكم مهندس معماري لإدارة الأهداف والمهام اليومية",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1C1B1C",
+  "theme_color": "#1C1B1C",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
