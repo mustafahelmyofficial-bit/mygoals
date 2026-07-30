@@ -106,7 +106,8 @@
 
     .history-item { display: flex; justify-content: space-between; padding: 12px 16px; margin-bottom: 10px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.95rem; font-weight: 600; align-items: center; border: 1px solid rgba(255,255,255,0.6); }
     
-    .date-picker-box { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 10px 14px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.85rem; }
+    .date-picker-box { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; padding: 12px 16px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.5); }
+    .custom-input-date { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-primary); font-weight: bold; color: var(--text-main); }
   </style>
 </head>
 <body>
@@ -269,14 +270,23 @@
     </div>
   </div>
 
+  <!-- إضافة يوم جديد يدوياً -->
+  <div class="date-picker-box" style="background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span>📅 <strong>اختر تاريخ أي يوم سابق لإضافته وتعديل مهامه:</strong></span>
+      <input type="date" id="custom-day-picker" class="custom-input-date">
+    </div>
+    <button class="btn-action" onclick="openSelectedCustomDate()">➕ فتح وتعديل هذا التاريخ</button>
+  </div>
+
   <div class="date-picker-box">
-    <span>📅 **تاريخ بداية الالتزام:**</span>
-    <input type="date" id="start-date-input" style="padding: 6px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-primary); font-weight: bold; color: var(--text-main);" onchange="updateStartDate(this.value)">
-    <span style="font-size: 0.75rem; color: var(--text-muted);">(تغيير هذا التاريخ سيعدل عدد أيام الـ Streak تلقائياً)</span>
+    <span>🗓️ **تاريخ بداية الالتزام الشخصي:**</span>
+    <input type="date" id="start-date-input" class="custom-input-date" onchange="updateStartDate(this.value)">
+    <span style="font-size: 0.75rem; color: var(--text-muted);">(تعديله يغير عدد أيام الـ Streak)</span>
   </div>
 
   <div id="history-container">
-    <!-- الأيام السابقة تظهر هنا -->
+    <!-- قائمة الأيام تُعرض هنا -->
   </div>
 </section>
 
@@ -288,7 +298,7 @@
       <h2 style="color: var(--accent-brown); margin-bottom: 15px;" id="edit-modal-title">تعديل يوم</h2>
       <div id="edit-tasks-list" class="task-list" style="margin-bottom: 20px;"></div>
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--glass-border); padding-top: 15px;">
-        <button class="btn-action" onclick="saveEditedDay()">💾 حفظ وتحديث نسبة اليوم</button>
+        <button class="btn-action" onclick="saveEditedDay()">💾 حفظ وتثبيت اليوم في السجل</button>
         <button class="btn-action" style="background: var(--text-muted);" onclick="closeEditModal()">إلغاء</button>
       </div>
     </div>
@@ -355,7 +365,6 @@
       last_backup_data: null
     };
 
-    // تحويل صيغة الوقت من 24 إلى 12 ساعة مع ص / م
     function convertTo12HourFormat(time24) {
       if (!time24) return '';
       let [hours, minutes] = time24.split(':');
@@ -365,7 +374,6 @@
       return `${hours}:${minutes} ${period}`;
     }
 
-    // جلب مواقيت الصلاة
     async function fetchPrayerTimes() {
       try {
         const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5');
@@ -435,7 +443,16 @@
       localState.history[dateLabel] = totalPct;
     }
 
-    // تظليل وعرض نافذة التعديل لأي يوم سابق
+    // فتح التاريخ المحدد يدوياً عبر خانة اختيار التاريخ
+    function openSelectedCustomDate() {
+      const customDate = document.getElementById('custom-day-picker').value;
+      if (!customDate) {
+        alert("يرجى اختيار تاريخ أولاً من الخانة!");
+        return;
+      }
+      openEditDayModal(customDate);
+    }
+
     function openEditDayModal(dateKey) {
       activeEditDate = dateKey;
       document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
@@ -496,7 +513,7 @@
       saveStateLocally();
       renderHistory();
       closeEditModal();
-      alert(`تم حفظ وتحديث نسبة إنجاز يوم (${activeEditDate}) بنجاح! 🎉`);
+      alert(`تم إضافة وتحديث نسبة يوم (${activeEditDate}) بالسجل بنجاح! 🎉`);
     }
 
     function closeEditModal() {
@@ -595,6 +612,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       fetchPrayerTimes();
       initClock();
+      
+      // ضبط تاريخ خانة الإضافة اليدوية الافتراضي على يوم الأمس
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+      document.getElementById('custom-day-picker').value = yStr;
+
       const savedLocal = localStorage.getItem('my_arch_dashboard_data');
       if (savedLocal) {
         try { localState = JSON.parse(savedLocal); } catch(e) {}
@@ -696,7 +720,7 @@
       const dates = Array.from(datesSet).sort().reverse();
 
       if (dates.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">لا يوجد أيام سابقة بعد. عند انتهاء اليوم أو التقفيل اليدوي سيظهر السجل هنا ويمكنك تعديله في أي وقت.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">لا يوجد أيام مسجلة بالسجل بعد. يمكنك اختيار أي تاريخ أعلاه وإضافته يدوياً!</p>';
         return;
       }
 
