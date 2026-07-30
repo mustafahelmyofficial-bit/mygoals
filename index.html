@@ -66,7 +66,8 @@
     .badge-streak { background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold-dark); padding: 8px 16px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
 
-    .quote-card { grid-column: span 12; text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); }
+    .quote-card { grid-column: span 12; text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); padding: 18px; }
+    .quote-card p { font-size: 1.15rem; font-weight: 700; color: var(--text-main); line-height: 1.6; }
 
     .col-4 { grid-column: span 4; }
     .col-6 { grid-column: span 6; }
@@ -133,7 +134,7 @@
 </header>
 
 <div class="glass-card quote-card">
-  <p id="daily-quote">"التزامك اليوم .. يصنع نجاحك غداً"</p>
+  <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
 </div>
 
 <!-- Daily Tasks -->
@@ -333,6 +334,37 @@
     firebase.initializeApp(firebaseConfig);
     const dbRef = firebase.database().ref('dashboard_data');
 
+    // مصفوفة الجمل التحفيزية الحماسية والرجولية (تتغير تلقائياً كل يوم)
+    const dailyMotivationalQuotes = [
+      "💪 ابني جسمك وكيانك في الصمت، واجعل نتيجتك تتحدث وتخرس كل من استهان بك.",
+      "🔥 عاتبهم بنجاحك، واجعل أسفهم الأبدي أنهم تركوك في المنتصف ولم يعلموا من ستصبح.",
+      "🏛️ الباشمهندس لا يبكي على ما فات، بل يبني مستقبلاً يجعله فوق الجميع.",
+      "👑 هيبة الرجل في انضباطه وعدم استسلامه، لا تنتظر تشجيعاً من أحد، ابدَأ الآن!",
+      "💔 دعها تشاهد نجاحك من بعيد وتدرك أنها خسرت الرجل الذي لم ولن يُعوَّض.",
+      "🏋️‍♂️ الوزن الثقيل في الجيم يُصنّع الرجال.. والضغط اليومي يُصنّع العظماء.",
+      "⚔️ كل شخص تخلى عنك كان مجرد محطة لتدرك أنك لا تحتاج إلا لنفسك وربك.",
+      "🦁 الأسد لا يشغل باله برأي أحد.. استمر في السعي ولا تتوقف.",
+      "🎯 لا توجد إهانة أقوى لأعدائك ومن خذلوك من أن يروك تُحقق كل ما قالوا إنك لن تصل إليه.",
+      "🏆 الجيم لا يبني العضلات فقط، بل يبني الإرادة التي تجعلك تعبر أي أزمة.",
+      "⌛ الأيام تدور.. وغداً سيندم كل من فارقك، حين لا يجد لك بديلاً.",
+      "📐 النجاح المعماري الحقيقي هو أن تبني نفسك أولاً قبل أن تبني المباني.",
+      "💼 قيمتك في عملك، علمك، وقوتك.. لا تضيع ثانية في الحسرة على الماضي.",
+      "🔥 العَرَق في الجيم اليوم يوفّر عليك دموع الندم غداً.. اضغط على نفسك!",
+      "👑 الرجل القوي يُصنع في الأوقات الصعبة.. أثبت لنفسك قبلهم أنك قادر.",
+      "🎯 اجعلهم يتساءلون كيف تنهض في كل مرة أقوى من السابق!"
+    ];
+
+    function setDailyQuote() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 0);
+      const diff = now - startOfYear;
+      const oneDay = 1000 * 60 * 60 * 24;
+      const dayOfYear = Math.floor(diff / oneDay);
+      
+      const quoteIndex = dayOfYear % dailyMotivationalQuotes.length;
+      document.getElementById('daily-quote').innerText = `"${dailyMotivationalQuotes[quoteIndex]}"`;
+    }
+
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
       { id: 'english', title: '🇬🇧 تعلم الإنجليزية' },
@@ -408,6 +440,7 @@
         localState.lastDate = today;
         saveStateLocally();
       }
+      setDailyQuote();
     }
 
     function performDayReset(dateLabel) {
@@ -616,6 +649,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       fetchPrayerTimes();
       initClock();
+      setDailyQuote();
       
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
@@ -644,6 +678,7 @@
       renderTasks();
       renderPrayers();
       renderHistory();
+      setDailyQuote();
       
       const stDate = localState.startDate || getTodayString();
       document.getElementById('start-date-input').value = stDate;
