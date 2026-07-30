@@ -103,6 +103,7 @@
 
     #sync-status { font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; transition: var(--transition); }
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3); }
+    .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); border: 1px solid rgba(217, 83, 79, 0.3); }
     .status-syncing { color: #c59b27; background: rgba(197, 155, 39, 0.15); border: 1px solid rgba(197, 155, 39, 0.3); }
   </style>
 </head>
@@ -298,8 +299,11 @@
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
+    
+    // تفعيل خاصية الحفظ أثناء انقطاع النت (Offline Cache)
     const database = firebase.database();
-    const dashboardRef = database.ref('dashboard_data');
+    dashboardRef = database.ref('dashboard_data');
+    dashboardRef.keepSynced(true); // لضمان المزامنة التلقائية فور عودة الإنترنت
 
     const defaultTasks = [
       { id: 'quran', title: '📖 قراءة/حفظ سورة البقرة' },
@@ -333,6 +337,9 @@
     let isUpdatingFromRemote = false;
 
     function syncToFirebase() {
+      // حفظ في الـ Local Storage أولاً لمنع الفقدان بدقة 100%
+      localStorage.setItem('local_dashboard_backup', JSON.stringify(localState));
+      
       if (!isUpdatingFromRemote) {
         dashboardRef.set(localState);
       }
@@ -340,27 +347,42 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       initClock();
-      renderTasks();
-      renderPrayers();
+      
+      // استرجاع البيانات المحلية فورياً أول ما الصفحة تفتح حتى بدون إنترنت
+      const localBackup = localStorage.getItem('local_dashboard_backup');
+      if (localBackup) {
+        localState = JSON.parse(localBackup);
+        applyStateToUI();
+      } else {
+        renderTasks();
+        renderPrayers();
+      }
+
       initChart();
+
+      // مراقبة حالة الاتصال بالإنترنت
+      const connectedRef = database.ref('.info/connected');
+      connectedRef.on('value', (snap) => {
+        const statusEl = document.getElementById('sync-status');
+        if (snap.val() === true) {
+          statusEl.className = 'status-online';
+          statusEl.innerHTML = '⚡ متصل ومُتزامن';
+        } else {
+          statusEl.className = 'status-offline';
+          statusEl.innerHTML = '📶 يعمل بدون إنترنت (Offline)';
+        }
+      });
 
       // Realtime Database Listener
       dashboardRef.on('value', (snapshot) => {
         const data = snapshot.val();
-        const statusEl = document.getElementById('sync-status');
-        statusEl.className = 'status-online';
-        statusEl.innerHTML = '⚡ متصل ومُتزامن';
-
         if (data) {
           isUpdatingFromRemote = true;
           localState = data;
+          localStorage.setItem('local_dashboard_backup', JSON.stringify(localState));
           applyStateToUI();
           isUpdatingFromRemote = false;
         }
-      }, (error) => {
-        const statusEl = document.getElementById('sync-status');
-        statusEl.className = 'status-syncing';
-        statusEl.innerHTML = '⚠️ خطأ في الأذونات (راجع قواعد Firebase)';
       });
     });
 
