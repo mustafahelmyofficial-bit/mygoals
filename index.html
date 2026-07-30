@@ -165,6 +165,7 @@
     .number-input { width: 70px; text-align: center; padding: 6px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6); font-weight: bold; }
 
     .btn-action { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #fff; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    .btn-undo { background: #5C4333; color: white; }
     .btn-panic { background: #D9534F; color: white; }
 
     .timer-display { font-size: 2.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-brown); margin: 10px 0; }
@@ -177,7 +178,7 @@
     .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); }
     .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); }
 
-    .history-item { display: flex; justify-content: space-between; padding: 10px 14px; margin-bottom: 8px; background: rgba(255,255,255,0.3); border-radius: 10px; font-size: 0.9rem; font-weight: 600; }
+    .history-item { display: flex; justify-content: space-between; padding: 10px 14px; margin-bottom: 8px; background: rgba(255,255,255,0.3); border-radius: 10px; font-size: 0.9rem; font-weight: 600; align-items: center; }
     
     .date-picker-box {
       display: flex;
@@ -344,11 +345,13 @@
 <!-- History Section -->
 <section class="glass-card col-12">
   <div class="section-title">
-    <span>📜 سجل الأيام السابقة إعدادات الالتزام</span>
-    <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="forceNewDay()">🔄 تقفيل وتصفير اليوم يدوياً</button>
+    <span>📜 سجل الأيام السابقة وإعدادات الالتزام</span>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action btn-undo" style="font-size: 0.75rem; padding: 4px 10px;" onclick="undoDayReset()">↩️ تراجع عن التقفيل والتصفير</button>
+      <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="forceNewDay()">🔄 تقفيل وتصفير اليوم يدوياً</button>
+    </div>
   </div>
 
-  <!-- الخانة الجديدة لتعديل تاريخ البداية -->
   <div class="date-picker-box">
     <span>📅 **تاريخ بداية الالتزام:**</span>
     <input type="date" id="start-date-input" style="padding: 6px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-primary); font-weight: bold; color: var(--text-main);" onchange="updateStartDate(this.value)">
@@ -414,7 +417,8 @@
       savings: 15000,
       followers: 1200,
       daily_notes: '',
-      history: {}
+      history: {},
+      last_backup_data: null // لحفظ نسخة احتياطية قبل التصفير للتراجع
     };
 
     function getTodayString() {
@@ -443,6 +447,15 @@
     }
 
     function performDayReset(dateLabel) {
+      // حفظ نسخة للتراجع قبل التصفير
+      localState.last_backup_data = {
+        dateLabel: dateLabel,
+        daily_tasks: { ...localState.daily_tasks },
+        prayers_tasks: { ...localState.prayers_tasks },
+        courses_data: { ...localState.courses_data },
+        daily_notes: localState.daily_notes
+      };
+
       const tDone = defaultTasks.filter(t => localState.daily_tasks && localState.daily_tasks[t.id]).length;
       const pDone = prayersList.filter(p => localState.prayers_tasks && localState.prayers_tasks[p.id]).length;
       const totalPct = Math.round(((tDone + pDone) / (defaultTasks.length + prayersList.length)) * 100);
@@ -458,6 +471,32 @@
         localState.courses_data.finishingToday = false;
       }
       localState.daily_notes = '';
+    }
+
+    function undoDayReset() {
+      if (!localState.last_backup_data) {
+        alert("لا يوجد تقفيل يدوياً سابق للتراجع عنه حالياً!");
+        return;
+      }
+
+      if (confirm("هل تريد إرجاع المهام والإنجازات واسترجاع اليوم قبل التقفيل؟")) {
+        const backup = localState.last_backup_data;
+        
+        localState.daily_tasks = backup.daily_tasks || {};
+        localState.prayers_tasks = backup.prayers_tasks || {};
+        localState.courses_data = backup.courses_data || {};
+        localState.daily_notes = backup.daily_notes || '';
+
+        // مسح اليوم من السجل
+        if (localState.history && localState.history[backup.dateLabel]) {
+          delete localState.history[backup.dateLabel];
+        }
+
+        localState.last_backup_data = null; // إعادة تعيين التراجع
+        saveStateLocally();
+        applyStateToUI();
+        alert("تم التراجع بنجاح وإعادة مهامك السابقة! 🎉");
+      }
     }
 
     function updateStartDate(val) {
