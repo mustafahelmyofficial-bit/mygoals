@@ -126,6 +126,7 @@
   </div>
 
   <div class="header-actions">
+    <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="تشغيل/كتم الأصوات">🔊</button>
     <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
     <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
     <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">🌙</button>
@@ -149,7 +150,10 @@
 
 <!-- Prayers -->
 <section class="glass-card col-6">
-  <div class="section-title"><span>🕌 الصلوات الخمس ومواقيتها</span></div>
+  <div class="section-title">
+    <span>🕌 الصلوات الخمس ومواقيتها</span>
+    <button class="btn-edit" style="font-size:0.75rem;" onclick="playAzanSound()">🔊 تجربة الأذان</button>
+  </div>
   <div style="margin-bottom: 12px;">
     <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
     <div class="progress-container"><div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div></div>
@@ -179,7 +183,7 @@
   <div style="margin-bottom: 15px;">
     <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData()"> تمت المذاكرة اليوم</label>
+      <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
       <div class="counter-control" style="margin: 0;">
         <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
         <span id="decor-lesson-val" style="font-weight: bold;">0</span>
@@ -191,7 +195,7 @@
   <div>
     <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData()"> تمت المذاكرة اليوم</label>
+      <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
       <div class="counter-control" style="margin: 0;">
         <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
         <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
@@ -276,7 +280,6 @@
     </div>
   </div>
 
-  <!-- إضافة يوم جديد يدوياً -->
   <div class="date-picker-box" style="background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold);">
     <div style="display: flex; align-items: center; gap: 8px;">
       <span>📅 <strong>اختر تاريخ أي يوم سابق لإضافته وتعديل مهامه:</strong></span>
@@ -291,9 +294,7 @@
     <span style="font-size: 0.75rem; color: var(--text-muted);">(تعديله يغير عدد أيام الـ Streak)</span>
   </div>
 
-  <div id="history-container">
-    <!-- قائمة الأيام تُعرض هنا -->
-  </div>
+  <div id="history-container"></div>
 </section>
 
   </div>
@@ -320,6 +321,53 @@
   </div>
 
   <script>
+    // --- إعدادات نظام الأصوات التفاعلي والأذان ---
+    let soundEnabled = true;
+    let audioCtx = null;
+    let playedPrayersToday = {}; // للتأكد من عدم تكرار الأذان في نفس الدقيقة
+
+    function toggleSoundMaster() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
+    }
+
+    // توليد صوت نقرة خفيفة وعصرية بالـ Web Audio API لتجنب تحميل ملفات خارجية
+    function playClickSound() {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    // تشغيل صوت الأذان مجانياً وبدون ملفات خارجية
+    const azanAudio = new Audio('https://cdn.islamicfinder.org/adhan/makkah/fajr.mp3');
+    
+    function playAzanSound() {
+      if (!soundEnabled) return;
+      try {
+        azanAudio.currentTime = 0;
+        azanAudio.play().catch(() => console.log("الأذان يحتاج تفاعل مع الصفحة أولاً"));
+      } catch(e){}
+    }
+
+    // --- إعدادات Firebase ---
     const firebaseConfig = {
       apiKey: "AIzaSyCKzDjyFuuasovCB_163vNZf4_QAWsCRU8",
       authDomain: "my-goals-ed6c2.firebaseapp.com",
@@ -334,7 +382,6 @@
     firebase.initializeApp(firebaseConfig);
     const dbRef = firebase.database().ref('dashboard_data');
 
-    // مصفوفة الجمل التحفيزية الحماسية والرجولية (تتغير تلقائياً كل يوم)
     const dailyMotivationalQuotes = [
       "💪 ابني جسمك وكيانك في الصمت، واجعل نتيجتك تتحدث وتخرس كل من استهان بك.",
       "🔥 عاتبهم بنجاحك، واجعل أسفهم الأبدي أنهم تركوك في المنتصف ولم يعلموا من ستصبح.",
@@ -360,7 +407,6 @@
       const diff = now - startOfYear;
       const oneDay = 1000 * 60 * 60 * 24;
       const dayOfYear = Math.floor(diff / oneDay);
-      
       const quoteIndex = dayOfYear % dailyMotivationalQuotes.length;
       document.getElementById('daily-quote').innerText = `"${dailyMotivationalQuotes[quoteIndex]}"`;
     }
@@ -419,7 +465,24 @@
           prayerTimesObj = data.data.timings;
           renderPrayers();
         }
-      } catch (e) { console.log("Offline prayer time mode"); }
+      } catch (e) {}
+    }
+
+    function checkPrayerTimesForAzan() {
+      const now = new Date();
+      const currentHours = String(now.getHours()).padStart(2, '0');
+      const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeStr = `${currentHours}:${currentMinutes}`;
+
+      prayersList.forEach(p => {
+        const prayerTime = prayerTimesObj[p.key];
+        if (prayerTime && prayerTime === currentTimeStr) {
+          if (!playedPrayersToday[p.key]) {
+            playAzanSound();
+            playedPrayersToday[p.key] = true;
+          }
+        }
+      });
     }
 
     function getTodayString() {
@@ -438,6 +501,7 @@
       if (localState.lastDate !== today) {
         performDayReset(localState.lastDate);
         localState.lastDate = today;
+        playedPrayersToday = {};
         saveStateLocally();
       }
       setDailyQuote();
@@ -482,6 +546,7 @@
     }
 
     function openSelectedCustomDate() {
+      playClickSound();
       const customDate = document.getElementById('custom-day-picker').value;
       if (!customDate) {
         alert("يرجى اختيار تاريخ أولاً من الخانة!");
@@ -491,6 +556,7 @@
     }
 
     function openEditDayModal(dateKey) {
+      playClickSound();
       activeEditDate = dateKey;
       document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
       
@@ -533,6 +599,7 @@
     }
 
     function saveEditedDay() {
+      playClickSound();
       if (!activeEditDate) return;
       const dayData = localState.history_details[activeEditDate];
 
@@ -554,11 +621,13 @@
     }
 
     function closeEditModal() {
+      playClickSound();
       document.getElementById('edit-day-modal').style.display = 'none';
       activeEditDate = null;
     }
 
     function undoDayReset() {
+      playClickSound();
       if (!localState.last_backup_data) {
         alert("لا يوجد تقفيل سابق للتراجع عنه حالياً!");
         return;
@@ -582,6 +651,7 @@
     }
 
     function deleteHistoryDate(dateKey) {
+      playClickSound();
       if (confirm(`هل أنت تأكد من مسح سجل يوم (${dateKey}) نهائياً؟`)) {
         if (localState.history && localState.history[dateKey]) delete localState.history[dateKey];
         if (localState.history_details && localState.history_details[dateKey]) delete localState.history_details[dateKey];
@@ -607,6 +677,7 @@
     }
 
     function forceNewDay() {
+      playClickSound();
       if (confirm("هل تريد تقفيل إنجاز اليوم الحالي ونقله للأيام السابقة وتصفير المهام لليوم الجديد؟")) {
         const currentDate = localState.lastDate || getTodayString();
         performDayReset(currentDate);
@@ -711,6 +782,8 @@
         const now = new Date();
         document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        
+        checkPrayerTimesForAzan();
       };
       update();
       setInterval(update, 1000);
@@ -750,7 +823,6 @@
 
     function renderHistory() {
       const container = document.getElementById('history-container');
-      
       let datesSet = new Set();
       if (localState.history) Object.keys(localState.history).forEach(d => datesSet.add(d));
       if (localState.history_details) Object.keys(localState.history_details).forEach(d => datesSet.add(d));
@@ -777,6 +849,7 @@
     }
 
     function toggleTask(id) {
+      playClickSound();
       if (!localState.daily_tasks) localState.daily_tasks = {};
       localState.daily_tasks[id] = !localState.daily_tasks[id];
       updateProgress('tasks-progress', defaultTasks, localState.daily_tasks);
@@ -784,6 +857,7 @@
     }
 
     function togglePrayer(id) {
+      playClickSound();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = !localState.prayers_tasks[id];
       updateProgress('prayers-progress', prayersList, localState.prayers_tasks);
@@ -797,6 +871,7 @@
     }
 
     function updateQuran(val) {
+      playClickSound();
       const input = document.getElementById('quran-page-input');
       let curr = parseInt(input.value) || 0;
       curr = Math.max(0, Math.min(48, curr + val));
@@ -817,6 +892,7 @@
     }
 
     function updateLesson(course, val) {
+      playClickSound();
       const el = document.getElementById(`${course}-lesson-val`);
       let curr = parseInt(el.innerText) || 0;
       curr = Math.max(0, curr + val);
@@ -844,6 +920,7 @@
     }
 
     function adjustSavings(amt) {
+      playClickSound();
       let curr = parseInt(localState.savings || '15000');
       curr = Math.max(0, curr + amt);
       localState.savings = curr;
@@ -882,16 +959,18 @@
 
     const themeBtn = document.getElementById('theme-toggle');
     themeBtn.addEventListener('click', () => {
+      playClickSound();
       document.body.classList.toggle('dark-mode');
       const isDark = document.body.classList.contains('dark-mode');
       themeBtn.innerText = isDark ? '☀️' : '🌙';
     });
 
-    document.getElementById('distract-btn').onclick = () => { document.getElementById('distract-modal').style.display = 'flex'; };
-    function closeModal() { document.getElementById('distract-modal').style.display = 'none'; }
+    document.getElementById('distract-btn').onclick = () => { playClickSound(); document.getElementById('distract-modal').style.display = 'flex'; };
+    function closeModal() { playClickSound(); document.getElementById('distract-modal').style.display = 'none'; }
 
     let timerState = { seconds: 1500, running: false, interval: null };
     function toggleTimer() {
+      playClickSound();
       const btn = document.getElementById('start-timer-btn');
       if (timerState.running) {
         clearInterval(timerState.interval);
@@ -913,6 +992,7 @@
       }
     }
     function resetTimer() {
+      playClickSound();
       clearInterval(timerState.interval);
       timerState.running = false;
       timerState.seconds = 1500;
