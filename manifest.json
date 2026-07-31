@@ -1,24 +1,21 @@
 {
-  "id": "architect-dashboard-pwa",
-  "short_name": "Dashboard",
-  "name": "Architect Dashboard",
+  "short_name": "Eng-Mustafa",
+  "name": "Eng-Mustafa Helmy",
   "description": "لوحة التحكم الشخصية لإدارة المهام والأهداف اليومية",
   "icons": [
     {
       "src": "logo.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any"
+      "sizes": "192x192"
     },
     {
       "src": "logo.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
+      "sizes": "512x512"
     }
   ],
-  "start_url": "/mygoals/index.html",
-  "scope": "/mygoals/",
+  "start_url": "./",
+  "scope": "./",
   "background_color": "#F4EFEA",
   "theme_color": "#5C4333",
   "display": "standalone",
