@@ -910,6 +910,12 @@
       const container = document.getElementById('english-levels-container');
       if (!container) return;
 
+      // حفظ الكروت المفتوحة حالياً حتى لا تغلق عند التحديث
+      const openCardIds = new Set();
+      document.querySelectorAll('.eng-level-card.open').forEach(card => {
+        openCardIds.add(card.id);
+      });
+
       let html = '';
       let previousLevelCompleted = true;
 
@@ -933,8 +939,11 @@
           previousLevelCompleted = (levelPct === 100);
         }
 
+        const cardId = `eng-card-${level.id}`;
+        const isOpen = openCardIds.has(cardId) && !isLocked;
+
         html += `
-          <div class="eng-level-card ${isLocked ? 'locked' : ''}" id="eng-card-${level.id}">
+          <div class="eng-level-card ${isLocked ? 'locked' : ''} ${isOpen ? 'open' : ''}" id="${cardId}">
             <div class="eng-level-header" onclick="toggleEngLevel('${level.id}', ${isLocked})">
               <span>${level.title} ${isLocked ? '🔒' : ''}</span>
               <span style="font-size:0.8rem; color:var(--accent-blue);">${levelPct}%</span>
