@@ -1,11 +1,11 @@
-const CACHE_NAME = 'dashboard-v7';
+const CACHE_NAME = 'dashboard-v8';
 
-// 1. تثبيت فوري وبدون أي انتظار أو تحميل ملفات قد تعطله
+// 1. تثبيت فوري وبدون أي انتظار لضمان عدم تعليق المتصفح
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// 2. التفعيل الفوري والسيطرة على التطبيق
+// 2. تفعيل وتنظيف الكاش القديم فوراً
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -20,7 +20,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. كاش ديناميكي أثناء التصفح فقط
+// 3. الاستجابة للطلبات مع حفظ الكاش أوفلاين ديناميكياً
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
