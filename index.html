@@ -328,8 +328,8 @@
     let timerInterval = null;
     let timerTime = 25 * 60;
     let isTimerRunning = false;
-    let prayerTimes24 = {}; // تخزين المواعيد بصيغة 24 ساعة للفحص
-    let prayerTimes12 = {}; // تخزين المواعيد بصيغة 12 ساعة للعرض
+    let prayerTimes24 = {}; 
+    let prayerTimes12 = {}; 
     let lastPlayedPrayer = "";
 
     function toggleSoundMaster() {
@@ -361,7 +361,7 @@
       } catch (e) {}
     }
 
-    // --- مواقيت الصلاة والأذان ---
+    // --- مواقيت الصلاة والأذان المحفوظة أوفلاين ---
     function convertTo12Hour(time24) {
       if (!time24) return "--:--";
       let [hours, minutes] = time24.split(':');
@@ -372,8 +372,19 @@
     }
 
     async function fetchPrayerTimes() {
+      // 1. عرض آخر مواقيت محفوظة محلياً
+      const savedPrayers = localStorage.getItem('cached_prayer_times');
+      if (savedPrayers) {
+        try {
+          const parsed = JSON.parse(savedPrayers);
+          prayerTimes24 = parsed.prayerTimes24;
+          prayerTimes12 = parsed.prayerTimes12;
+          renderPrayers();
+        } catch(e) {}
+      }
+
+      // 2. تحديث المواقيت من النت في حالة وجود اتصال
       try {
-        // الاعتماد على مصر كافتراضي لمواقيت الصلاة
         const response = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5');
         const data = await response.json();
         if (data && data.data && data.data.timings) {
@@ -387,10 +398,13 @@
             maghrib: convertTo12Hour(t.Maghrib),
             isha: convertTo12Hour(t.Isha)
           };
+
+          // حفظ البيانات للاستخدام الأوفلاين
+          localStorage.setItem('cached_prayer_times', JSON.stringify({ prayerTimes24, prayerTimes12 }));
           renderPrayers();
         }
       } catch (e) {
-        console.log("استخدام التوقيت المحلي الأوفلاين المسبق الصنع");
+        console.log("استخدام مواقيت الصلاة المحفوظة أوفلاين");
       }
     }
 
