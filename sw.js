@@ -1,23 +1,23 @@
-const CACHE_NAME = 'dashboard-v5';
+const CACHE_NAME = 'dashboard-v6';
 
+// اقتصار الكاش في البداية على الملفات الأساسية فقط لضمان التثبيت الفوري
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './manifest.json',
-  './logo.png',
-  './azan.mp3'
+  './manifest.json'
 ];
 
-// 1. تثبيت الملفات في الكاش
+// 1. تثبيت فوري وتخطي الانتظار
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // تجبر المتصفح يفعل الـ SW فوراً بدون تعليق
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
-// 2. تفعيل وتنظيف الكاش القديم لضمان تحديث التطبيق
+// 2. تفعيل وتنظيف أي كاش قديم مع السيطرة الفورية على الصفحات
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -28,18 +28,18 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => self.clients.claim()) // سيطرة فورية على التطبيق
   );
 });
 
-// 3. الاستجابة للطلبات (Network First مع Fallback للكاش)
+// 3. استراتيجية الشبكة أولاً مع حماية من الأخطاء
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        if (response && response.status === 200) {
+        if (response && response.status === 200 && event.request.url.startsWith('http')) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseClone);
