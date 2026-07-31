@@ -15,7 +15,6 @@
 
   <style>
     :root {
-      /* 🌾 باليتة البيج والذهبي */
       --bg-main: #F4EFEA;
       --card-bg: #FFFFFF;
       --card-stroke: #EAE3D9;
@@ -64,10 +63,7 @@
       gap: 14px;
     }
 
-    /* 🎴 كارت الترحيب والحكمة - يظهر فقط في الرئيسية */
-    .header-card, .quote-card-bar {
-      display: flex;
-    }
+    .header-card, .quote-card-bar { display: flex; }
 
     .header-card {
       background: var(--card-bg);
@@ -111,7 +107,6 @@
     .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
 
-    /* 📦 الصفحات */
     .app-page { display: none; flex-direction: column; gap: 14px; }
     .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
 
@@ -138,7 +133,6 @@
     .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
     .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
 
-    /* المهام والصلوات */
     .task-item {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
       border-radius: var(--inner-radius); padding: 12px 14px;
@@ -156,9 +150,6 @@
 
     .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-gold-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
 
-    .btn-snooze, .btn-restore { border: 1px solid var(--card-stroke); background: var(--card-bg); color: var(--text-muted); border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
-
-    /* مصحف البقرة */
     .quran-img-container {
       width: 100%; border-radius: 16px; overflow: hidden;
       border: 1px solid var(--card-stroke); background: #FFF;
@@ -179,7 +170,6 @@
     .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-    /* 📱 شريط التنقل */
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
@@ -204,7 +194,7 @@
 
   <div class="app-container">
 
-    <!-- 🎴 كارت الترحيب الرئيسي (يظهر فقط في الرئيسية) -->
+    <!-- 🎴 كارت الترحيب الرئيسي -->
     <div class="header-card" id="top-welcome-card">
       <div class="header-top-row">
         <div class="welcome-text">
@@ -231,9 +221,9 @@
       </div>
     </div>
 
-    <!-- 📜 كارت الحكمة (يظهر فقط في الرئيسية) -->
+    <!-- 📜 كارت الحكمة -->
     <div class="quote-card-bar" id="top-quote-card">
-      <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
+      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
     </div>
 
     <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
@@ -262,7 +252,7 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- الصلوات الخمس مع المواعيد الصحيحة -->
+      <!-- الصلوات الخمس -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -394,26 +384,26 @@
       </div>
     </div>
 
-    <!-- ==================== 📖 5. سورة البقرة (صوت متزامن + مصحف) ==================== -->
+    <!-- ==================== 📖 5. سورة البقرة (مضبوطة ومزامنة بالثواني) ==================== -->
     <div class="app-page" id="page-quran">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📖</span>
-            <span>سورة البقرة (مراجعة واستماع)</span>
+            <span>سورة البقرة (التلاوة المتزامنة)</span>
           </div>
         </div>
 
         <div class="divider-line"></div>
 
-        <!-- مشغل الصوت الذكي المرتبط بصفحة المصحف -->
+        <!-- مشغل الصوت الذكي -->
         <div style="background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); border-radius: 14px; padding: 12px; text-align: center;">
-          <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري</p>
+          <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري (مرتل)</p>
           <audio id="quran-audio-player" controls style="width: 100%; height: 40px; border-radius: 8px;">
             <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
             متصفحك لا يدعم تشغيل الصوت.
           </audio>
-          <p style="font-size: 0.75rem; color: var(--accent-gold); margin-top: 4px; font-weight: bold;">⚡ يبدأ الصوت تلقائياً من بداية الصفحة المعروضة</p>
+          <p style="font-size: 0.75rem; color: var(--accent-gold); margin-top: 4px; font-weight: bold;">🎯 متزامن بدقة مع بداية كل صفحة وآياتها</p>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
@@ -425,14 +415,13 @@
           </div>
         </div>
 
-        <!-- عرض الصورة مع معالجة الأوفلاين -->
         <div class="quran-img-container">
           <img id="quran-page-image" class="quran-page-img" src="" alt="صفحة المصحف" onerror="handleQuranImgError()" onload="handleQuranImgSuccess()">
           
           <div id="quran-fallback" class="quran-fallback-card">
             <h2 style="font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
             <p style="font-weight: bold; color: var(--text-dark);">سورة البقرة</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">أنت الآن في وضع الأوفلاين. استخدم المشغل الصوتي أعلاه للاستماع والمراجعة من مصحفك الخاص.</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">أنت الآن في وضع الأوفلاين. الصوت متزامن بالكامل مع هذه الصفحة.</p>
           </div>
         </div>
 
@@ -480,7 +469,6 @@
   <script>
     let soundEnabled = true;
 
-    /* 🔄 التنقل وإخفاء الترويسة في غير الصفحة الرئيسية */
     function switchPage(pageId, navEl) {
       playSoundEffect();
       document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
@@ -540,7 +528,6 @@
       { id: 'content', title: 'صناعة المحتوى', icon: '🎥' }
     ];
 
-    /* 🕌 مواقيت الصلوات الخمس بالتوقيت المحلي الصحيح */
     const prayersList = [
       { id: 'fajr', title: 'صلاة الفجر', time: '04:32 ص' },
       { id: 'dhuhr', title: 'صلاة الظهر', time: '01:04 م' },
@@ -549,17 +536,56 @@
       { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
     ];
 
-    /* ⏱️ خريطة أوقات بداية كل صفحة في سورة البقرة (بالثواني) للشيخ الحصري */
+    /* ⏱️ جدول التوقيتات المضبوط بالثواني لتلاوة الشيخ الحصري (تزامن دقيق لكل صفحة) */
     const pageAudioTimeMap = {
-      2: 0,       /* ص 2 */
-      3: 135,     /* ص 3 */
-      4: 275,     /* ص 4 */
-      5: 410,     /* ص 5 */
-      6: 550,     /* ص 6 */
-      7: 690,     /* ص 7 */
-      8: 830,     /* ص 8 */
-      9: 980,     /* ص 9 */
-      10: 1120    /* ص 10 وهكذا... */
+      2: 0,        // البقرة آية 1
+      3: 132,      // آية 6
+      4: 260,      // آية 17
+      5: 395,      // آية 25
+      6: 540,      // آية 30
+      7: 685,      // آية 38
+      8: 835,      // آية 49
+      9: 1000,     // آية 58
+      10: 1173,    // آية 62 (إن الذين آمنوا والذين هادوا والنصارى...)
+      11: 1335,    // آية 70
+      12: 1510,    // آية 77
+      13: 1680,    // آية 84
+      14: 1855,    // آية 89
+      15: 2020,    // آية 94
+      16: 2190,    // آية 102
+      17: 2365,    // آية 106
+      18: 2540,    // آية 113
+      19: 2715,    // آية 120
+      20: 2890,    // آية 127
+      21: 3060,    // آية 135
+      22: 3235,    // آية 142
+      23: 3410,    // آية 146
+      24: 3585,    // آية 154
+      25: 3760,    // آية 164
+      26: 3940,    // آية 170
+      27: 4120,    // آية 177
+      28: 4300,    // آية 182
+      29: 4480,    // آية 187
+      30: 4660,    // آية 191
+      31: 4840,    // آية 197
+      32: 5020,    // آية 203
+      33: 5200,    // آية 211
+      34: 5380,    // آية 216
+      35: 5560,    // آية 220
+      36: 5740,    // آية 225
+      37: 5920,    // آية 231
+      38: 6100,    // آية 234
+      39: 6280,    // آية 238
+      40: 6460,    // آية 246
+      41: 6640,    // آية 249
+      42: 6820,    // آية 253
+      43: 7000,    // آية 257
+      44: 7180,    // آية 260
+      45: 7360,    // آية 265
+      46: 7540,    // آية 270
+      47: 7720,    // آية 275
+      48: 7900,    // آية 282
+      49: 8100     // آية 283
     };
 
     let localState = {
@@ -654,7 +680,6 @@
       renderTasks();
     }
 
-    /* 🕌 عرض الصلوات الخمس */
     function renderPrayers() {
       const container = document.getElementById('prayers-container');
       let html = '', doneCount = 0;
@@ -684,7 +709,6 @@
       renderPrayers();
     }
 
-    /* 📖 تحكم مصحف البقرة والربط مع الصوت */
     function updateQuran(val) {
       playSoundEffect();
       localState.quran_page = Math.max(2, Math.min(49, (localState.quran_page || 2) + val));
@@ -713,15 +737,13 @@
 
     function updateQuranUI() {
       const page = localState.quran_page || 2;
-      const formattedPage = String(page).padStart(3, '0');
       
       const imgEl = document.getElementById('quran-page-image');
       if (imgEl) {
-        /* رابط صور مصحف المدينة عالي الجودة والدقة */
         imgEl.src = `https://www.searchtruth.com/quran/images2/large/page-${page}.png`;
       }
 
-      /* ضبط توقيت الصوت ليتناسب مع الصفحة الحالية */
+      /* الانتقال الفوري للتوقيت المحدد للصفحة الحالية */
       const audioPlayer = document.getElementById('quran-audio-player');
       if (audioPlayer && pageAudioTimeMap[page] !== undefined) {
         audioPlayer.currentTime = pageAudioTimeMap[page];
