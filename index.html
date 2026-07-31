@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم والتطبيق</title>
+  <title>Eng-Mustafa Helmy | لوحة التحكم</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -15,7 +15,7 @@
 
   <style>
     :root {
-      /* 🌾 باليتة الألوان البيج والرملي والذهبي */
+      /* 🌾 باليتة البيج والذهبي */
       --bg-main: #F4EFEA;
       --card-bg: #FFFFFF;
       --card-stroke: #EAE3D9;
@@ -64,14 +64,18 @@
       gap: 14px;
     }
 
-    /* 🎴 كارت الترحيب الرئيسي */
+    /* 🎴 كارت الترحيب والحكمة - يظهر فقط في الرئيسية */
+    .header-card, .quote-card-bar {
+      display: flex;
+    }
+
     .header-card {
       background: var(--card-bg);
       border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke);
       padding: 20px;
       box-shadow: var(--shadow-soft);
-      display: flex; flex-direction: column; gap: 18px;
+      flex-direction: column; gap: 18px;
     }
 
     .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
@@ -86,7 +90,6 @@
     }
 
     .header-widgets-row { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
-
     .widgets-group { display: flex; align-items: center; gap: 10px; }
     .time-widget { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
     .time-widget span.ampm { font-size: 0.75rem; color: var(--text-muted); }
@@ -99,16 +102,16 @@
     }
     .circle-btn:active { transform: scale(0.9); }
 
-    /* 📜 كارت الحكمة */
     .quote-card-bar {
       background: var(--card-bg); border-radius: var(--inner-radius);
       border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
       box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
+      justify-content: center; align-items: center;
     }
     .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
 
-    /* 📦 نظام تبديل الصفحات الفعلي */
+    /* 📦 الصفحات */
     .app-page { display: none; flex-direction: column; gap: 14px; }
     .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
 
@@ -117,7 +120,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 📦 كروت الأقسام */
     .section-card {
       background: var(--card-bg); border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke); padding: 18px;
@@ -136,7 +138,7 @@
     .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
     .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
 
-    /* 🔥 تصميم عنصر المهمة مع بدج الأيام */
+    /* المهام والصلوات */
     .task-item {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
       border-radius: var(--inner-radius); padding: 12px 14px;
@@ -152,18 +154,11 @@
       padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
     }
 
-    .task-actions { display: flex; align-items: center; gap: 6px; }
-    .btn-snooze, .btn-restore { border: 1px solid var(--card-stroke); background: var(--card-bg); color: var(--text-muted); border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
     .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-gold-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
 
-    .counter-control { display: flex; align-items: center; gap: 8px; }
-    .btn-counter { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-    .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
-    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
-    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-    .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
+    .btn-snooze, .btn-restore { border: 1px solid var(--card-stroke); background: var(--card-bg); color: var(--text-muted); border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
 
-    /* 🇬🇧 كورس الإنجليزي */
+    /* الإنجليزي */
     .unit-selector { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 8px; }
     .unit-tab {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
@@ -209,7 +204,22 @@
 
     .tts-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; border-radius: 6px; }
 
-    /* 📱 شريط التنقل السفلي */
+    /* مصحف البقرة */
+    .quran-img-container {
+      width: 100%; border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--card-stroke); background: #FFF;
+      display: flex; justify-content: center; align-items: center; margin-top: 10px;
+    }
+    .quran-page-img { width: 100%; max-width: 450px; height: auto; display: block; }
+
+    .counter-control { display: flex; align-items: center; gap: 8px; }
+    .btn-counter { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+    .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
+    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
+    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+    .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
+
+    /* 📱 شريط التنقل */
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
@@ -224,12 +234,7 @@
       padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
     }
     .nav-item .nav-icon { font-size: 1.25rem; }
-    
-    .nav-item.active {
-      background: var(--accent-gold-light);
-      color: var(--accent-gold);
-      border: 1px solid var(--accent-gold-border);
-    }
+    .nav-item.active { background: var(--accent-gold-light); color: var(--accent-gold); border: 1px solid var(--accent-gold-border); }
 
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
     .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
@@ -237,12 +242,10 @@
 </head>
 <body>
 
-  <audio id="azan-audio" src="azan.mp3" preload="auto"></audio>
-
   <div class="app-container">
 
-    <!-- 🎴 كارت الترحيب والحكمة -->
-    <div class="header-card">
+    <!-- 🎴 كارت الترحيب الرئيسي (يظهر فقط في الرئيسية) -->
+    <div class="header-card" id="top-welcome-card">
       <div class="header-top-row">
         <div class="welcome-text">
           <h1>👋 مرحباً بك،<br>يا مهندس!</h1>
@@ -268,11 +271,12 @@
       </div>
     </div>
 
-    <div class="quote-card-bar">
+    <!-- 📜 كارت الحكمة (يظهر فقط في الرئيسية) -->
+    <div class="quote-card-bar" id="top-quote-card">
       <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
     </div>
 
-    <!-- ==================== 🏠 الصفحة الأولى: الرئيسية ==================== -->
+    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
     <div class="app-page active" id="page-home">
       <!-- المهام اليومية -->
       <div class="section-card">
@@ -298,14 +302,13 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- الصلوات الخمس -->
+      <!-- الصلوات الخمس مع المواعيد -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">🕌</span>
-            <span>الصلوات الخمس</span>
+            <span>الصلوات الخمس ومواقيتها</span>
           </div>
-          <button class="btn-action" style="font-size:0.65rem; padding: 2px 8px;" onclick="stopAzan();">⏹️ إيقاف الأذان</button>
         </div>
 
         <div class="divider-line"></div>
@@ -323,7 +326,7 @@
       </div>
     </div>
 
-    <!-- ==================== 🇬🇧 الصفحة الثانية: كورس الإنجليزي ==================== -->
+    <!-- ==================== 🇬🇧 2. كورس الإنجليزي ==================== -->
     <div class="app-page" id="page-english">
       <div class="section-card">
         <div class="section-header-row">
@@ -363,13 +366,13 @@
       </div>
     </div>
 
-    <!-- ==================== 📐 الصفحة الثالثة: الكورسات ==================== -->
+    <!-- ==================== 📐 3. الكورسات ==================== -->
     <div class="app-page" id="page-courses">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📐</span>
-            <span>الكورسات الهندسة والتشطيبات</span>
+            <span>كورسات الهندسة والتشطيبات</span>
           </div>
         </div>
 
@@ -403,25 +406,14 @@
       </div>
     </div>
 
-    <!-- ==================== 🎯 الصفحة الرابعة: الأهداف ==================== -->
+    <!-- ==================== 🎯 4. الأهداف (بالترتيب الجديد) ==================== -->
     <div class="app-page" id="page-goals">
+      <!-- 1. الهدف الأول: صناعة المحتوى -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
-            <span class="sec-icon">🏢</span>
-            <span>تأسيس مكتب التشطيبات</span>
-          </div>
-          <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow()">➕ إضافة</button>
-        </div>
-        <div class="divider-line"></div>
-        <div id="office-goals-container"></div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🎯</span>
-            <span>صناعة المحتوى (10K متابع)</span>
+            <span class="sec-icon">🎥</span>
+            <span>1. صناعة المحتوى (10K متابع)</span>
           </div>
         </div>
         <div class="divider-line"></div>
@@ -435,11 +427,12 @@
         <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
       </div>
 
+      <!-- 2. الهدف الثاني: الادخار للآيفون -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">🍎</span>
-            <span>الادخار للآيفون</span>
+            <span>2. الادخار للآيفون</span>
           </div>
         </div>
         <div class="divider-line"></div>
@@ -456,6 +449,20 @@
         </div>
       </div>
 
+      <!-- 3. الهدف الثالث: تأسيس مكتب التشطيبات -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🏢</span>
+            <span>3. تأسيس مكتب التشطيبات</span>
+          </div>
+          <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow()">➕ إضافة خطوة</button>
+        </div>
+        <div class="divider-line"></div>
+        <div id="office-goals-container"></div>
+      </div>
+
+      <!-- الأهداف المؤجلة -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -468,37 +475,51 @@
       </div>
     </div>
 
-    <!-- ==================== 📖 الصفحة الخامسة: سورة البقرة ==================== -->
+    <!-- ==================== 📖 5. سورة البقرة (صوت الحصري + صور الصفحات) ==================== -->
     <div class="app-page" id="page-quran">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📖</span>
-            <span>متابعة حفظ وقراءة سورة البقرة</span>
+            <span>سورة البقرة (مراجعة واستماع)</span>
           </div>
         </div>
 
         <div class="divider-line"></div>
 
+        <!-- مشغل الصوت للشيخ محمود خليل الحصري -->
+        <div style="background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); border-radius: 14px; padding: 12px; text-align: center;">
+          <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري</p>
+          <audio controls style="width: 100%; height: 40px; border-radius: 8px;">
+            <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
+            متصفحك لا يدعم تشغيل الصوت.
+          </audio>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-          <span style="font-size: 0.85rem; font-weight: bold;">الصفحات المكتملة:</span>
+          <span style="font-size: 0.85rem; font-weight: bold;">الصفحة الحالية:</span>
           <div class="counter-control">
-            <button class="btn-counter" onclick="updateQuran(-1)">-</button>
-            <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
-            <button class="btn-counter" onclick="updateQuran(1)">+</button>
+            <button class="btn-counter" onclick="updateQuran(-1)">السابقة</button>
+            <input type="number" id="quran-page-input" class="number-input" value="2" min="2" max="49" onchange="setQuranPage(this.value)">
+            <button class="btn-counter" onclick="updateQuran(1)">التالية</button>
           </div>
         </div>
 
-        <div class="progress-track" style="margin-top: 14px;">
+        <!-- عرض صورة الصفحة الحالية من المصحف -->
+        <div class="quran-img-container">
+          <img id="quran-page-image" class="quran-page-img" src="https://quran.ksu.edu.eg/png_big/2.png" alt="صفحة المصحف">
+        </div>
+
+        <div class="progress-track" style="margin-top: 10px;">
           <div class="progress-fill" id="quran-progress"></div>
         </div>
-        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-gold); margin-top: 8px;" id="quran-status">آخر صفحة وصلت لها: 0 من 48</p>
+        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-gold); margin-top: 6px;" id="quran-status">الصفحة 2 من 49 (سورة البقرة)</p>
       </div>
     </div>
 
   </div>
 
-  <!-- 📱 شريط التنقل السفلي المربوط بالأيقونات -->
+  <!-- 📱 شريط التنقل السفلي -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="switchPage('page-home', this)">
       <span class="nav-icon">🏠</span>
@@ -540,6 +561,7 @@
     let ttsRate = 1.0;
     let activeUnitIndex = 0;
 
+    /* 🔄 التنقل وإخفاء الترويسة في غير الصفحة الرئيسية */
     function switchPage(pageId, navEl) {
       playSoundEffect();
       document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
@@ -547,6 +569,18 @@
 
       document.getElementById(pageId).classList.add('active');
       navEl.classList.add('active');
+
+      const welcomeCard = document.getElementById('top-welcome-card');
+      const quoteCard = document.getElementById('top-quote-card');
+
+      if (pageId === 'page-home') {
+        welcomeCard.style.display = 'flex';
+        quoteCard.style.display = 'flex';
+      } else {
+        welcomeCard.style.display = 'none';
+        quoteCard.style.display = 'none';
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -599,7 +633,6 @@
     function speakEnglish(text) {
       if (!('speechSynthesis' in window)) return alert('متصفحك لا يدعم الناطق الصوتي.');
       window.speechSynthesis.cancel();
-      
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
       utterance.rate = ttsRate;
@@ -625,7 +658,6 @@
 
     function renderEngUnit(index) {
       const unit = englishCourseData[index];
-      
       let vocabHtml = '';
       unit.vocab.forEach(item => {
         vocabHtml += `
@@ -709,21 +741,22 @@
       { id: 'content', title: 'صناعة المحتوى', icon: '🎥' }
     ];
 
+    /* مواقيت الصلوات الخمس */
     const prayersList = [
-      { id: 'fajr', title: 'صلاة الفجر' },
-      { id: 'dhuhr', title: 'صلاة الظهر' },
-      { id: 'asr', title: 'صلاة العصر' },
-      { id: 'maghrib', title: 'صلاة المغرب' },
-      { id: 'isha', title: 'صلاة العشاء' }
+      { id: 'fajr', title: 'صلاة الفجر', time: '04:32 ص' },
+      { id: 'dhuhr', title: 'صلاة الظهر', time: '12:04 م' },
+      { id: 'asr', title: 'صلاة العصر', time: '03:41 م' },
+      { id: 'maghrib', title: 'صلاة المغرب', time: '06:56 م' },
+      { id: 'isha', title: 'صلاة العشاء', time: '08:24 م' }
     ];
 
     let localState = {
       daily_tasks: {}, 
-      task_days_count: {}, /* 🏆 كائن حفظ عدد أيام الإنجاز التراكمي */
+      task_days_count: {},
       prayers_tasks: {}, 
       snoozed_tasks: {},
       office_goals: ["تجهيز Portfolio الأعمال", "تحديد تسعير الخدمات"], 
-      quran_page: 0,
+      quran_page: 2,
       courses_data: { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' },
       savings: 15000, followers: 1200
     };
@@ -735,6 +768,7 @@
       if (stored) { try { localState = JSON.parse(stored); } catch(e){} }
       if (!localState.snoozed_tasks) localState.snoozed_tasks = {};
       if (!localState.task_days_count) localState.task_days_count = {};
+      if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
       applyStateToUI();
     }
 
@@ -745,7 +779,7 @@
       setDailyQuote();
       renderEngUnit(0);
       
-      document.getElementById('quran-page-input').value = localState.quran_page || 0;
+      document.getElementById('quran-page-input').value = localState.quran_page || 2;
       updateQuranUI();
 
       if (localState.courses_data) {
@@ -762,7 +796,6 @@
       updateFollowersUI();
     }
 
-    /* 📋 عرض المهام وعداد الأيام المتراكم */
     function renderTasks() {
       const mainContainer = document.getElementById('tasks-container');
       const snoozedContainer = document.getElementById('snoozed-tasks-container');
@@ -807,7 +840,6 @@
       document.getElementById('tasks-progress-text').innerText = pct + '%';
     }
 
-    /* 🔄 تبديل حالة المهمة وتراكم الأيام */
     function toggleTask(id, isChecked) {
       if (!localState.daily_tasks) localState.daily_tasks = {};
       if (!localState.task_days_count) localState.task_days_count = {};
@@ -815,11 +847,9 @@
       if (isChecked) {
         playSoundEffect();
         localState.daily_tasks[id] = true;
-        // زيادة عدد الأيام التراكمي بمقدار يوم واحد عند الإنجاز
         localState.task_days_count[id] = (localState.task_days_count[id] || 0) + 1;
       } else {
         localState.daily_tasks[id] = false;
-        // في حال إلغاء التحديد في نفس اليوم، يتم خصم اليوم المحسوب
         localState.task_days_count[id] = Math.max(0, (localState.task_days_count[id] || 1) - 1);
       }
 
@@ -834,6 +864,7 @@
       renderTasks();
     }
 
+    /* 🕌 عرض الصلوات الخمس مع الأوقات */
     function renderPrayers() {
       const container = document.getElementById('prayers-container');
       let html = '', doneCount = 0;
@@ -847,7 +878,7 @@
               <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
               <span>${prayer.title}</span>
             </label>
-            <span class="prayer-badge">🕌 صلاة</span>
+            <span class="prayer-badge">${prayer.time}</span>
           </div>`;
       });
 
@@ -889,25 +920,34 @@
       saveStateLocally();
     }
 
+    /* 📖 تحكم مصحف البقرة المصور */
     function updateQuran(val) {
       playSoundEffect();
-      localState.quran_page = Math.max(0, Math.min(48, (localState.quran_page || 0) + val));
+      localState.quran_page = Math.max(2, Math.min(49, (localState.quran_page || 2) + val));
       document.getElementById('quran-page-input').value = localState.quran_page;
       saveStateLocally();
       updateQuranUI();
     }
 
     function setQuranPage(val) {
-      localState.quran_page = Math.max(0, Math.min(48, parseInt(val) || 0));
+      localState.quran_page = Math.max(2, Math.min(49, parseInt(val) || 2));
       document.getElementById('quran-page-input').value = localState.quran_page;
       saveStateLocally();
       updateQuranUI();
     }
 
     function updateQuranUI() {
-      const page = localState.quran_page || 0;
-      document.getElementById('quran-progress').style.width = Math.round((page / 48) * 100) + '%';
-      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${page} من 48`;
+      const page = localState.quran_page || 2;
+      const imgEl = document.getElementById('quran-page-image');
+      if (imgEl) {
+        imgEl.src = `https://quran.ksu.edu.eg/png_big/${page}.png`;
+      }
+      const totalPagesInSurah = 48; // عدد صفحات سورة البقرة (من ص 2 لـ ص 49)
+      const currentProgress = page - 1; 
+      const pct = Math.round((currentProgress / totalPagesInSurah) * 100);
+
+      document.getElementById('quran-progress').style.width = pct + '%';
+      document.getElementById('quran-status').innerText = `الصفحة ${page} من 49 (سورة البقرة)`;
     }
 
     function renderOfficeGoals() {
@@ -957,11 +997,6 @@
       const pct = Math.min(100, Math.round(((localState.followers || 0) / 10000) * 100));
       document.getElementById('followers-progress').style.width = pct + '%';
       document.getElementById('followers-percent').innerText = `${pct}% مكتمل`;
-    }
-
-    function stopAzan() {
-      const azanAudio = document.getElementById('azan-audio');
-      if (azanAudio) { azanAudio.pause(); azanAudio.currentTime = 0; }
     }
 
     function toggleTheme() { playSoundEffect(); document.body.classList.toggle('dark-mode'); }
