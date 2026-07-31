@@ -1,22 +1,21 @@
 {
   "short_name": "Dashboard",
-  "name": "Personal Dashboard",
+  "name": "Architect Dashboard",
   "icons": [
     {
       "src": "logo.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "start_url": "./index.html",
-  "scope": "./",
   "background_color": "#F4EFEA",
   "theme_color": "#5C4333",
   "display": "standalone",
