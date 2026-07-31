@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم</title>
+  <title>Eng-Mustafa Helmy | لوحة التحكم والتطبيق</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -29,7 +29,7 @@
       --card-radius: 24px;
       --inner-radius: 16px;
       --shadow-soft: 0 10px 25px rgba(180, 160, 140, 0.08);
-      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     body.dark-mode {
@@ -64,16 +64,18 @@
       gap: 14px;
     }
 
-    /* 🔝 الشريط العلوي للأيقونات */
+    /* 🔝 الشريط العلوي */
     .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; }
     .top-bar-right, .top-bar-left { display: flex; align-items: center; gap: 10px; }
     .icon-top-btn {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.7);
       border: 1px solid var(--card-stroke);
-      width: 40px; height: 40px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; font-size: 1.1rem; color: var(--text-dark);
+      transition: var(--transition);
     }
+    .icon-top-btn:active { transform: scale(0.92); }
 
     /* 🎴 كارت الترحيب */
     .header-card {
@@ -104,7 +106,7 @@
       display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1rem; color: var(--text-dark);
     }
 
-    .widgets-group { display: flex; align-items: center; gap: 12px; }
+    .widgets-group { display: flex; align-items: center; gap: 10px; }
     .time-widget { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
     .time-widget span.ampm { font-size: 0.75rem; color: var(--text-muted); }
 
@@ -112,8 +114,9 @@
       width: 38px; height: 38px; border-radius: 50%;
       background: var(--bg-main); border: 1px solid var(--card-stroke);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; cursor: pointer; color: var(--text-dark);
+      font-size: 1rem; cursor: pointer; color: var(--text-dark); transition: var(--transition);
     }
+    .circle-btn:active { transform: scale(0.9); }
 
     /* 📜 كارت الحكمة */
     .quote-card-bar {
@@ -124,6 +127,15 @@
     .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
 
+    /* 📦 نظام تبديل الصفحات الفعلي (View Engine) */
+    .app-page { display: none; flex-direction: column; gap: 14px; }
+    .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* 📦 كروت الأقسام */
     .section-card {
       background: var(--card-bg); border-radius: var(--card-radius);
@@ -131,7 +143,7 @@
       box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 14px;
     }
 
-    .section-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .section-header-row { display: flex; justify-content: space-between; align-items: center; }
     .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
     .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-gold-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
 
@@ -143,14 +155,11 @@
     .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
     .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
 
-    .accordion-content { display: none; flex-direction: column; gap: 10px; }
-    .accordion-content.open { display: flex; }
-
     .task-item {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
       border-radius: var(--inner-radius); padding: 12px 14px;
       display: flex; align-items: center; justify-content: space-between;
-      direction: rtl; transition: var(--transition);
+      direction: rtl; transition: var(--transition); margin-bottom: 8px;
     }
     .task-item label { display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 700; font-size: 0.95rem; color: var(--text-dark); flex-grow: 1; }
     .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
@@ -165,18 +174,14 @@
     .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-    /* 🇬🇧 تنسيقات أكاديمية اللغة الإنجليزية الاحترافية */
-    .unit-selector {
-      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 8px;
-    }
+    /* 🇬🇧 قسم كورس الإنجليزي */
+    .unit-selector { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 8px; }
     .unit-tab {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
       border-radius: 12px; padding: 8px 14px; font-size: 0.8rem; font-weight: 800;
       white-space: nowrap; cursor: pointer; color: var(--text-muted); transition: var(--transition);
     }
-    .unit-tab.active {
-      background: var(--accent-gold); color: white; border-color: var(--accent-gold);
-    }
+    .unit-tab.active { background: var(--accent-gold); color: white; border-color: var(--accent-gold); }
 
     .eng-controls-bar {
       display: flex; justify-content: space-between; align-items: center;
@@ -213,17 +218,13 @@
     .speech-en { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
     .speech-ar { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; text-align: right; direction: rtl; }
 
-    .tts-btn {
-      background: none; border: none; cursor: pointer; font-size: 1.1rem;
-      padding: 4px; border-radius: 6px; transition: transform 0.1s ease;
-    }
-    .tts-btn:active { transform: scale(0.9); }
+    .tts-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; border-radius: 6px; }
 
-    /* 📱 شريط التنقل السفلي */
+    /* 📱 شريط التنقل السفلي التفاعلي بالكامل */
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
-      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 8px 12px;
+      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
       display: flex; justify-content: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
     }
@@ -231,10 +232,15 @@
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
       color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer;
-      padding: 4px 8px; border-radius: 12px; transition: var(--transition);
+      padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
     }
-    .nav-item .nav-icon { font-size: 1.2rem; }
-    .nav-item.active { background: var(--accent-gold-light); color: var(--text-dark); }
+    .nav-item .nav-icon { font-size: 1.25rem; }
+    
+    .nav-item.active {
+      background: var(--accent-gold-light);
+      color: var(--accent-gold);
+      border: 1px solid var(--accent-gold-border);
+    }
 
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
     .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
@@ -249,15 +255,15 @@
     <!-- 🔝 الشريط العلوي -->
     <div class="top-bar">
       <div class="top-bar-left">
-        <button class="icon-top-btn" title="القائمة">☰</button>
-        <button class="icon-top-btn" title="التقويم">📅</button>
+        <button class="icon-top-btn" title="القائمة" onclick="openModal('menu-modal')">☰</button>
+        <button class="icon-top-btn" title="التقويم" onclick="openModal('calendar-modal')">📅</button>
       </div>
       <div class="top-bar-right">
-        <button class="icon-top-btn" title="الإشعارات">🔔</button>
+        <button class="icon-top-btn" title="الإشعارات" onclick="openModal('notif-modal')">🔔</button>
       </div>
     </div>
 
-    <!-- 🎴 كارت الترحيب -->
+    <!-- 🎴 كارت الترحيب والحكمة (ثابت لكل الصفحات) -->
     <div class="header-card">
       <div class="header-top-row">
         <div class="welcome-text">
@@ -289,58 +295,81 @@
       </div>
     </div>
 
-    <!-- 📜 كارت الحكمة اليومية -->
     <div class="quote-card-bar">
       <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
     </div>
 
-    <!-- 1️⃣ 📋 المهام اليومية -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">📋</span>
-          <span>المهام اليومية</span>
+    <!-- ==================== 🏠 الصفحة الأولى: الرئيسية ==================== -->
+    <div class="app-page active" id="page-home">
+      <!-- المهام اليومية -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">📋</span>
+            <span>المهام اليومية</span>
+          </div>
         </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
+
+        <div class="divider-line"></div>
+
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>نسبة الإنجاز اليومي:</span>
+            <span id="tasks-progress-text">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="tasks-progress"></div>
+          </div>
+        </div>
+
+        <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <div class="divider-line"></div>
+      <!-- الصلوات الخمس -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🕌</span>
+            <span>الصلوات الخمس</span>
+          </div>
+          <button class="btn-action" style="font-size:0.65rem; padding: 2px 8px;" onclick="stopAzan();">⏹️ إيقاف الأذان</button>
+        </div>
 
-      <div class="progress-section">
-        <div class="progress-info">
-          <span>نسبة الإنجاز اليومي:</span>
-          <span id="tasks-progress-text">0%</span>
+        <div class="divider-line"></div>
+
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>نسبة الالتزام بالصلوات:</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="prayers-progress"></div>
+          </div>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="tasks-progress"></div>
-        </div>
+
+        <div id="prayers-container" style="margin-top: 10px;"></div>
       </div>
-
-      <div class="accordion-content open" id="tasks-container"></div>
     </div>
 
-    <!-- 2️⃣ 🇬🇧 أكاديمية تعلم اللغة الإنجليزية (قسم دسم ومتكامل) -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">🇬🇧</span>
-          <span>كورس الإنجليزية الشامل</span>
+    <!-- ==================== 🇬🇧 الصفحة الثانية: كورس الإنجليزي ==================== -->
+    <div class="app-page" id="page-english">
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🇬🇧</span>
+            <span>أكاديمية اللغة الإنجليزية</span>
+          </div>
         </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
-      </div>
 
-      <div class="divider-line"></div>
+        <div class="divider-line"></div>
 
-      <div class="accordion-content open">
-        
-        <!-- تبويبات الوحدات التعليمية -->
+        <!-- تبويبات الوحدات -->
         <div class="unit-selector">
           <div class="unit-tab active" onclick="switchEngUnit(0, this)">Unit 1: Fundamentals</div>
-          <div class="unit-tab" onclick="switchEngUnit(1, this)">Unit 2: Architecture & Interior</div>
+          <div class="unit-tab" onclick="switchEngUnit(1, this)">Unit 2: Architecture</div>
           <div class="unit-tab" onclick="switchEngUnit(2, this)">Unit 3: Client Meetings</div>
         </div>
 
-        <!-- أشرطة التحكم بالترجمة والصوت -->
+        <!-- أدوات التحكم -->
         <div class="eng-controls-bar">
           <div>
             <span>الترجمة: </span>
@@ -352,59 +381,31 @@
           </div>
         </div>
 
-        <!-- محتوى الكلمات والمعجم -->
         <p style="font-weight: 800; font-size: 0.9rem; margin-top: 4px;">📚 المفردات والمصطلحات (Vocabulary):</p>
         <div id="eng-vocab-container"></div>
 
-        <!-- محتوى المحادثة والأستماع -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
           <p style="font-weight: 800; font-size: 0.9rem;">🎙️ الاستماع والمحادثة (Conversation):</p>
-          <button class="btn-action" style="padding: 4px 10px; font-size: 0.75rem;" onclick="playFullDialogue()">▶️ تشغيل المحادثة</button>
+          <button class="btn-action" style="padding: 4px 10px; font-size: 0.75rem;" onclick="playFullDialogue()">▶️ تشغيل كامل</button>
         </div>
-        <div id="eng-dialogue-container"></div>
-
+        <div id="eng-dialogue-container" style="margin-top: 8px;"></div>
       </div>
     </div>
 
-    <!-- 3️⃣ 🕌 الصلوات الخمس -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">🕌</span>
-          <span>الصلوات الخمس</span>
+    <!-- ==================== 📐 الصفحة الثالثة: الكورسات الفنية ==================== -->
+    <div class="app-page" id="page-courses">
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">📐</span>
+            <span>الكورسات الهندسة والتشطيبات</span>
+          </div>
         </div>
-        <button class="btn-action" style="font-size:0.65rem; padding: 2px 8px;" onclick="stopAzan(); event.stopPropagation();">⏹️ إيقاف الأذان</button>
-      </div>
 
-      <div class="divider-line"></div>
+        <div class="divider-line"></div>
 
-      <div class="progress-section">
-        <div class="progress-info">
-          <span>نسبة الالتزام بالصلوات:</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="prayers-progress"></div>
-        </div>
-      </div>
-
-      <div class="accordion-content" id="prayers-container"></div>
-    </div>
-
-    <!-- 4️⃣ 📐 الكورسات الفنية -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">📐</span>
-          <span>الكورسات الفنية</span>
-        </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
-      </div>
-
-      <div class="divider-line"></div>
-
-      <div class="accordion-content">
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور</p>
+        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
+          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
             <div class="counter-control">
@@ -413,11 +414,11 @@
               <button class="btn-counter" onclick="updateCourseLessons('decor', 1)">+</button>
             </div>
           </div>
-          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="مثال: أسس توزيع الإضاءة" onchange="saveCoursesData()">
+          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
         </div>
 
         <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات</p>
+          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
             <div class="counter-control">
@@ -426,63 +427,54 @@
               <button class="btn-counter" onclick="updateCourseLessons('finishing', 1)">+</button>
             </div>
           </div>
-          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="مثال: بند الكهرباء والمحارة" onchange="saveCoursesData()">
+          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
         </div>
       </div>
     </div>
 
-    <!-- 5️⃣ 📖 سورة البقرة -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">📖</span>
-          <span>سورة البقرة</span>
-        </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
-      </div>
-
-      <div class="accordion-content">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.85rem;">الصفحات المحفوظة:</span>
-          <div class="counter-control">
-            <button class="btn-counter" onclick="updateQuran(-1)">-</button>
-            <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
-            <button class="btn-counter" onclick="updateQuran(1)">+</button>
+    <!-- ==================== 🎯 الصفحة الرابعة: الأهداف ==================== -->
+    <div class="app-page" id="page-goals">
+      <!-- تأسيس المكتب -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🏢</span>
+            <span>تأسيس مكتب التشطيبات</span>
           </div>
+          <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow()">➕ إضافة</button>
         </div>
-        <div class="progress-track" style="margin-top: 10px;">
-          <div class="progress-fill" id="quran-progress"></div>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;" id="quran-status">آخر صفحة وصلت لها: 0 من 48</p>
-      </div>
-    </div>
-
-    <!-- 6️⃣ 🏢 الهدف الأكبر: المكتب -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">🏢</span>
-          <span>تأسيس مكتب التشطيبات</span>
-        </div>
-        <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow(); event.stopPropagation();">➕ إضافة</button>
-      </div>
-
-      <div class="accordion-content">
+        <div class="divider-line"></div>
         <div id="office-goals-container"></div>
       </div>
-    </div>
 
-    <!-- 7️⃣ 🍎 الادخار للآيفون -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">🍎</span>
-          <span>الادخار للآيفون</span>
+      <!-- هدف 10K -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🎯</span>
+            <span>صناعة المحتوى (10K متابع)</span>
+          </div>
         </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
+        <div class="divider-line"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem;">المتابعين الحاليين:</span>
+          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 80px;" onchange="updateFollowers()">
+        </div>
+        <div class="progress-track" style="margin-top: 10px;">
+          <div class="progress-fill" id="followers-progress"></div>
+        </div>
+        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
       </div>
 
-      <div class="accordion-content">
+      <!-- الادخار للآيفون -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🍎</span>
+            <span>الادخار للآيفون</span>
+          </div>
+        </div>
+        <div class="divider-line"></div>
         <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
           <span>الحالي: <strong id="savings-current">0</strong> ج.م</span>
           <span>المستهدف: <strong>50,000</strong> ج.م</span>
@@ -495,75 +487,105 @@
           <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
         </div>
       </div>
-    </div>
 
-    <!-- 8️⃣ 🎯 هدف 10K متابع -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">🎯</span>
-          <span>صناعة المحتوى (10K)</span>
+      <!-- الأهداف المؤجلة -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">⏸️</span>
+            <span>الأهداف المؤجلة</span>
+          </div>
         </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
-      </div>
-
-      <div class="accordion-content">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.85rem;">المتابعين الحاليين:</span>
-          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 80px;" onchange="updateFollowers()">
-        </div>
-        <div class="progress-track" style="margin-top: 10px;">
-          <div class="progress-fill" id="followers-progress"></div>
-        </div>
-        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
+        <div class="divider-line"></div>
+        <div id="snoozed-tasks-container"></div>
       </div>
     </div>
 
-    <!-- 9️⃣ ⏸️ الأهداف المؤجلة -->
-    <div class="section-card">
-      <div class="section-header-row" onclick="toggleAccordion(this)">
-        <div class="section-title">
-          <span class="sec-icon">⏸️</span>
-          <span>الأهداف المؤجلة</span>
+    <!-- ==================== 📖 الصفحة الخامسة: سورة البقرة ==================== -->
+    <div class="app-page" id="page-quran">
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">📖</span>
+            <span>متابعة حفظ وقراءة سورة البقرة</span>
+          </div>
         </div>
-        <span style="font-size:0.8rem; color:var(--text-muted)">▼</span>
-      </div>
 
-      <div class="accordion-content" id="snoozed-tasks-container"></div>
+        <div class="divider-line"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+          <span style="font-size: 0.85rem; font-weight: bold;">الصفحات المكتملة:</span>
+          <div class="counter-control">
+            <button class="btn-counter" onclick="updateQuran(-1)">-</button>
+            <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
+            <button class="btn-counter" onclick="updateQuran(1)">+</button>
+          </div>
+        </div>
+
+        <div class="progress-track" style="margin-top: 14px;">
+          <div class="progress-fill" id="quran-progress"></div>
+        </div>
+        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-gold); margin-top: 8px;" id="quran-status">آخر صفحة وصلت لها: 0 من 48</p>
+      </div>
     </div>
 
   </div>
 
-  <!-- 📱 شريط التنقل السفلي -->
+  <!-- 📱 شريط التنقل السفلي المربوط بالأيقونات -->
   <div class="bottom-nav">
-    <div class="nav-item">
-      <span class="nav-icon">👤</span>
-      <span>الحساب</span>
-    </div>
-    <div class="nav-item">
-      <span class="nav-icon">📊</span>
-      <span>التقارير</span>
-    </div>
-    <div class="nav-item active">
+    <div class="nav-item active" onclick="switchPage('page-home', this)">
       <span class="nav-icon">🏠</span>
       <span>الرئيسية</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="switchPage('page-english', this)">
+      <span class="nav-icon">🇬🇧</span>
+      <span>الإنجليزي</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('page-courses', this)">
+      <span class="nav-icon">📐</span>
+      <span>الكورسات</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('page-goals', this)">
       <span class="nav-icon">🎯</span>
       <span>الأهداف</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="switchPage('page-quran', this)">
       <span class="nav-icon">📖</span>
-      <span>المجتمع</span>
+      <span>البقرة</span>
     </div>
   </div>
 
-  <!-- Modals -->
+  <!-- Popups / Modals التفاعلية للبار العلوي -->
+  <div class="modal" id="menu-modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 10px; color: var(--accent-gold);">⚙️ قائمة التطبيق السريعة</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">مرحباً بك يا باشمهندس في لوحة تحكمك الشخصية المصممة بأسلوب Glassmorphism.</p>
+      <button class="btn-action" style="width: 100%;" onclick="closeModal('menu-modal')">إغلاق القائمة</button>
+    </div>
+  </div>
+
+  <div class="modal" id="calendar-modal">
+    <div class="modal-content" style="text-align: center;">
+      <h3 style="margin-bottom: 8px;">📅 تقويم اليوم</h3>
+      <p id="modal-calendar-date" style="font-size: 1rem; font-weight: bold; color: var(--accent-gold); margin-bottom: 14px;"></p>
+      <button class="btn-action" onclick="closeModal('calendar-modal')">تم</button>
+    </div>
+  </div>
+
+  <div class="modal" id="notif-modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 10px;">🔔 الإشعارات والتنبيهات</h3>
+      <p style="font-size: 0.85rem; margin-bottom: 6px;">• حان وقت مراجعة درس الإنجليزية اليومي.</p>
+      <p style="font-size: 0.85rem; margin-bottom: 14px;">• لا تنس الاستمرار في ورد سورة البقرة.</p>
+      <button class="btn-action" style="width: 100%;" onclick="closeModal('notif-modal')">حسناً</button>
+    </div>
+  </div>
+
   <div class="modal" id="distract-modal">
     <div class="modal-content" style="text-align: center;">
       <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
-      <button class="btn-action" onclick="closeDistractModal()">جاهز للعودة 💪</button>
+      <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
     </div>
   </div>
 
@@ -577,7 +599,27 @@
     let ttsRate = 1.0;
     let activeUnitIndex = 0;
 
-    /* 🇬🇧 المنهج الشامل للغة الإنجليزية (مقسم لوحدات ومفردات ومحادثات) */
+    /* 🔄 نظام التبديل بين الأقسات التفاعلية بالكامل */
+    function switchPage(pageId, navEl) {
+      playSoundEffect();
+      
+      // إخفاء كافة الصفحات
+      document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
+      // إزالة الحالة النشطة من كل الأيقونات
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+      // تفعيل الصفحة والأيقونة المحددة
+      document.getElementById(pageId).classList.add('active');
+      navEl.classList.add('active');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'flex'; }
+    function closeModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'none'; }
+    function openDistractModal() { openModal('distract-modal'); }
+
+    /* 🇬🇧 منهج كورس اللغة الإنجليزية المعتمد */
     const englishCourseData = [
       {
         unitTitle: "Unit 1: Fundamentals & Daily Greetings",
@@ -620,15 +662,13 @@
       }
     ];
 
-    /* 🔊 ناطق الكلمات والمحادثات باللكنة الأمريكية */
     function speakEnglish(text) {
       if (!('speechSynthesis' in window)) return alert('متصفحك لا يدعم الناطق الصوتي.');
-      window.speechSynthesis.cancel(); // إيقاف أي صوت سابق
+      window.speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US'; // اللكنة الأمريكية
-      utterance.rate = ttsRate;   // السرعة المتحكم بها
-      
+      utterance.lang = 'en-US';
+      utterance.rate = ttsRate;
       window.speechSynthesis.speak(utterance);
     }
 
@@ -652,7 +692,6 @@
     function renderEngUnit(index) {
       const unit = englishCourseData[index];
       
-      // الكلمات
       let vocabHtml = '';
       unit.vocab.forEach(item => {
         vocabHtml += `
@@ -667,7 +706,6 @@
       });
       document.getElementById('eng-vocab-container').innerHTML = vocabHtml;
 
-      // المحادثة
       let dialogueHtml = '';
       unit.dialogue.forEach(line => {
         dialogueHtml += `
@@ -689,12 +727,6 @@
       const unit = englishCourseData[activeUnitIndex];
       let fullText = unit.dialogue.map(d => d.en).join('. ');
       speakEnglish(fullText);
-    }
-
-    function toggleAccordion(headerEl) {
-      playSoundEffect();
-      const content = headerEl.parentElement.querySelector('.accordion-content');
-      if (content) content.classList.toggle('open');
     }
 
     function playSoundEffect() {
@@ -925,7 +957,7 @@
       let html = '';
       localState.office_goals.forEach((goalText, index) => {
         html += `
-          <div class="office-goal-row" style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
             <span style="font-weight:bold; width:20px;">${index + 1}.</span>
             <input type="text" class="text-input-field" style="margin:0;" value="${goalText}" onchange="updateOfficeGoal(${index}, this.value)">
             <button class="btn-delete" onclick="deleteOfficeGoalRow(${index})">🗑️</button>
@@ -975,8 +1007,6 @@
     }
 
     function toggleTheme() { playSoundEffect(); document.body.classList.toggle('dark-mode'); }
-    function openDistractModal() { playSoundEffect(); document.getElementById('distract-modal').style.display = 'flex'; }
-    function closeDistractModal() { playSoundEffect(); document.getElementById('distract-modal').style.display = 'none'; }
 
     function updateLiveClock() {
       const now = new Date();
@@ -990,7 +1020,9 @@
       document.getElementById('live-clock-ampm').innerText = ampm;
       
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', options);
+      const formattedDate = now.toLocaleDateString('ar-EG', options);
+      document.getElementById('live-date').innerText = formattedDate;
+      document.getElementById('modal-calendar-date').innerText = formattedDate;
     }
 
     window.onload = () => {
