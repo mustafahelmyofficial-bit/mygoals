@@ -1,6 +1,5 @@
-const CACHE_NAME = 'dashboard-v4'; // تحديث النسخة لتفعيل الملفات الجديدة
+const CACHE_NAME = 'dashboard-v5';
 
-// القائمة الكاملة لكل ملفات التطبيق ليتم حفظها للعمل بدون إنترنت (Offline)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,24 +8,22 @@ const ASSETS_TO_CACHE = [
   './azan.mp3'
 ];
 
-// 1. تثبيت الـ Service Worker وحفظ كافة المرفقات في الكاش
+// تثبيت الملفات في الكاش
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching all assets successfully...');
       return cache.addAll(ASSETS_TO_CACHE);
     }).then(() => self.skipWaiting())
   );
 });
 
-// 2. التفعيل ومسح أي كاش قديم لضمان تحديث التطبيق فوراً
+// تفعيل وتنظيف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[SW] Removing old cache:', key);
             return caches.delete(key);
           }
         })
@@ -35,27 +32,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. معالجة الطلبات وتشغيل التطبيق من الكاش في حالة الأوفلاين
+// الاستجابة للطلبات (Network First مع Fallback للكاش)
 self.addEventListener('fetch', (event) => {
-  // تجاهل الطلبات الخارجية غير التابعة لنفس النطاق
-  if (!event.request.url.startsWith(self.location.origin)) return;
-
+  if (event.request.method !== 'GET') return;
+  
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
+    fetch(event.request)
+      .then((response) => {
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(event.request, responseClone);
           });
         }
-        return networkResponse;
-      }).catch(() => {
-        // في حالة قطع الإنترت، يتم استدعاء الصفحة المحفوظة
-        return caches.match('./index.html');
-      });
-
-      return cachedResponse || fetchPromise;
-    })
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          return cachedResponse || caches.match('./index.html');
+        });
+      })
   );
 });
