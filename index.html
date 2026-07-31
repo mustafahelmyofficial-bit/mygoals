@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم</title>
+  <title>Eng - Mustafa Helmy | لوحة التحكم</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -11,43 +11,54 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#F7F4EE">
+  <meta name="theme-color" content="#DCE5EE">
 
   <style>
     :root {
-      --bg-main: #F4EFEA;
-      --card-bg: #FFFFFF;
-      --card-stroke: #EAE3D9;
-      --accent-gold: #C69A3D;
-      --accent-gold-light: #FDF9ED;
-      --accent-gold-border: #E8D3A7;
+      /* لوحة الألوان المستوحاة من الصورة: أزرق ثلجي، رمادي كحلي، ولمسات زجاجية */
+      --bg-main: #DCE5EE;
+      --bg-gradient: linear-gradient(135deg, #E6EEF4 0%, #CBD8E5 50%, #9EB7CE 100%);
       
-      --text-dark: #2B2621;
-      --text-muted: #8C827A;
+      --card-bg: rgba(255, 255, 255, 0.45);
+      --card-stroke: rgba(255, 255, 255, 0.7);
+      
+      --accent-blue: #4B79A1;
+      --accent-blue-dark: #283E51;
+      --accent-blue-light: rgba(75, 121, 161, 0.15);
+      --accent-blue-border: rgba(75, 121, 161, 0.3);
+      
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
       
       --card-radius: 24px;
       --inner-radius: 16px;
-      --shadow-soft: 0 10px 25px rgba(180, 160, 140, 0.08);
+      --shadow-soft: 0 10px 30px rgba(40, 62, 81, 0.1);
       --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --glass-blur: blur(16px);
     }
 
     body.dark-mode {
-      --bg-main: #1A1715;
-      --card-bg: #26221E;
-      --card-stroke: #3B342E;
-      --accent-gold: #D4A84B;
-      --accent-gold-light: #332B20;
-      --accent-gold-border: #594830;
+      --bg-main: #0F172A;
+      --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #1E3A8A 100%);
       
-      --text-dark: #F5EFE8;
-      --text-muted: #A3978C;
-      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.3);
+      --card-bg: rgba(30, 41, 59, 0.5);
+      --card-stroke: rgba(255, 255, 255, 0.1);
+      
+      --accent-blue: #60A5FA;
+      --accent-blue-dark: #93C5FD;
+      --accent-blue-light: rgba(96, 165, 250, 0.15);
+      --accent-blue-border: rgba(96, 165, 250, 0.3);
+      
+      --text-dark: #F8FAFC;
+      --text-muted: #94A3B8;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
     
     body {
-      background-color: var(--bg-main);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text-dark);
       min-height: 100vh;
       padding: 16px 12px 90px 12px;
@@ -67,6 +78,8 @@
 
     .header-card {
       background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke);
       padding: 20px;
@@ -75,12 +88,12 @@
     }
 
     .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .welcome-text h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
+    .welcome-text h1 { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
     .welcome-text p { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
 
     .badge-offline-pill {
-      background: var(--accent-gold-light);
-      border: 1px solid var(--accent-gold-border);
+      background: var(--accent-blue-light);
+      border: 1px solid var(--accent-blue-border);
       color: var(--text-dark); padding: 8px 16px; border-radius: 50px;
       font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
     }
@@ -92,19 +105,23 @@
 
     .circle-btn {
       width: 38px; height: 38px; border-radius: 50%;
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
+      background: rgba(255, 255, 255, 0.3); border: 1px solid var(--card-stroke);
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem; cursor: pointer; color: var(--text-dark); transition: var(--transition);
+      backdrop-filter: blur(5px);
     }
     .circle-btn:active { transform: scale(0.9); }
 
     .quote-card-bar {
-      background: var(--card-bg); border-radius: var(--inner-radius);
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: var(--inner-radius);
       border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
       box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
       justify-content: center; align-items: center;
     }
-    .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
+    .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-blue); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
 
     .app-page { display: none; flex-direction: column; gap: 14px; }
@@ -116,39 +133,44 @@
     }
 
     .section-card {
-      background: var(--card-bg); border-radius: var(--card-radius);
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke); padding: 18px;
       box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 14px;
     }
 
     .section-header-row { display: flex; justify-content: space-between; align-items: center; }
     .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
-    .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-gold-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
+    .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-blue-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-blue-border); }
 
     .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--card-stroke), transparent); margin: 2px 0; position: relative; }
-    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent-gold); }
+    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent-blue); }
 
     .progress-section { display: flex; flex-direction: column; gap: 6px; }
     .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
-    .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
-    .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
+    .progress-track { background: rgba(0, 0, 0, 0.05); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
+    .progress-fill { height: 100%; background: var(--accent-blue); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
 
     .task-item {
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
+      background: rgba(255, 255, 255, 0.3); border: 1px solid var(--card-stroke);
       border-radius: var(--inner-radius); padding: 12px 14px;
       display: flex; align-items: center; justify-content: space-between;
       direction: rtl; transition: var(--transition); margin-bottom: 8px; gap: 8px;
     }
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
-    .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
+    .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-blue); cursor: pointer; }
 
     .days-badge {
-      background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border);
-      color: var(--accent-gold); font-size: 0.75rem; font-weight: 800;
+      background: var(--accent-blue-light); border: 1px solid var(--accent-blue-border);
+      color: var(--accent-blue); font-size: 0.75rem; font-weight: 800;
       padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
     }
 
-    .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-gold-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
+    .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-blue-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-blue-border); display: flex; align-items: center; gap: 6px; }
+
+    .btn-adhan { background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer; }
 
     .quran-img-container {
       width: 100%; border-radius: 16px; overflow: hidden;
@@ -159,15 +181,15 @@
     .quran-page-img { width: 100%; max-width: 450px; height: auto; display: block; }
     
     .quran-fallback-card {
-      display: none; padding: 40px 20px; text-align: center; background: var(--accent-gold-light);
-      border-radius: 16px; width: 100%; border: 2px dashed var(--accent-gold-border);
+      display: none; padding: 40px 20px; text-align: center; background: var(--accent-blue-light);
+      border-radius: 16px; width: 100%; border: 2px dashed var(--accent-blue-border);
     }
 
     .counter-control { display: flex; align-items: center; gap: 8px; }
-    .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+    .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-blue); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
     .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
     .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
-    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+    .btn-action { background: var(--accent-blue); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
     /* --- تنسيقات كورس الإنجليزي الخاص --- */
@@ -185,7 +207,7 @@
     }
     .eng-level-header {
       padding: 14px 16px;
-      background: var(--bg-main);
+      background: rgba(255, 255, 255, 0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -205,7 +227,7 @@
     .eng-unit-title {
       font-weight: 700;
       font-size: 0.85rem;
-      color: var(--accent-gold);
+      color: var(--accent-blue);
       margin-top: 6px;
       margin-bottom: 4px;
       border-bottom: 1px dashed var(--card-stroke);
@@ -215,7 +237,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--card-bg);
+      background: rgba(255, 255, 255, 0.2);
       border: 1px solid var(--card-stroke);
       border-radius: 10px;
       padding: 8px 12px;
@@ -224,7 +246,7 @@
     }
     .eng-status-btn {
       border: none;
-      background: var(--bg-main);
+      background: var(--card-bg);
       border: 1px solid var(--card-stroke);
       border-radius: 6px;
       padding: 4px 8px;
@@ -239,7 +261,10 @@
 
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
+      width: calc(100% - 24px); max-width: 450px; 
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
       display: flex; justify-content: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
@@ -251,13 +276,18 @@
       padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
     }
     .nav-item .nav-icon { font-size: 1.25rem; }
-    .nav-item.active { background: var(--accent-gold-light); color: var(--accent-gold); border: 1px solid var(--accent-gold-border); }
+    .nav-item.active { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue-border); }
 
-    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
-    .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
+    .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); backdrop-filter: var(--glass-blur); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
   </style>
 </head>
 <body>
+
+  <!-- مشغل صوت الأذان المخفي -->
+  <audio id="adhan-audio-player">
+    <source src="https://cdn.islamicfinder.org/static/audio/athan/makkah.mp3" type="audio/mpeg">
+  </audio>
 
   <div class="app-container">
 
@@ -265,7 +295,7 @@
     <div class="header-card" id="top-welcome-card">
       <div class="header-top-row">
         <div class="welcome-text">
-          <h1>👋 مرحباً بك،<br>يا مهندس!</h1>
+          <h1>👋 Eng - Mustafa Helmy</h1>
           <p id="live-date">الجمعة، 31 يوليو 2026</p>
         </div>
         <div class="badge-offline-pill">
@@ -371,7 +401,7 @@
         </div>
         <div class="divider-line"></div>
 
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
+        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
           <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
@@ -384,7 +414,7 @@
           <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
         </div>
 
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
+        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
           <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
@@ -465,13 +495,13 @@
 
         <div class="divider-line"></div>
 
-        <div style="background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); border-radius: 14px; padding: 12px; text-align: center;">
+        <div style="background: var(--accent-blue-light); border: 1px solid var(--accent-blue-border); border-radius: 14px; padding: 12px; text-align: center;">
           <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري (مرتل)</p>
           <audio id="quran-audio-player" controls style="width: 100%; height: 40px; border-radius: 8px;">
             <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
             متصفحك لا يدعم تشغيل الصوت.
           </audio>
-          <p style="font-size: 0.75rem; color: var(--accent-gold); margin-top: 4px; font-weight: bold;">🎯 متزامن بدقة مع بداية كل صفحة وآياتها</p>
+          <p style="font-size: 0.75rem; color: var(--accent-blue); margin-top: 4px; font-weight: bold;">🎯 متزامن بدقة مع بداية كل صفحة وآياتها</p>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
@@ -487,7 +517,7 @@
           <img id="quran-page-image" class="quran-page-img" src="" alt="صفحة المصحف" onerror="handleQuranImgError()" onload="handleQuranImgSuccess()">
           
           <div id="quran-fallback" class="quran-fallback-card">
-            <h2 style="font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
+            <h2 style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
             <p style="font-weight: bold; color: var(--text-dark);">سورة البقرة</p>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">أنت الآن في وضع الأوفلاين. الصوت متزامن بالكامل مع هذه الصفحة.</p>
           </div>
@@ -496,7 +526,7 @@
         <div class="progress-track" style="margin-top: 10px;">
           <div class="progress-fill" id="quran-progress"></div>
         </div>
-        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-gold); margin-top: 6px;" id="quran-status">الصفحة 2 من 49 (سورة البقرة)</p>
+        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-blue); margin-top: 6px;" id="quran-status">الصفحة 2 من 49 (سورة البقرة)</p>
       </div>
     </div>
 
@@ -535,9 +565,11 @@
   </div>
 
   <script>
-    function playSoundEffect() {
-      // إيقاف جميع المؤثرات الصوتية عند الضغط بالنقر
-      return;
+    function playAdhanSound() {
+      const adhanAudio = document.getElementById('adhan-audio-player');
+      if (adhanAudio) {
+        adhanAudio.play().catch(e => console.log("تنبيه الصوت محجوب حتى يتم التفاعل مع الصفحة"));
+      }
     }
 
     function switchPage(pageId, navEl = null) {
@@ -598,7 +630,6 @@
       { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
     ];
 
-    // ==================== بيانات كورسات الإنجليزي الهيكلية ====================
     const englishCourseData = [
       {
         id: "a0",
@@ -718,7 +749,7 @@
 
     const statusMap = [
       { text: "لم يبدأ", icon: "⭕", color: "var(--text-muted)" },
-      { text: "قيد الدراسة", icon: "🟡", color: "var(--accent-gold)" },
+      { text: "قيد الدراسة", icon: "🟡", color: "var(--accent-blue)" },
       { text: "مكتمل", icon: "✅", color: "#2e7d32" },
       { text: "يحتاج مراجعة", icon: "🔁", color: "#d9534f" }
     ];
@@ -852,7 +883,12 @@
               <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
               <span>${prayer.title}</span>
             </label>
-            <span class="prayer-badge">${prayer.time}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="prayer-badge">
+                ${prayer.time}
+                <button class="btn-adhan" onclick="playAdhanSound()" title="تشغيل الأذان">🔊</button>
+              </span>
+            </div>
           </div>`;
       });
 
@@ -863,11 +899,13 @@
     function togglePrayer(id, isChecked) {
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
+      if (isChecked) {
+        playAdhanSound();
+      }
       saveStateLocally();
       renderPrayers();
     }
 
-    // ==================== بناء وإدارة أكاديمية الإنجليزي ====================
     function renderEnglishAcademy() {
       const container = document.getElementById('english-levels-container');
       if (!container) return;
@@ -899,9 +937,9 @@
           <div class="eng-level-card ${isLocked ? 'locked' : ''}" id="eng-card-${level.id}">
             <div class="eng-level-header" onclick="toggleEngLevel('${level.id}', ${isLocked})">
               <span>${level.title} ${isLocked ? '🔒' : ''}</span>
-              <span style="font-size:0.8rem; color:var(--accent-gold);">${levelPct}%</span>
+              <span style="font-size:0.8rem; color:var(--accent-blue);">${levelPct}%</span>
             </div>
-            <div style="padding:0 12px 6px 12px; background:var(--bg-main);">
+            <div style="padding:0 12px 6px 12px; background:rgba(255,255,255,0.1);">
               <div class="progress-track"><div class="progress-fill" style="width:${levelPct}%;"></div></div>
             </div>
             <div class="eng-level-content">`;
