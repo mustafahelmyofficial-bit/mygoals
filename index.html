@@ -363,19 +363,41 @@
     let prayerTimes24 = {}; 
     let prayerTimes12 = {}; 
     let lastPlayedPrayer = "";
+    let audioUnlocked = false;
+
+    // 🟢 فك حظر المتصفح للصوت فور أول لمسة أو ضغطة بالصفحة
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      const tigerAudio = document.getElementById('tiger-audio');
+      if (tigerAudio) {
+        tigerAudio.play().then(() => {
+          tigerAudio.pause();
+          tigerAudio.currentTime = 0;
+          audioUnlocked = true;
+        }).catch(() => {});
+      }
+    }
+
+    window.addEventListener('click', unlockAudio, { once: true });
+    window.addEventListener('touchstart', unlockAudio, { once: true });
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
-    // 🐅 تشغيل ملف الصوت الخاص بالنمر
+    // 🐅 تشغيل ملف الصوت الخاص بالنمر المحسن
     function playTigerSound() {
       if (!soundEnabled) return;
       const tigerAudio = document.getElementById('tiger-audio');
       if (tigerAudio) {
-        tigerAudio.currentTime = 0; // إعادة تشغيل الصوت من البداية لو شغال
-        tigerAudio.play().catch(err => console.log('خطأ تشغيل الصوت:', err));
+        tigerAudio.currentTime = 0; // إعادة تشغيل الصوت من البداية
+        const playPromise = tigerAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn("تعذر تشغيل الصوت، اضغط في أي مكان بالصفحة لتفعيله:", err);
+          });
+        }
       }
     }
 
@@ -669,14 +691,10 @@
 
       const pct = activeTasksCount > 0 ? Math.round((doneCount / activeTasksCount) * 100) : 0;
       document.getElementById('tasks-progress').style.width = pct + '%';
-
-      if (activeTasksCount > 0 && doneCount === activeTasksCount) {
-        playTigerSound();
-      }
     }
 
     function toggleTask(id, isChecked) {
-      if (isChecked) playTigerSound();
+      if (isChecked) playTigerSound(); // 🔥 تشغيل صوت النمر عند اختيار المهمة
       if (!localState.daily_tasks) localState.daily_tasks = {};
       localState.daily_tasks[id] = isChecked;
       saveStateLocally();
@@ -719,21 +737,16 @@
       container.innerHTML = html;
       const pct = Math.round((doneCount / prayersList.length) * 100);
       document.getElementById('prayers-progress').style.width = pct + '%';
-
-      if (doneCount === prayersList.length) {
-        playTigerSound();
-      }
     }
 
     function togglePrayer(id, isChecked) {
-      if (isChecked) playTigerSound();
+      if (isChecked) playTigerSound(); // 🔥 تشغيل صوت النمر عند اختيار الصلاة
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
       renderPrayers();
     }
 
-    // 🏢 قسم الهدف الأكبر: فتح مكتب تشطيبات
     function renderOfficeGoals() {
       const container = document.getElementById('office-goals-container');
       let html = '';
