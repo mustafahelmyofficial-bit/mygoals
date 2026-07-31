@@ -117,8 +117,9 @@
 </head>
 <body>
 
-  <!-- صوت الأذان -->
+  <!-- 🔊 عناصر الصوت الخارجية -->
   <audio id="azan-audio" src="azan.mp3" preload="auto"></audio>
+  <audio id="tiger-audio" src="tiger.mp3" preload="auto"></audio>
 
   <div class="container">
 
@@ -202,7 +203,7 @@
       <div style="margin-bottom: 15px;">
         <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playTigerAttackRoar();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playTigerSound();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
             <span id="decor-lesson-val" style="font-weight: bold;">0</span>
@@ -214,7 +215,7 @@
       <div>
         <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playTigerAttackRoar();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playTigerSound();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
             <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
@@ -355,7 +356,6 @@
     }
 
     let soundEnabled = true;
-    let audioCtx = null;
     let activeEditDate = null;
     let timerInterval = null;
     let timerTime = 25 * 60;
@@ -369,58 +369,14 @@
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
-    function initAudioContext() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    // 🐅 صوت زئير نمر هجومي وقوي جدًا أثناء التعليم على المهام
-    function playTigerAttackRoar() {
+    // 🐅 تشغيل ملف الصوت الخاص بالنمر
+    function playTigerSound() {
       if (!soundEnabled) return;
-      try {
-        initAudioContext();
-        const now = audioCtx.currentTime;
-
-        // إنشاء ضوضاء زئير عميقة ومندفعة
-        const bufferSize = audioCtx.sampleRate * 0.65;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const output = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          output[i] = (Math.random() * 2 - 1);
-        }
-
-        const whiteNoise = audioCtx.createBufferSource();
-        whiteNoise.buffer = buffer;
-
-        // فلتر الترددات للزئير الهجومي
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(380, now);
-        filter.frequency.linearRampToValueAtTime(140, now + 0.3);
-        filter.frequency.linearRampToValueAtTime(450, now + 0.6);
-
-        // مولد تذبذب إضافي لإعطاء طابع خطورة وهجوم للنمر
-        const osc = audioCtx.createOscillator();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(80, now);
-        osc.frequency.linearRampToValueAtTime(160, now + 0.2);
-        osc.frequency.linearRampToValueAtTime(50, now + 0.6);
-
-        const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.01, now);
-        gain.gain.linearRampToValueAtTime(0.7, now + 0.15); // صوت عالي وهجومي
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-
-        whiteNoise.connect(filter);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        whiteNoise.start(now);
-        osc.start(now);
-        whiteNoise.stop(now + 0.65);
-        osc.stop(now + 0.65);
-      } catch (e) {}
+      const tigerAudio = document.getElementById('tiger-audio');
+      if (tigerAudio) {
+        tigerAudio.currentTime = 0; // إعادة تشغيل الصوت من البداية لو شغال
+        tigerAudio.play().catch(err => console.log('خطأ تشغيل الصوت:', err));
+      }
     }
 
     function convertTo12Hour(time24) {
@@ -715,12 +671,12 @@
       document.getElementById('tasks-progress').style.width = pct + '%';
 
       if (activeTasksCount > 0 && doneCount === activeTasksCount) {
-        playTigerAttackRoar();
+        playTigerSound();
       }
     }
 
     function toggleTask(id, isChecked) {
-      if (isChecked) playTigerAttackRoar();
+      if (isChecked) playTigerSound();
       if (!localState.daily_tasks) localState.daily_tasks = {};
       localState.daily_tasks[id] = isChecked;
       saveStateLocally();
@@ -733,7 +689,7 @@
     }
 
     function toggleSnoozeTask(id, snoozeState) {
-      playTigerAttackRoar();
+      playTigerSound();
       localState.snoozed_tasks[id] = snoozeState;
       saveStateLocally();
       renderTasks();
@@ -765,12 +721,12 @@
       document.getElementById('prayers-progress').style.width = pct + '%';
 
       if (doneCount === prayersList.length) {
-        playTigerAttackRoar();
+        playTigerSound();
       }
     }
 
     function togglePrayer(id, isChecked) {
-      if (isChecked) playTigerAttackRoar();
+      if (isChecked) playTigerSound();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
@@ -794,7 +750,7 @@
     }
 
     function addOfficeGoalRow() {
-      playTigerAttackRoar();
+      playTigerSound();
       localState.office_goals.push("");
       saveStateLocally();
       renderOfficeGoals();
@@ -806,14 +762,14 @@
     }
 
     function deleteOfficeGoalRow(index) {
-      playTigerAttackRoar();
+      playTigerSound();
       localState.office_goals.splice(index, 1);
       saveStateLocally();
       renderOfficeGoals();
     }
 
     function updateQuran(val) {
-      playTigerAttackRoar();
+      playTigerSound();
       let current = parseInt(localState.quran_page || 0) + val;
       if (current < 0) current = 0;
       if (current > 48) current = 48;
@@ -840,7 +796,7 @@
     }
 
     function updateLesson(course, change) {
-      playTigerAttackRoar();
+      playTigerSound();
       if (!localState.courses_data) localState.courses_data = { decorLesson: 0, finishingLesson: 0 };
       if (course === 'decor') {
         localState.courses_data.decorLesson = Math.max(0, (localState.courses_data.decorLesson || 0) + change);
@@ -869,7 +825,7 @@
     }
 
     function adjustSavings(val) {
-      playTigerAttackRoar();
+      playTigerSound();
       localState.savings = Math.max(0, (localState.savings || 0) + val);
       document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       saveStateLocally();
@@ -896,7 +852,7 @@
     }
 
     function toggleTimer() {
-      playTigerAttackRoar();
+      playTigerSound();
       const btn = document.getElementById('start-timer-btn');
       if (isTimerRunning) {
         clearInterval(timerInterval);
@@ -913,7 +869,7 @@
             clearInterval(timerInterval);
             isTimerRunning = false;
             btn.innerText = 'بدء';
-            playTigerAttackRoar();
+            playTigerSound();
             alert('انتهى وقت البومودورو! خذ استراحة قصيرة.');
           }
         }, 1000);
@@ -921,7 +877,7 @@
     }
 
     function resetTimer() {
-      playTigerAttackRoar();
+      playTigerSound();
       clearInterval(timerInterval);
       isTimerRunning = false;
       timerTime = 25 * 60;
@@ -965,7 +921,7 @@
     }
 
     function openSelectedCustomDate() {
-      playTigerAttackRoar();
+      playTigerSound();
       const customDate = document.getElementById('custom-day-picker').value;
       if (!customDate) {
         alert("يرجى اختيار تاريخ أولاً من الخانة!");
@@ -975,7 +931,7 @@
     }
 
     function openEditDayModal(dateKey) {
-      playTigerAttackRoar();
+      playTigerSound();
       activeEditDate = dateKey;
       document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
       
@@ -1018,7 +974,7 @@
     }
 
     function saveEditedDay() {
-      playTigerAttackRoar();
+      playTigerSound();
       if (!activeEditDate) return;
       const dayData = localState.history_details[activeEditDate];
 
@@ -1040,13 +996,13 @@
     }
 
     function closeEditModal() {
-      playTigerAttackRoar();
+      playTigerSound();
       document.getElementById('edit-day-modal').style.display = 'none';
       activeEditDate = null;
     }
 
     function undoDayReset() {
-      playTigerAttackRoar();
+      playTigerSound();
       if (!localState.last_backup_data) {
         alert("لا يوجد تقفيل سابق للتراجع عنه حالياً!");
         return;
@@ -1070,7 +1026,7 @@
     }
 
     function deleteHistoryDate(dateKey) {
-      playTigerAttackRoar();
+      playTigerSound();
       if (confirm(`هل أنت تأكد من مسح سجل يوم (${dateKey}) نهائياً؟`)) {
         if (localState.history && localState.history[dateKey]) delete localState.history[dateKey];
         if (localState.history_details && localState.history_details[dateKey]) delete localState.history_details[dateKey];
@@ -1096,7 +1052,7 @@
     }
 
     function forceNewDay() {
-      playTigerAttackRoar();
+      playTigerSound();
       if (confirm("هل تريد تقفيل إنجاز اليوم الحالي ونقله للأيام السابقة وتصفير المهام لليوم الجديد؟")) {
         const currentDate = localState.lastDate || getTodayString();
         performDayReset(currentDate);
@@ -1107,17 +1063,17 @@
     }
 
     function toggleTheme() {
-      playTigerAttackRoar();
+      playTigerSound();
       document.body.classList.toggle('dark-mode');
     }
 
     function openDistractModal() {
-      playTigerAttackRoar();
+      playTigerSound();
       document.getElementById('distract-modal').style.display = 'flex';
     }
 
     function closeDistractModal() {
-      playTigerAttackRoar();
+      playTigerSound();
       document.getElementById('distract-modal').style.display = 'none';
     }
 
