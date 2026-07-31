@@ -170,6 +170,73 @@
     .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
+    /* --- تنسيقات كورس الإنجليزي الخاصة --- */
+    .eng-level-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-stroke);
+      border-radius: var(--inner-radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .eng-level-card.locked {
+      opacity: 0.6;
+      filter: grayscale(0.5);
+    }
+    .eng-level-header {
+      padding: 14px 16px;
+      background: var(--bg-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .eng-level-content {
+      padding: 12px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .eng-level-card.open .eng-level-content {
+      display: flex;
+    }
+    .eng-unit-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+      margin-top: 6px;
+      margin-bottom: 4px;
+      border-bottom: 1px dashed var(--card-stroke);
+      padding-bottom: 4px;
+    }
+    .eng-lesson-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-stroke);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .eng-status-btn {
+      border: none;
+      background: var(--bg-main);
+      border: 1px solid var(--card-stroke);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
@@ -287,7 +354,9 @@
         </div>
 
         <div class="divider-line"></div>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">محتوى الكورس متاح ومحفوظ محلياً للتعلم اليومي.</p>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">رحلة التعلم المنظمة من الصفر وحتى الاحتراف والتخصص الهندسي.</p>
+        
+        <div id="english-levels-container" style="margin-top: 10px;"></div>
       </div>
     </div>
 
@@ -471,7 +540,6 @@
     function switchPage(pageId, navEl = null) {
       playSoundEffect();
       
-      // حفظ الصفحة الحالية في الـ Storage
       localState.current_page = pageId;
       saveStateLocally();
 
@@ -527,6 +595,13 @@
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('theme-toggle').innerText = isDark ? '☀️' : '🌙';
+      localStorage.setItem('dashboard_theme', isDark ? 'dark' : 'light');
+    }
+
     const defaultTasks = [
       { id: 'quran', title: 'حفظ سورة البقرة', icon: '📖' },
       { id: 'english', title: 'تعلم الإنجليزية (الكورس)', icon: '🇬🇧' },
@@ -543,6 +618,131 @@
       { id: 'asr', title: 'صلاة العصر', time: '04:41 م' },
       { id: 'maghrib', title: 'صلاة المغرب', time: '07:56 م' },
       { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
+    ];
+
+    // ==================== بيانات كورسات الإنجليزي الهيكلية ====================
+    const englishCourseData = [
+      {
+        id: "a0",
+        title: "المستوى A0 - Beginner (من الصفر تمامًا)",
+        units: [
+          {
+            title: "الوحدة الأولى: الحروف والنطق",
+            lessons: ["الأبجدية الإنجليزية (Alphabet)", "الحروف الكبيرة والصغيرة", "أصوات الحروف (Letter Sounds)", "الحروف المتحركة (Vowels)", "الحروف الساكنة (Consonants)", "الفرق بين اسم الحرف وصوته", "نطق الكلمات البسيطة", "مراجعة الوحدة", "اختبار الوحدة"]
+          },
+          {
+            title: "الوحدة الثانية: أساسيات اللغة",
+            lessons: ["التحيات (Greetings)", "التعارف (Introducing Yourself)", "الضمائر (Pronouns)", "الأرقام (Numbers)", "الألوان (Colors)", "الأيام والشهور", "الوقت والتاريخ", "مراجعة", "اختبار"]
+          },
+          {
+            title: "الوحدة الثالثة: المفردات الأساسية",
+            lessons: ["العائلة", "الوظائف", "الدول والجنسيات", "أجزاء الجسم", "الملابس", "الطعام", "المشروبات", "المنزل", "الأثاث", "مراجعة", "اختبار"]
+          },
+          {
+            title: "الوحدة الرابعة: أول قواعد",
+            lessons: ["أجزاء الجملة", "Verb To Be", "أدوات التعريف", "الملكية", "الجمع", "الأسئلة البسيطة", "النفي", "مراجعة", "اختبار"]
+          }
+        ]
+      },
+      {
+        id: "a1",
+        title: "🇺🇸 المستوى A1",
+        units: [
+          { title: "الوحدة الأولى", lessons: ["Present Simple", "استخدام Do و Does", "ظروف التكرار", "الروتين اليومي", "مراجعة", "اختبار"] },
+          { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] },
+          { title: "الوحدة الثالثة", lessons: ["الصفات", "المقارنة", "التفضيل", "مراجعة", "اختبار"] },
+          { title: "الوحدة الرابعة", lessons: ["الطلب في المطعم", "التسوق", "في الفندق", "في البنك", "في الصيدلية", "مراجعة", "اختبار"] }
+        ]
+      },
+      {
+        id: "a2",
+        title: "🇺🇸 المستوى A2",
+        units: [
+          { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] },
+          { title: "الوحدة الثانية", lessons: ["Future Simple", "Going To", "الخطط", "المواعيد", "مراجعة", "اختبار"] },
+          { title: "الوحدة الثالثة", lessons: ["Present Continuous", "Past Continuous", "Future Continuous", "مراجعة", "اختبار"] },
+          { title: "الوحدة الرابعة", lessons: ["كتابة رسالة", "كتابة Email", "وصف مكان", "وصف شخص", "وصف يوم", "مراجعة", "اختبار"] }
+        ]
+      },
+      {
+        id: "b1",
+        title: "🇺🇸 المستوى B1",
+        units: [
+          { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] },
+          { title: "الوحدة الثانية", lessons: ["Reading قصيرة", "استخراج المفردات", "فهم النصوص", "مراجعة"] },
+          { title: "الوحدة الثالثة", lessons: ["محادثات السفر", "المطار", "الفندق", "العمل", "المطعم", "المستشفى", "مراجعة"] },
+          { title: "الوحدة الرابعة", lessons: ["كتابة Paragraph", "كتابة Essay", "مراجعة", "اختبار"] }
+        ]
+      },
+      {
+        id: "b2",
+        title: "🇺🇸 المستوى B2",
+        units: [
+          { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] },
+          { title: "الوحدة الثانية", lessons: ["Business English", "Meetings", "Negotiation", "Emails"] },
+          { title: "الوحدة الثالثة", lessons: ["Speaking Fluently", "Pronunciation", "Accent"] },
+          { title: "الوحدة الرابعة", lessons: ["مشاهدة فيديوهات بدون ترجمة", "تلخيصها", "مناقشتها"] }
+        ]
+      },
+      {
+        id: "c1",
+        title: "🇺🇸 المستوى C1",
+        units: [
+          { title: "الوحدة الأولى", lessons: ["التفكير بالإنجليزية", "التحدث بطلاقة"] },
+          { title: "الوحدة الثانية", lessons: ["Presentation Skills", "Public Speaking"] },
+          { title: "الوحدة الثالثة", lessons: ["Academic English", "Professional Writing"] },
+          {
+            title: "الوحدة الرابعة: English for Interior Design",
+            lessons: [
+              "أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات",
+              "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أسماء الحوائط",
+              "أسماء الأجهزة", "أسماء أدوات الموقع", "أسماء اللوحات التنفيذية",
+              "التعامل مع العميل", "كتابة عروض الأسعار", "كتابة الإيميلات الاحترافية", "تقديم المشروع بالإنجليزية"
+            ]
+          }
+        ]
+      },
+      {
+        id: "vocab",
+        title: "📖 قسم المفردات (مستقل)",
+        units: [
+          {
+            title: "قوائم الكلمات حسب المستوى",
+            lessons: [
+              "أهم 500 كلمة (A0)", "أهم 1000 كلمة (A1)", "أهم 1500 كلمة (A2)",
+              "أهم 2000 كلمة (B1)", "أهم 2500 كلمة (B2)", "أهم 3000 كلمة (C1)",
+              "Vocabulary for Interior Design"
+            ]
+          }
+        ]
+      },
+      {
+        id: "listening",
+        title: "🎧 قسم الاستماع",
+        units: [
+          {
+            title: "مستويات الاستماع",
+            lessons: ["Beginner Listening", "Elementary Listening", "Intermediate Listening", "Advanced Listening", "Native Listening"]
+          }
+        ]
+      },
+      {
+        id: "speaking",
+        title: "🗣 قسم المحادثة",
+        units: [
+          {
+            title: "موضوعات المحادثة اليومية والمهنية",
+            lessons: ["التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار", "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"]
+          }
+        ]
+      }
+    ];
+
+    const statusMap = [
+      { text: "لم يبدأ", icon: "⭕", color: "var(--text-muted)" },
+      { text: "قيد الدراسة", icon: "🟡", color: "var(--accent-gold)" },
+      { text: "مكتمل", icon: "✅", color: "#2e7d32" },
+      { text: "يحتاج مراجعة", icon: "🔁", color: "#d9534f" }
     ];
 
     const pageAudioTimeMap = {
@@ -565,7 +765,8 @@
       office_goals: ["تجهيز Portfolio الأعمال", "تحديد تسعير الخدمات"], 
       quran_page: 2,
       courses_data: { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' },
-      savings: 15000, followers: 1200
+      savings: 15000, followers: 1200,
+      english_lessons_status: {}
     };
 
     function saveStateLocally() { localStorage.setItem('dashboard_local_state', JSON.stringify(localState)); }
@@ -577,7 +778,14 @@
       if (!localState.task_days_count) localState.task_days_count = {};
       if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
       if (!localState.current_page) localState.current_page = 'page-home';
+      if (!localState.english_lessons_status) localState.english_lessons_status = {};
       
+      const savedTheme = localStorage.getItem('dashboard_theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').innerText = '☀️';
+      }
+
       applyStateToUI();
     }
 
@@ -585,6 +793,7 @@
       renderTasks();
       renderPrayers();
       renderOfficeGoals();
+      renderEnglishAcademy();
       
       document.getElementById('quran-page-input').value = localState.quran_page || 2;
       updateQuranUI();
@@ -602,7 +811,6 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      // فتح آخر صفحة كانت مفتوحة قبل التحديث
       switchPage(localState.current_page);
     }
 
@@ -683,6 +891,185 @@
       renderPrayers();
     }
 
+    // ==================== بناء وإدارة أكاديمية الإنجليزي ====================
+    function renderEnglishAcademy() {
+      const container = document.getElementById('english-levels-container');
+      if (!container) return;
+
+      let html = '';
+      let previousLevelCompleted = true;
+
+      englishCourseData.forEach((level, lvlIdx) => {
+        let totalLessons = 0;
+        let completedLessons = 0;
+
+        level.units.forEach(u => {
+          u.lessons.forEach(l => {
+            totalLessons++;
+            const lessonKey = `${level.id}_${u.title}_${l}`;
+            const stIndex = localState.english_lessons_status?.[lessonKey] || 0;
+            if (stIndex === 2) completedLessons++; // مكتمل
+          });
+        });
+
+        const levelPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+        const isLocked = lvlIdx > 0 && lvlIdx <= 5 && !previousLevelCompleted;
+
+        // لتحديد فتح المستوى القادم (للمستويات الدراسية الأساسية من A0 لـ C1)
+        if (lvlIdx <= 5) {
+          previousLevelCompleted = (levelPct === 100);
+        }
+
+        html += `
+          <div class="eng-level-card ${isLocked ? 'locked' : ''}" id="eng-card-${level.id}">
+            <div class="eng-level-header" onclick="toggleEngLevel('${level.id}', ${isLocked})">
+              <span>${level.title} ${isLocked ? '🔒' : ''}</span>
+              <span style="font-size:0.8rem; color:var(--accent-gold);">${levelPct}%</span>
+            </div>
+            <div style="padding:0 12px 6px 12px; background:var(--bg-main);">
+              <div class="progress-track"><div class="progress-fill" style="width:${levelPct}%;"></div></div>
+            </div>
+            <div class="eng-level-content">`;
+
+        if (isLocked) {
+          html += `<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; padding:10px;">أكمل المستوى السابق بنسبة 100% لفتح هذا المستوى تلقائيًا 💪</p>`;
+        } else {
+          level.units.forEach(u => {
+            html += `<div class="eng-unit-title">${u.title}</div>`;
+            u.lessons.forEach(l => {
+              const lessonKey = `${level.id}_${u.title}_${l}`;
+              const currentStIdx = localState.english_lessons_status?.[lessonKey] || 0;
+              const currentSt = statusMap[currentStIdx];
+
+              html += `
+                <div class="eng-lesson-row">
+                  <span>${l}</span>
+                  <button class="eng-status-btn" style="color:${currentSt.color};" onclick="cycleEngStatus('${lessonKey}')">
+                    <span>${currentSt.icon}</span>
+                    <span>${currentSt.text}</span>
+                  </button>
+                </div>`;
+            });
+          });
+        }
+
+        html += `</div></div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleEngLevel(levelId, isLocked) {
+      if (isLocked) {
+        playSoundEffect();
+        alert("هذا المستوى مغلق حالياً! أكمل المستوى السابق 100% ليفتح لك تلقائياً 🎯");
+        return;
+      }
+      playSoundEffect();
+      const card = document.getElementById(`eng-card-${levelId}`);
+      if (card) {
+        card.classList.toggle('open');
+      }
+    }
+
+    function cycleEngStatus(lessonKey) {
+      playSoundEffect();
+      if (!localState.english_lessons_status) localState.english_lessons_status = {};
+      let currentIdx = localState.english_lessons_status[lessonKey] || 0;
+      currentIdx = (currentIdx + 1) % statusMap.length;
+      localState.english_lessons_status[lessonKey] = currentIdx;
+      
+      saveStateLocally();
+      renderEnglishAcademy();
+    }
+
+    function updateCourseLessons(type, val) {
+      playSoundEffect();
+      if (!localState.courses_data) localState.courses_data = { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' };
+      if (type === 'decor') {
+        localState.courses_data.decorLessons = Math.max(0, (localState.courses_data.decorLessons || 0) + val);
+        document.getElementById('decor-lesson-count').value = localState.courses_data.decorLessons;
+      } else {
+        localState.courses_data.finishingLessons = Math.max(0, (localState.courses_data.finishingLessons || 0) + val);
+        document.getElementById('finishing-lesson-count').value = localState.courses_data.finishingLessons;
+      }
+      saveStateLocally();
+    }
+
+    function setCourseLessons(type, val) {
+      if (!localState.courses_data) localState.courses_data = { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' };
+      const num = Math.max(0, parseInt(val) || 0);
+      if (type === 'decor') localState.courses_data.decorLessons = num;
+      else localState.courses_data.finishingLessons = num;
+      saveStateLocally();
+    }
+
+    function saveCoursesData() {
+      if (!localState.courses_data) localState.courses_data = {};
+      localState.courses_data.decorTitle = document.getElementById('decor-lesson-title').value;
+      localState.courses_data.finishingTitle = document.getElementById('finishing-lesson-title').value;
+      saveStateLocally();
+    }
+
+    function adjustSavings(val) {
+      playSoundEffect();
+      localState.savings = Math.max(0, (localState.savings || 0) + val);
+      document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
+      updateSavingsUI();
+      saveStateLocally();
+    }
+
+    function updateSavingsUI() {
+      const pct = Math.min(100, Math.round(((localState.savings || 0) / 50000) * 100));
+      document.getElementById('savings-progress').style.width = pct + '%';
+    }
+
+    function updateFollowers() {
+      const val = parseInt(document.getElementById('followers-count').value) || 0;
+      localState.followers = val;
+      updateFollowersUI();
+      saveStateLocally();
+    }
+
+    function updateFollowersUI() {
+      const pct = Math.min(100, Math.round(((localState.followers || 0) / 10000) * 100));
+      document.getElementById('followers-progress').style.width = pct + '%';
+      document.getElementById('followers-percent').innerText = pct + '% مكتمل';
+    }
+
+    function renderOfficeGoals() {
+      const container = document.getElementById('office-goals-container');
+      let html = '';
+      (localState.office_goals || []).forEach((goal, idx) => {
+        html += `
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+            <input type="text" class="text-input-field" value="${goal}" style="margin-top:0;" onchange="updateOfficeGoalRow(${idx}, this.value)">
+            <button class="btn-delete" onclick="removeOfficeGoalRow(${idx})">🗑️</button>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function addOfficeGoalRow() {
+      playSoundEffect();
+      if (!localState.office_goals) localState.office_goals = [];
+      localState.office_goals.push("خطوة جديدة...");
+      saveStateLocally();
+      renderOfficeGoals();
+    }
+
+    function updateOfficeGoalRow(idx, val) {
+      localState.office_goals[idx] = val;
+      saveStateLocally();
+    }
+
+    function removeOfficeGoalRow(idx) {
+      playSoundEffect();
+      localState.office_goals.splice(idx, 1);
+      saveStateLocally();
+      renderOfficeGoals();
+    }
+
     function updateQuran(val) {
       playSoundEffect();
       localState.quran_page = Math.max(2, Math.min(49, (localState.quran_page || 2) + val));
@@ -714,7 +1101,8 @@
       
       const imgEl = document.getElementById('quran-page-image');
       if (imgEl) {
-        imgEl.src = `https://www.searchtruth.com/quran/images2/large/page-${page}.png`;
+        const formattedPage = String(page).padStart(3, '0');
+        imgEl.src = `https://www.searchtruth.org/quran/images2/${formattedPage}.jpg`;
       }
 
       const audioPlayer = document.getElementById('quran-audio-player');
@@ -722,64 +1110,10 @@
         audioPlayer.currentTime = pageAudioTimeMap[page];
       }
 
-      const totalPagesInSurah = 48;
-      const currentProgress = page - 1; 
-      const pct = Math.round((currentProgress / totalPagesInSurah) * 100);
-
+      const pct = Math.round(((page - 1) / 48) * 100);
       document.getElementById('quran-progress').style.width = pct + '%';
       document.getElementById('quran-status').innerText = `الصفحة ${page} من 49 (سورة البقرة)`;
     }
-
-    function renderOfficeGoals() {
-      const container = document.getElementById('office-goals-container');
-      let html = '';
-      localState.office_goals.forEach((goalText, index) => {
-        html += `
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <span style="font-weight:bold; width:20px;">${index + 1}.</span>
-            <input type="text" class="text-input-field" style="margin:0;" value="${goalText}" onchange="updateOfficeGoal(${index}, this.value)">
-            <button class="btn-delete" onclick="deleteOfficeGoalRow(${index})">🗑️</button>
-          </div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    function addOfficeGoalRow() {
-      playSoundEffect();
-      localState.office_goals.push("");
-      saveStateLocally();
-      renderOfficeGoals();
-    }
-
-    function updateOfficeGoal(index, val) { localState.office_goals[index] = val; saveStateLocally(); }
-    function deleteOfficeGoalRow(index) { playSoundEffect(); localState.office_goals.splice(index, 1); saveStateLocally(); renderOfficeGoals(); }
-
-    function adjustSavings(val) {
-      playSoundEffect();
-      localState.savings = Math.max(0, (localState.savings || 0) + val);
-      document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
-      saveStateLocally();
-      updateSavingsUI();
-    }
-
-    function updateSavingsUI() {
-      const pct = Math.min(100, Math.round(((localState.savings || 0) / 50000) * 100));
-      document.getElementById('savings-progress').style.width = pct + '%';
-    }
-
-    function updateFollowers() {
-      localState.followers = Math.max(0, parseInt(document.getElementById('followers-count').value) || 0);
-      saveStateLocally();
-      updateFollowersUI();
-    }
-
-    function updateFollowersUI() {
-      const pct = Math.min(100, Math.round(((localState.followers || 0) / 10000) * 100));
-      document.getElementById('followers-progress').style.width = pct + '%';
-      document.getElementById('followers-percent').innerText = `${pct}% مكتمل`;
-    }
-
-    function toggleTheme() { playSoundEffect(); document.body.classList.toggle('dark-mode'); }
 
     function updateLiveClock() {
       const now = new Date();
@@ -787,20 +1121,19 @@
       const minutes = String(now.getMinutes()).padStart(2, '0');
       const seconds = String(now.getSeconds()).padStart(2, '0');
       const ampm = hours >= 12 ? 'م' : 'ص';
-      hours = hours % 12 || 12;
-
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12; 
+      
       document.getElementById('live-clock-time').innerText = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}`;
       document.getElementById('live-clock-ampm').innerText = ampm;
-      
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const formattedDate = now.toLocaleDateString('ar-EG', options);
-      document.getElementById('live-date').innerText = formattedDate;
     }
 
-    window.onload = () => {
+    setInterval(updateLiveClock, 1000);
+    updateLiveClock();
+
+    window.onload = function() {
       loadStateLocally();
-      updateLiveClock();
-      setInterval(updateLiveClock, 1000);
     };
   </script>
 </body>
