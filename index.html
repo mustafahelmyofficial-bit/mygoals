@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم والأكاديمية</title>
+  <title>لوحة التحكم الشخصية | المهندس مصطفى حلمي</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -67,15 +67,15 @@
       gap: 14px;
     }
 
-    .header-card, .quote-card-bar { display: flex; }
-
     .header-card {
       background: var(--card-bg);
       border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke);
       padding: 20px;
       box-shadow: var(--shadow-soft);
-      flex-direction: column; gap: 18px;
+      display: flex;
+      flex-direction: column; 
+      gap: 18px;
     }
 
     .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
@@ -106,7 +106,7 @@
       background: var(--card-bg); border-radius: var(--inner-radius);
       border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
       box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
-      justify-content: center; align-items: center;
+      display: flex; justify-content: center; align-items: center;
     }
     .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
@@ -146,7 +146,7 @@
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
     .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
 
-    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي الجديدة ==================== */
+    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي المحدثة ==================== */
     .eng-main-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
     .eng-main-tab {
       padding: 8px 14px; border-radius: 12px; background: var(--bg-main); border: 1px solid var(--card-stroke);
@@ -177,10 +177,10 @@
     .status-badge {
       font-size: 0.72rem; font-weight: bold; padding: 4px 8px; border-radius: 8px; cursor: pointer; border: none; transition: var(--transition);
     }
-    .status-0 { background: rgba(140, 130, 122, 0.15); color: var(--text-muted); } /* لم يبدأ */
-    .status-1 { background: rgba(37, 99, 235, 0.15); color: var(--status-progress); } /* قيد الدراسة */
-    .status-2 { background: rgba(46, 125, 50, 0.15); color: var(--success-green); } /* مكتمل */
-    .status-3 { background: rgba(217, 119, 6, 0.15); color: var(--status-review); } /* يحتاج مراجعة */
+    .status-0 { background: rgba(140, 130, 122, 0.15); color: var(--text-muted); }
+    .status-1 { background: rgba(37, 99, 235, 0.15); color: var(--status-progress); }
+    .status-2 { background: rgba(46, 125, 50, 0.15); color: var(--success-green); }
+    .status-3 { background: rgba(217, 119, 6, 0.15); color: var(--status-review); }
 
     .vocab-grid-card {
       background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 12px;
@@ -222,7 +222,7 @@
 
   <div class="app-container">
 
-    <!-- 🎴 كارت الترحيب الرئيسي -->
+    <!-- 🎴 كارت الترحيب الرئيسي الأصلي -->
     <div class="header-card" id="top-welcome-card">
       <div class="header-top-row">
         <div class="welcome-text">
@@ -249,26 +249,29 @@
       </div>
     </div>
 
-    <!-- 📜 كارت الحكمة -->
+    <!-- 📜 كارت الحكمة الأصلي -->
     <div class="quote-card-bar" id="top-quote-card">
-      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
+      <p id="daily-quote">"استخدام أثاث أكبر من حجم الغرفة يعطي إحساساً بالاتساع والارتقاء."</p>
     </div>
 
-    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
+    <!-- ==================== 🏠 1. الصفحة الرئيسية (التصميم الأصلي بالكامل) ==================== -->
     <div class="app-page active" id="page-home">
+      
+      <!-- 📋 المهام اليومية الشاملة -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📋</span>
-            <span>المهام اليومية</span>
+            <span>المهام اليومية والأهداف الشخصية</span>
           </div>
+          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="addNewTask()">➕ إضافة مهمة</button>
         </div>
 
         <div class="divider-line"></div>
 
         <div class="progress-section">
           <div class="progress-info">
-            <span>نسبة الإنجاز اليومي:</span>
+            <span>نسبة إنجاز المهام:</span>
             <span id="tasks-progress-text">0%</span>
           </div>
           <div class="progress-track">
@@ -279,6 +282,51 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
+      <!-- 🏋️‍♂️ متابعة اللياقة والجيم -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🏋️‍♂️</span>
+            <span>التمارين والرياضة (الجيم)</span>
+          </div>
+        </div>
+        <div class="divider-line"></div>
+        <div id="gym-tasks-container"></div>
+      </div>
+
+      <!-- 💻 تتبع البرامج الهندسية (SketchUp, AutoCAD, D5 Render) -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">💻</span>
+            <span>متابعة أدوات التصميم والهندسة</span>
+          </div>
+        </div>
+        <div class="divider-line"></div>
+        
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="task-item">
+            <label>
+              <input type="checkbox" id="tool-sketchup" onchange="saveStateLocally()">
+              <span>📐 SketchUp - التطبيق والتصميم المعماري</span>
+            </label>
+          </div>
+          <div class="task-item">
+            <label>
+              <input type="checkbox" id="tool-autocad" onchange="saveStateLocally()">
+              <span>📏 AutoCAD - اللوحات التنفيذية والشوب دروينج</span>
+            </label>
+          </div>
+          <div class="task-item">
+            <label>
+              <input type="checkbox" id="tool-d5" onchange="saveStateLocally()">
+              <span>🎬 D5 Render - الرندر الإظهار المباشر والحركة</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🕌 مواقيت الصلوات الخمس -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -302,7 +350,7 @@
       </div>
     </div>
 
-    <!-- ==================== 🇬🇧 2. أكاديمية اللغة الإنجليزية الاحترافية الشاملة ==================== -->
+    <!-- ==================== 🇬🇧 2. أكاديمية اللغة الإنجليزية المحدثة بالمنهج الجديد ==================== -->
     <div class="app-page" id="page-english">
       
       <!-- شريط التنقل العلوي لأقسام اللغة الإنجليزية -->
@@ -313,7 +361,7 @@
         <div class="eng-main-tab" onclick="switchEngTab('speaking', this)">🗣️ المحادثة</div>
       </div>
 
-      <!-- 1️⃣ TAB 1: المنهج التفاعلي المطور -->
+      <!-- TAB 1: المنهج التفاعلي (A0 حتى C1 + Interior Design) -->
       <div id="eng-tab-curriculum">
         <div class="section-card" style="margin-bottom: 10px;">
           <div class="section-header-row">
@@ -327,23 +375,19 @@
             <div class="progress-fill" id="level-progress-bar"></div>
           </div>
 
-          <div class="level-selector-tabs" id="english-level-tabs">
-            <!-- يتم التوليد بالـ JS بناءً على حالة الفتح -->
-          </div>
+          <div class="level-selector-tabs" id="english-level-tabs"></div>
         </div>
 
-        <div id="english-units-container">
-          <!-- محتوى الوحدات والدروس -->
-        </div>
+        <div id="english-units-container"></div>
       </div>
 
-      <!-- 2️⃣ TAB 2: المفردات المستقلة -->
+      <!-- TAB 2: المفردات المستقلة -->
       <div id="eng-tab-vocabulary" style="display: none;">
         <div class="section-card">
           <div class="section-header-row">
             <div class="section-title">
               <span class="sec-icon">📖</span>
-              <span>قواميس المفردات حسب المستوى</span>
+              <span>قواميس المفردات المستقلة</span>
             </div>
           </div>
           <div class="divider-line"></div>
@@ -351,7 +395,7 @@
         </div>
       </div>
 
-      <!-- 3️⃣ TAB 3: قسم الاستماع -->
+      <!-- TAB 3: قسم الاستماع -->
       <div id="eng-tab-listening" style="display: none;">
         <div class="section-card">
           <div class="section-header-row">
@@ -365,7 +409,7 @@
         </div>
       </div>
 
-      <!-- 4️⃣ TAB 4: قسم المحادثة -->
+      <!-- TAB 4: قسم المحادثة -->
       <div id="eng-tab-speaking" style="display: none;">
         <div class="section-card">
           <div class="section-header-row">
@@ -381,7 +425,7 @@
 
     </div>
 
-    <!-- ==================== 📐 3. الكورسات ==================== -->
+    <!-- ==================== 📐 3. الكورسات والتعلم ==================== -->
     <div class="app-page" id="page-courses">
       <div class="section-card">
         <div class="section-header-row">
@@ -420,13 +464,13 @@
       </div>
     </div>
 
-    <!-- ==================== 🎯 4. الأهداف ==================== -->
+    <!-- ==================== 🎯 4. الأهداف وصناعة المحتوى ==================== -->
     <div class="app-page" id="page-goals">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">🎥</span>
-            <span>1. صناعة المحتوى (10K متابع)</span>
+            <span>1. صناعة المحتوى (هدف 10K متابع)</span>
           </div>
         </div>
         <div class="divider-line"></div>
@@ -555,7 +599,7 @@
   <script>
     let soundEnabled = true;
 
-    /* ==================== 📚 المنهج الكامل والشامل للغة الإنجليزية ==================== */
+    /* ==================== 📚 المنهج المخصص الكامل للغة الإنجليزية ==================== */
     const fullEnglishCurriculum = {
       "A0": {
         name: "🇺🇸 A0 - Beginner",
@@ -646,17 +690,16 @@
       }
     };
 
-    /* المفردات المستقلة */
     const standaloneVocabData = {
-      "A0": ["Apple - تفاحة", "Sun - شمس", "Book - كتاب", "House - منزل", "Water - ماء"],
-      "A1": ["Routine - روتين", "Weather - طقس", "Market - سوق", "Travel - سفر", "Doctor - طبيب"],
-      "A2": ["Journey - رحلة", "Schedule - جدول", "Improve - تحسين", "Describe - وصف", "Future - مستقبل"],
-      "B1": ["Fluency - طلاقة", "Experience - خبرة", "Paragraph - فقرة", "Hospitality - ضيافة", "Essay - مقال"],
-      "B2": ["Negotiation - تفاوض", "Expression - تعبير", "Corporate - شركات", "Strategy - استراتيجية", "Confidence - ثقة"],
-      "C1": ["Architectural Blueprint - مخطط معمارى", "False Ceiling - سقف معلق", "Moodboard - لوحة الأفكار", "BoQ (Bill of Quantities) - مقايسة أسعار", "Interior Elevation - قطاع داخلي"]
+      "أهم 500 كلمة (A0)": ["Apple - تفاحة", "Sun - شمس", "Book - كتاب", "House - منزل", "Water - ماء"],
+      "أهم 1000 كلمة (A1)": ["Routine - روتين", "Weather - طقس", "Market - سوق", "Travel - سفر", "Doctor - طبيب"],
+      "أهم 1500 كلمة (A2)": ["Journey - رحلة", "Schedule - جدول", "Improve - تحسين", "Describe - وصف", "Future - مستقبل"],
+      "أهم 2000 كلمة (B1)": ["Fluency - طلاقة", "Experience - خبرة", "Paragraph - فقرة", "Hospitality - ضيافة", "Essay - مقال"],
+      "أهم 2500 كلمة (B2)": ["Negotiation - تفاوض", "Expression - تعبير", "Corporate - شركات", "Strategy - استراتيجية", "Confidence - ثقة"],
+      "أهم 3000 كلمة (C1)": ["Comprehensive - شامل", "Articulate - يتحدث بوضوح", "Exquisite - فاخر/دقيق", "Substantial - جوهري", "Perspective - منظور"],
+      "Vocabulary for Interior Design": ["Architectural Blueprint - مخطط معمارى", "False Ceiling - سقف معلق", "Moodboard - لوحة الأفكار", "BoQ (Bill of Quantities) - مقايسة أسعار", "Interior Elevation - قطاع داخلي", "Finishing Materials - خامات التشطيب"]
     };
 
-    /* أقسام الاستماع */
     const listeningCategories = [
       { title: "🎧 Beginner Listening", desc: "نصوص استماع بطيئة وواضحة جداً للمبتدئين." },
       { title: "🎧 Elementary Listening", desc: "محادثات يومية بسيطة مع أسئلة استيعاب." },
@@ -665,10 +708,9 @@
       { title: "🎧 Native Listening", desc: "مقاطع حقيقية لأصحاب اللغة الأصليين بسرعة طبيعية." }
     ];
 
-    /* أقسام المحادثة */
     const speakingTopics = [
       "التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار",
-      "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل الهندسي", "المكتب الهندسي"
+      "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"
     ];
 
     const statusMap = [
@@ -682,7 +724,7 @@
     let appState = {
       theme: 'light',
       selectedLevelKey: 'A0',
-      lessonStatus: {}, // Store lesson states { "A0_U0_L0": 0..3 }
+      lessonStatus: {},
       quranPage: 2,
       followers: 1200,
       savings: 0,
@@ -690,13 +732,18 @@
       decorTitle: '',
       finishingLessons: 0,
       finishingTitle: '',
+      toolsState: { sketchup: false, autocad: false, d5: false },
       officeGoals: [
         { text: 'اختيار اسم الماركة واللوجو', done: false },
         { text: 'تجهيز بورتفوليو الأعمال', done: false }
       ],
+      gymTasks: [
+        { text: 'تمارين الكارديو والإحماء', done: false },
+        { text: 'تمارين المقاومة والحديد', done: false }
+      ],
       tasks: [
-        { text: 'العمل على تصميم الكورس', done: false },
-        { text: 'التدريب في الجيم', done: false }
+        { text: 'مراجعة التصاميم الهندسية', done: false },
+        { text: 'مذاكرة 45 دقيقة إنجليزي', done: false }
       ],
       prayers: [
         { name: 'الفجر', done: false },
@@ -708,7 +755,7 @@
     };
 
     function loadStateLocally() {
-      const data = localStorage.getItem('eng_mustafa_app_data_v2');
+      const data = localStorage.getItem('eng_mustafa_full_dashboard');
       if (data) {
         try { appState = { ...appState, ...JSON.parse(data) }; } catch(e) { console.error(e); }
       }
@@ -718,7 +765,12 @@
     function saveStateLocally() {
       appState.decorTitle = document.getElementById('decor-lesson-title')?.value || '';
       appState.finishingTitle = document.getElementById('finishing-lesson-title')?.value || '';
-      localStorage.setItem('eng_mustafa_app_data_v2', JSON.stringify(appState));
+      appState.toolsState = {
+        sketchup: document.getElementById('tool-sketchup')?.checked || false,
+        autocad: document.getElementById('tool-autocad')?.checked || false,
+        d5: document.getElementById('tool-d5')?.checked || false
+      };
+      localStorage.setItem('eng_mustafa_full_dashboard', JSON.stringify(appState));
       updateProgressBars();
     }
 
@@ -735,7 +787,14 @@
       document.getElementById('followers-count').value = appState.followers;
       document.getElementById('savings-current').innerText = appState.savings.toLocaleString();
 
+      if(appState.toolsState) {
+        document.getElementById('tool-sketchup').checked = !!appState.toolsState.sketchup;
+        document.getElementById('tool-autocad').checked = !!appState.toolsState.autocad;
+        document.getElementById('tool-d5').checked = !!appState.toolsState.d5;
+      }
+
       renderTasks();
+      renderGymTasks();
       renderPrayers();
       renderOfficeGoals();
       renderEnglishAcademy();
@@ -769,7 +828,7 @@
     function openDistractModal() { document.getElementById('distract-modal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    /* ==================== 📋 Tasks & Prayers ==================== */
+    /* ==================== 📋 Tasks & Gym ==================== */
     function renderTasks() {
       const container = document.getElementById('tasks-container');
       container.innerHTML = appState.tasks.map((task, idx) => `
@@ -778,6 +837,7 @@
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${idx})">
             <span style="${task.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${task.text}</span>
           </label>
+          <button class="btn-delete" onclick="deleteTask(${idx})">✕</button>
         </div>
       `).join('');
     }
@@ -786,6 +846,39 @@
       appState.tasks[idx].done = !appState.tasks[idx].done;
       saveStateLocally();
       renderTasks();
+    }
+
+    function addNewTask() {
+      const t = prompt('أدخل المهمة الجديدة:');
+      if(t) {
+        appState.tasks.push({ text: t, done: false });
+        saveStateLocally();
+        renderTasks();
+      }
+    }
+
+    function deleteTask(idx) {
+      appState.tasks.splice(idx, 1);
+      saveStateLocally();
+      renderTasks();
+    }
+
+    function renderGymTasks() {
+      const container = document.getElementById('gym-tasks-container');
+      container.innerHTML = appState.gymTasks.map((gt, idx) => `
+        <div class="task-item">
+          <label>
+            <input type="checkbox" ${gt.done ? 'checked' : ''} onchange="toggleGymTask(${idx})">
+            <span style="${gt.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${gt.text}</span>
+          </label>
+        </div>
+      `).join('');
+    }
+
+    function toggleGymTask(idx) {
+      appState.gymTasks[idx].done = !appState.gymTasks[idx].done;
+      saveStateLocally();
+      renderGymTasks();
     }
 
     function renderPrayers() {
@@ -909,7 +1002,7 @@
     function isLevelUnlocked(lvlKey) {
       const keys = Object.keys(fullEnglishCurriculum);
       const index = keys.indexOf(lvlKey);
-      if(index <= 0) return true; // Level 0 unlocked always
+      if(index <= 0) return true;
 
       const prevLvlKey = keys[index - 1];
       const prevLvlData = fullEnglishCurriculum[prevLvlKey];
@@ -1013,7 +1106,7 @@
       container.innerHTML = Object.keys(standaloneVocabData).map(lvl => `
         <div class="unit-accordion">
           <div class="unit-header">
-            <span>📚 مفردات المستوى (${lvl})</span>
+            <span>📚 ${lvl}</span>
           </div>
           <div class="unit-content">
             ${standaloneVocabData[lvl].map(w => `
