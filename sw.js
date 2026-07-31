@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
   './azan.mp3'
 ];
 
-// تثبيت الملفات في الكاش
+// 1. تثبيت الملفات في الكاش
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -17,7 +17,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// تفعيل وتنظيف الكاش القديم
+// 2. تفعيل وتنظيف الكاش القديم لضمان تحديث التطبيق
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// الاستجابة للطلبات (Network First مع Fallback للكاش)
+// 3. الاستجابة للطلبات (Network First مع Fallback للكاش)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   
