@@ -142,7 +142,7 @@
       <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
     </div>
 
-    <!-- 🌟 الهدف الأكبر: فتح مكتب تشطيبات خاص -->
+    <!-- 🌟 الهدف الأكبر -->
     <section class="glass-card col-12" style="border: 2px solid var(--accent-gold);">
       <div class="section-title">
         <span>🏢 الهدف الأكبر: فتح مكتب تشطيبات وديكور خاص</span>
@@ -162,7 +162,7 @@
       <div class="task-list" id="tasks-container"></div>
     </section>
 
-    <!-- Prayers with Adhan -->
+    <!-- Prayers -->
     <section class="glass-card col-6">
       <div class="section-title">
         <span>🕌 الصلوات الخمس ومواقيت الصلاة</span>
@@ -175,7 +175,7 @@
       <div class="task-list" id="prayers-container"></div>
     </section>
 
-    <!-- ⏸️ الأهداف المؤجلة -->
+    <!-- الأهداف المؤجلة -->
     <section class="glass-card col-12" id="snoozed-section" style="background: rgba(227, 215, 199, 0.4);">
       <div class="section-title"><span>⏸️ الأهداف المؤجلة (لتوزيع المجهود والتركيز)</span></div>
       <div class="task-list" id="snoozed-tasks-container"></div>
@@ -203,7 +203,7 @@
       <div style="margin-bottom: 15px;">
         <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playTigerSound();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playSoundEffect();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
             <span id="decor-lesson-val" style="font-weight: bold;">0</span>
@@ -215,7 +215,7 @@
       <div>
         <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playTigerSound();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playSoundEffect();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
             <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
@@ -363,42 +363,57 @@
     let prayerTimes24 = {}; 
     let prayerTimes12 = {}; 
     let lastPlayedPrayer = "";
-    let audioUnlocked = false;
+    let audioCtx = null;
 
-    // 🟢 فك حظر المتصفح للصوت فور أول لمسة أو ضغطة بالصفحة
-    function unlockAudio() {
-      if (audioUnlocked) return;
+    // 🔊 نظام الصوت الذكي المزدوج (نغمة رقمية فورية + MP3)
+    function playSoundEffect() {
+      if (!soundEnabled) return;
+
+      // 1. تشغيل النغمة الرقمية المحفزة فوراً بدون اعتماد على ملفات
+      playDigitalBeep();
+
+      // 2. محاولة تشغيل ملف tiger.mp3
       const tigerAudio = document.getElementById('tiger-audio');
       if (tigerAudio) {
-        tigerAudio.play().then(() => {
-          tigerAudio.pause();
-          tigerAudio.currentTime = 0;
-          audioUnlocked = true;
-        }).catch(() => {});
+        tigerAudio.currentTime = 0;
+        tigerAudio.play().catch(() => {});
       }
     }
 
-    window.addEventListener('click', unlockAudio, { once: true });
-    window.addEventListener('touchstart', unlockAudio, { once: true });
+    function playDigitalBeep() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // نغمة C5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // تصاعد لـ A5
+        
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch(e) {}
+    }
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
-    // 🐅 تشغيل ملف الصوت الخاص بالنمر المحسن
     function playTigerSound() {
-      if (!soundEnabled) return;
-      const tigerAudio = document.getElementById('tiger-audio');
-      if (tigerAudio) {
-        tigerAudio.currentTime = 0; // إعادة تشغيل الصوت من البداية
-        const playPromise = tigerAudio.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(err => {
-            console.warn("تعذر تشغيل الصوت، اضغط في أي مكان بالصفحة لتفعيله:", err);
-          });
-        }
-      }
+      playSoundEffect();
     }
 
     function convertTo12Hour(time24) {
@@ -694,7 +709,7 @@
     }
 
     function toggleTask(id, isChecked) {
-      if (isChecked) playTigerSound(); // 🔥 تشغيل صوت النمر عند اختيار المهمة
+      if (isChecked) playSoundEffect(); // 🔊 تشغيل النغمة والصوت
       if (!localState.daily_tasks) localState.daily_tasks = {};
       localState.daily_tasks[id] = isChecked;
       saveStateLocally();
@@ -707,7 +722,7 @@
     }
 
     function toggleSnoozeTask(id, snoozeState) {
-      playTigerSound();
+      playSoundEffect();
       localState.snoozed_tasks[id] = snoozeState;
       saveStateLocally();
       renderTasks();
@@ -740,7 +755,7 @@
     }
 
     function togglePrayer(id, isChecked) {
-      if (isChecked) playTigerSound(); // 🔥 تشغيل صوت النمر عند اختيار الصلاة
+      if (isChecked) playSoundEffect(); // 🔊 تشغيل النغمة والصوت
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
@@ -763,7 +778,7 @@
     }
 
     function addOfficeGoalRow() {
-      playTigerSound();
+      playSoundEffect();
       localState.office_goals.push("");
       saveStateLocally();
       renderOfficeGoals();
@@ -775,14 +790,14 @@
     }
 
     function deleteOfficeGoalRow(index) {
-      playTigerSound();
+      playSoundEffect();
       localState.office_goals.splice(index, 1);
       saveStateLocally();
       renderOfficeGoals();
     }
 
     function updateQuran(val) {
-      playTigerSound();
+      playSoundEffect();
       let current = parseInt(localState.quran_page || 0) + val;
       if (current < 0) current = 0;
       if (current > 48) current = 48;
@@ -809,7 +824,7 @@
     }
 
     function updateLesson(course, change) {
-      playTigerSound();
+      playSoundEffect();
       if (!localState.courses_data) localState.courses_data = { decorLesson: 0, finishingLesson: 0 };
       if (course === 'decor') {
         localState.courses_data.decorLesson = Math.max(0, (localState.courses_data.decorLesson || 0) + change);
@@ -838,7 +853,7 @@
     }
 
     function adjustSavings(val) {
-      playTigerSound();
+      playSoundEffect();
       localState.savings = Math.max(0, (localState.savings || 0) + val);
       document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       saveStateLocally();
@@ -865,7 +880,7 @@
     }
 
     function toggleTimer() {
-      playTigerSound();
+      playSoundEffect();
       const btn = document.getElementById('start-timer-btn');
       if (isTimerRunning) {
         clearInterval(timerInterval);
@@ -882,7 +897,7 @@
             clearInterval(timerInterval);
             isTimerRunning = false;
             btn.innerText = 'بدء';
-            playTigerSound();
+            playSoundEffect();
             alert('انتهى وقت البومودورو! خذ استراحة قصيرة.');
           }
         }, 1000);
@@ -890,7 +905,7 @@
     }
 
     function resetTimer() {
-      playTigerSound();
+      playSoundEffect();
       clearInterval(timerInterval);
       isTimerRunning = false;
       timerTime = 25 * 60;
@@ -934,7 +949,7 @@
     }
 
     function openSelectedCustomDate() {
-      playTigerSound();
+      playSoundEffect();
       const customDate = document.getElementById('custom-day-picker').value;
       if (!customDate) {
         alert("يرجى اختيار تاريخ أولاً من الخانة!");
@@ -944,7 +959,7 @@
     }
 
     function openEditDayModal(dateKey) {
-      playTigerSound();
+      playSoundEffect();
       activeEditDate = dateKey;
       document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
       
@@ -987,7 +1002,7 @@
     }
 
     function saveEditedDay() {
-      playTigerSound();
+      playSoundEffect();
       if (!activeEditDate) return;
       const dayData = localState.history_details[activeEditDate];
 
@@ -1009,13 +1024,13 @@
     }
 
     function closeEditModal() {
-      playTigerSound();
+      playSoundEffect();
       document.getElementById('edit-day-modal').style.display = 'none';
       activeEditDate = null;
     }
 
     function undoDayReset() {
-      playTigerSound();
+      playSoundEffect();
       if (!localState.last_backup_data) {
         alert("لا يوجد تقفيل سابق للتراجع عنه حالياً!");
         return;
@@ -1039,7 +1054,7 @@
     }
 
     function deleteHistoryDate(dateKey) {
-      playTigerSound();
+      playSoundEffect();
       if (confirm(`هل أنت تأكد من مسح سجل يوم (${dateKey}) نهائياً؟`)) {
         if (localState.history && localState.history[dateKey]) delete localState.history[dateKey];
         if (localState.history_details && localState.history_details[dateKey]) delete localState.history_details[dateKey];
@@ -1065,7 +1080,7 @@
     }
 
     function forceNewDay() {
-      playTigerSound();
+      playSoundEffect();
       if (confirm("هل تريد تقفيل إنجاز اليوم الحالي ونقله للأيام السابقة وتصفير المهام لليوم الجديد؟")) {
         const currentDate = localState.lastDate || getTodayString();
         performDayReset(currentDate);
@@ -1076,17 +1091,17 @@
     }
 
     function toggleTheme() {
-      playTigerSound();
+      playSoundEffect();
       document.body.classList.toggle('dark-mode');
     }
 
     function openDistractModal() {
-      playTigerSound();
+      playSoundEffect();
       document.getElementById('distract-modal').style.display = 'flex';
     }
 
     function closeDistractModal() {
-      playTigerSound();
+      playSoundEffect();
       document.getElementById('distract-modal').style.display = 'none';
     }
 
