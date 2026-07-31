@@ -5,26 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
   
-  <!-- أيقونة الموقع والـ Manifest مع تحايل الكاش v=2 -->
-  <link rel="icon" type="image/png" href="logo.png?v=2">
-  <link rel="manifest" href="app-manifest.json?v=2">
-
-  <!-- إعدادات إضافية لدعم أيقونة التطبيق على أجهزة iPhone / iOS -->
-  <link rel="apple-touch-icon" href="logo.png?v=2">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <!-- إعدادات الأيقونة والتطبيق المحلي -->
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="manifest" href="app-manifest.json">
+  <link rel="apple-touch-icon" href="logo.png">
   <meta name="mobile-web-app-capable" content="yes">
-
-  <!-- مكتبات Firebase السحابية -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
   <style>
     :root {
       --bg-primary: #F4EFEA;
       --bg-gradient: linear-gradient(135deg, #EFE8DF 0%, #E3D7C7 100%);
-      --glass-bg: rgba(255, 255, 255, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.9);
       --glass-shadow: 0 8px 32px 0 rgba(60, 48, 38, 0.08);
       --text-main: #2D221E;
       --text-muted: #7A6A5D;
@@ -39,7 +32,7 @@
     body.dark-mode {
       --bg-primary: #1C1816;
       --bg-gradient: linear-gradient(135deg, #1A1614 0%, #29221D 100%);
-      --glass-bg: rgba(45, 34, 30, 0.8);
+      --glass-bg: rgba(45, 34, 30, 0.85);
       --glass-border: rgba(212, 175, 55, 0.25);
       --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
       --text-main: #EFE8DF;
@@ -59,6 +52,7 @@
     body.dark-mode .welcome-box h1 { color: var(--accent-gold); }
     .header-actions { display: flex; align-items: center; gap: 12px; }
 
+    .badge-offline { background: rgba(46, 125, 50, 0.15); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 6px 12px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; }
     .badge-streak { background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold-dark); padding: 8px 16px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
 
@@ -79,11 +73,9 @@
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
     .task-list { display: flex; flex-direction: column; gap: 10px; }
-    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.35); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.4); }
+    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); }
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-grow: 1; font-weight: 600; }
     .task-item input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--accent-gold); cursor: pointer; }
-    
-    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; color: var(--accent-brown); background: rgba(197, 155, 39, 0.2); padding: 4px 10px; border-radius: 8px; }
 
     .counter-control { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .btn-counter { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--accent-brown); color: #fff; font-weight: bold; cursor: pointer; }
@@ -102,10 +94,6 @@
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
     .modal-content { max-width: 550px; width: 92%; max-height: 85vh; overflow-y: auto; text-align: right; background: var(--bg-primary); padding: 25px; border-radius: 20px; color: var(--text-main); border: 1px solid var(--glass-border); }
 
-    #sync-status { font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; }
-    .status-online { color: #2e7d32; background: rgba(46, 125, 50, 0.15); }
-    .status-offline { color: #d9534f; background: rgba(217, 83, 79, 0.15); }
-
     .history-item { display: flex; justify-content: space-between; padding: 12px 16px; margin-bottom: 10px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.95rem; font-weight: 600; align-items: center; border: 1px solid rgba(255,255,255,0.6); }
     
     .date-picker-box { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; padding: 12px 16px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.5); }
@@ -114,14 +102,13 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت المحلي للأذان -->
-  <audio id="local-azan-audio" src="azan.mp3" preload="auto" playsinline webkit-playsinline></audio>
+  <!-- صوت كليك محلي أوفلاين باستعمال Web Audio API -->
 
   <div class="container">
 
     <header class="glass-card dashboard-header">
       <div class="welcome-box">
-        <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">🔄 جاري الاتصال...</span></h1>
+        <h1>👋 مرحباً بك، باشمهندس! <span class="badge-offline">⚡ نظام محلي (أوفلاين)</span></h1>
         <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
       </div>
 
@@ -151,8 +138,7 @@
     <!-- Prayers -->
     <section class="glass-card col-6">
       <div class="section-title">
-        <span>🕌 الصلوات الخمس ومواقيتها</span>
-        <button class="btn-edit" id="enable-audio-btn" style="font-size:0.75rem;" onclick="activateMobileNotificationsAndAudio()">🔔 تفعيل أذان الموبايل والإشعارات</button>
+        <span>🕌 الصلوات الخمس</span>
       </div>
       <div style="margin-bottom: 12px;">
         <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
@@ -321,47 +307,9 @@
   </div>
 
   <script>
-    // --- إعدادات الأذان والإشعارات ---
     let soundEnabled = true;
     let audioCtx = null;
-    let playedPrayersToday = {};
-    const azanAudio = document.getElementById('local-azan-audio');
-
-    function activateMobileNotificationsAndAudio() {
-      if ("Notification" in window) {
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            const btn = document.getElementById('enable-audio-btn');
-            if (btn) {
-              btn.innerText = '✅ تم تفعيل الصوت والإشعارات';
-              btn.style.background = '#2E7D32';
-              btn.style.color = '#fff';
-            }
-          }
-        });
-      }
-
-      if (azanAudio) {
-        azanAudio.play().then(() => {
-          azanAudio.pause();
-          azanAudio.currentTime = 0;
-        }).catch(e => console.log(e));
-      }
-
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-      } catch(e){}
-    }
-
-    document.addEventListener('touchstart', () => {
-      if (azanAudio && azanAudio.paused) {
-        azanAudio.play().then(() => {
-          azanAudio.pause();
-          azanAudio.currentTime = 0;
-        }).catch(() => {});
-      }
-    }, { once: true });
+    let activeEditDate = null;
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
@@ -391,38 +339,6 @@
         osc.stop(audioCtx.currentTime + 0.08);
       } catch (e) {}
     }
-
-    function triggerAzanNotificationAndSound(prayerName) {
-      if (!soundEnabled) return;
-
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(`🕌 حان الآن موعد ${prayerName}`, {
-          body: 'الله أكبر، حي على الصلاة.',
-          icon: 'logo.png?v=2',
-          vibrate: [200, 100, 200]
-        });
-      }
-
-      if (azanAudio) {
-        azanAudio.currentTime = 0;
-        azanAudio.play().catch(err => console.log("المتصفح منع التشغيل:", err));
-      }
-    }
-
-    // --- إعدادات Firebase ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyCKzDjyFuuasovCB_163vNZf4_QAWsCRU8",
-      authDomain: "my-goals-ed6c2.firebaseapp.com",
-      databaseURL: "https://my-goals-ed6c2-default-rtdb.firebaseio.com",
-      projectId: "my-goals-ed6c2",
-      storageBucket: "my-goals-ed6c2.firebasestorage.app",
-      messagingSenderId: "550190058724",
-      appId: "1:550190058724:web:84f5fc27c7af95bc5370f1",
-      measurementId: "G-KQGBT49TF9"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const dbRef = firebase.database().ref('dashboard_data');
 
     const dailyMotivationalQuotes = [
       "💪 ابني جسمك وكيانك في الصمت، واجعل نتيجتك تتحدث وتخرس كل من استهان بك.",
@@ -464,16 +380,12 @@
     ];
 
     const prayersList = [
-      { id: 'fajr', title: '🌅 صلاة الفجر', key: 'Fajr' },
-      { id: 'dhuhr', title: '☀️ صلاة الظهر', key: 'Dhuhr' },
-      { id: 'asr', title: '🌤️ صلاة العصر', key: 'Asr' },
-      { id: 'maghrib', title: '🌅 صلاة المغرب', key: 'Maghrib' },
-      { id: 'isha', title: '🌙 صلاة العشاء', key: 'Isha' }
+      { id: 'fajr', title: '🌅 صلاة الفجر' },
+      { id: 'dhuhr', title: '☀️ صلاة الظهر' },
+      { id: 'asr', title: '🌤️ صلاة العصر' },
+      { id: 'maghrib', title: '🌅 صلاة المغرب' },
+      { id: 'isha', title: '🌙 صلاة العشاء' }
     ];
-
-    let prayerTimesObj = { Fajr: "04:30", Dhuhr: "12:00", Asr: "15:30", Maghrib: "18:45", Isha: "20:15" };
-    let activeEditDate = null;
-    let isUpdatingFromRemote = false;
 
     let localState = {
       startDate: '',
@@ -491,49 +403,6 @@
       last_backup_data: null
     };
 
-    function convertTo12HourFormat(time24) {
-      if (!time24) return '';
-      let [hours, minutes] = time24.split(':');
-      hours = parseInt(hours, 10);
-      const period = hours >= 12 ? 'م' : 'ص';
-      hours = hours % 12 || 12;
-      return `${hours}:${minutes} ${period}`;
-    }
-
-    async function fetchPrayerTimes() {
-      try {
-        const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5');
-        const data = await res.json();
-        if (data && data.data && data.data.timings) {
-          prayerTimesObj = data.data.timings;
-          localStorage.setItem('cached_prayer_times', JSON.stringify(prayerTimesObj));
-        }
-      } catch (e) {
-        const cached = localStorage.getItem('cached_prayer_times');
-        if (cached) prayerTimesObj = JSON.parse(cached);
-      }
-      renderPrayers();
-    }
-
-    function checkPrayerTimesForAzan() {
-      const now = new Date();
-      const currentHours = String(now.getHours()).padStart(2, '0');
-      const currentMinutes = String(now.getMinutes()).padStart(2, '0');
-      const currentTimeStr = `${currentHours}:${currentMinutes}`;
-      const todayStr = getTodayString();
-
-      prayersList.forEach(p => {
-        const prayerTime = prayerTimesObj[p.key];
-        if (prayerTime && prayerTime === currentTimeStr) {
-          const key = `${todayStr}-${p.key}`;
-          if (!playedPrayersToday[key]) {
-            triggerAzanNotificationAndSound(p.title);
-            playedPrayersToday[key] = true;
-          }
-        }
-      });
-    }
-
     function getTodayString() {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -550,7 +419,6 @@
       if (localState.lastDate !== today) {
         performDayReset(localState.lastDate);
         localState.lastDate = today;
-        playedPrayersToday = {};
         saveStateLocally();
       }
       setDailyQuote();
@@ -666,7 +534,7 @@
       saveStateLocally();
       renderHistory();
       closeEditModal();
-      alert(`تم إضافة وتحديث نسبة يوم (${activeEditDate}) بالسجل بنجاح! 🎉`);
+      alert(`تم تحديث نسبة يوم (${activeEditDate}) بالسجل بنجاح! 🎉`);
     }
 
     function closeEditModal() {
@@ -738,9 +606,6 @@
 
     function saveStateLocally() {
       localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
-      if (!isUpdatingFromRemote) {
-        syncToFirebase();
-      }
     }
 
     function loadStateLocally() {
@@ -750,31 +615,6 @@
       }
       checkAndResetNewDay();
       applyStateToUI();
-    }
-
-    function syncToFirebase() {
-      if (navigator.onLine && dbRef) {
-        dbRef.set(localState).catch(() => {});
-      }
-    }
-
-    function setupFirebaseRealtimeSync() {
-      dbRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          isUpdatingFromRemote = true;
-          localState = data;
-          localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
-          applyStateToUI();
-          isUpdatingFromRemote = false;
-
-          document.getElementById('sync-status').innerText = '🟢 متصل ومُتزامن لحظياً';
-          document.getElementById('sync-status').className = 'status-online';
-        }
-      }, (error) => {
-        document.getElementById('sync-status').innerText = '🔴 أوفلاين (حفظ محلي)';
-        document.getElementById('sync-status').className = 'status-offline';
-      });
     }
 
     function applyStateToUI() {
@@ -850,8 +690,6 @@
       prayersList.forEach(p => {
         const checked = localState.prayers_tasks && localState.prayers_tasks[p.id] ? 'checked' : '';
         if (checked) doneCount++;
-        const time24 = prayerTimesObj[p.key] || '';
-        const time12 = convertTo12HourFormat(time24);
 
         html += `
           <div class="task-item">
@@ -859,7 +697,6 @@
               <input type="checkbox" onchange="togglePrayer('${p.id}', this.checked)" ${checked}>
               <span>${p.title}</span>
             </label>
-            <span class="prayer-time-badge">${time12 || '--:--'}</span>
           </div>
         `;
       });
@@ -1038,7 +875,6 @@
       document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
-    // --- التحكم بالشاشة والمساعدات ---
     document.getElementById('theme-toggle').addEventListener('click', () => {
       playClickSound();
       document.body.classList.toggle('dark-mode');
@@ -1061,33 +897,14 @@
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', options);
       document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG');
-      
-      checkPrayerTimesForAzan();
     }
 
     window.onload = function() {
       loadStateLocally();
-      fetchPrayerTimes();
       setDailyQuote();
-      setupFirebaseRealtimeSync();
 
-      if ("Notification" in window && Notification.permission === "granted") {
-        const btn = document.getElementById('enable-audio-btn');
-        if (btn) {
-          btn.innerText = '✅ تم تفعيل الأذان والإشعارات';
-          btn.style.background = '#2E7D32';
-          btn.style.color = '#fff';
-        }
-      }
-      
       setInterval(updateLiveClockAndCheck, 1000);
       setInterval(checkAndResetNewDay, 60000);
-
-      window.addEventListener('online', syncToFirebase);
-      window.addEventListener('offline', () => {
-        document.getElementById('sync-status').innerText = '🔴 أوفلاين (حفظ محلي)';
-        document.getElementById('sync-status').className = 'status-offline';
-      });
     };
   </script>
 </body>
