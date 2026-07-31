@@ -74,9 +74,15 @@
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
     .task-list { display: flex; flex-direction: column; gap: 10px; }
-    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); }
+    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); flex-wrap: wrap; gap: 8px; }
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-grow: 1; font-weight: 600; }
     .task-item input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--accent-gold); cursor: pointer; }
+
+    .task-meta { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
+    .target-days-input { width: 55px; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--glass-border); text-align: center; font-weight: bold; background: rgba(255,255,255,0.7); }
+    
+    .btn-snooze { background: rgba(212, 160, 23, 0.2); border: 1px solid var(--accent-gold); color: var(--accent-brown); border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+    .btn-restore { background: rgba(46, 125, 50, 0.2); border: 1px solid var(--accent-green); color: var(--accent-green); border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
 
     .prayer-time-badge { font-size: 0.85rem; font-weight: bold; background: rgba(197, 155, 39, 0.15); color: var(--accent-brown); padding: 4px 8px; border-radius: 6px; }
     body.dark-mode .prayer-time-badge { color: var(--accent-gold); }
@@ -91,6 +97,11 @@
     .btn-edit:hover { background: var(--accent-gold); color: white; }
     .btn-delete { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid #d9534f; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
     .btn-delete:hover { background: #d9534f; color: white; }
+
+    .office-goal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .office-goal-num { font-weight: 800; font-size: 1.1rem; color: var(--accent-brown); width: 30px; text-align: center; }
+    body.dark-mode .office-goal-num { color: var(--accent-gold); }
+    .office-goal-input { flex-grow: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); font-weight: 600; color: var(--text-main); }
 
     .timer-display { font-size: 2.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-brown); margin: 10px 0; }
     body.dark-mode .timer-display { color: var(--accent-gold); }
@@ -130,9 +141,19 @@
       <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
     </div>
 
+    <!-- 🌟 الهدف الأكبر: فتح مكتب تشطيبات خاص -->
+    <section class="glass-card col-12" style="border: 2px solid var(--accent-gold);">
+      <div class="section-title">
+        <span>🏢 الهدف الأكبر: فتح مكتب تشطيبات وديكور خاص</span>
+        <button class="btn-action" style="font-size: 0.8rem; padding: 4px 12px;" onclick="addOfficeGoalRow()">➕ إضافة بند جديد</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">قائمة بالخطوات والنقاط الاستراتيجية التي تخدم تأسيس وتجهيز المكتب في المستقبل:</p>
+      <div id="office-goals-container"></div>
+    </section>
+
     <!-- Daily Tasks -->
     <section class="glass-card col-6">
-      <div class="section-title"><span>📋 المهام اليومية</span></div>
+      <div class="section-title"><span>📋 المهام اليومية المستهدفة</span></div>
       <div style="margin-bottom: 12px;">
         <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة الإنجاز اليومي:</span>
         <div class="progress-container"><div class="progress-bar" id="tasks-progress"></div></div>
@@ -151,6 +172,12 @@
         <div class="progress-container"><div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div></div>
       </div>
       <div class="task-list" id="prayers-container"></div>
+    </section>
+
+    <!-- ⏸️ الأهداف المؤجلة -->
+    <section class="glass-card col-12" id="snoozed-section" style="background: rgba(227, 215, 199, 0.4);">
+      <div class="section-title"><span>⏸️ الأهداف المؤجلة (لتوزيع المجهود والتركيز)</span></div>
+      <div class="task-list" id="snoozed-tasks-container"></div>
     </section>
 
     <!-- Quran -->
@@ -175,7 +202,7 @@
       <div style="margin-bottom: 15px;">
         <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playEagleSound();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
             <span id="decor-lesson-val" style="font-weight: bold;">0</span>
@@ -187,7 +214,7 @@
       <div>
         <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playEagleSound();"> تمت المذاكرة اليوم</label>
           <div class="counter-control" style="margin: 0;">
             <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
             <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
@@ -342,27 +369,75 @@
       document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
     }
 
-    function playClickSound() {
+    function initAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    // 🦅 1. صوت النسر (عند الإنجاز التك)
+    function playEagleSound() {
       if (!soundEnabled) return;
       try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
+        initAudioContext();
+        const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+        osc.type = 'sawtooth';
+        
+        // محاكاة صرخة نسر حادة وتردد سريع
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(2400, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.35);
 
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
 
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) {}
+    }
+
+    // 🐅 2. صوت زئير النمر (عند اكتمال أي قسم بالكامل)
+    function playTigerSound() {
+      if (!soundEnabled) return;
+      try {
+        initAudioContext();
+        const now = audioCtx.currentTime;
+        
+        // مولد ضوضاء مع تردد منخفض لمحاكاة الزئير القوي
+        const bufferSize = audioCtx.sampleRate * 0.8;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = buffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(250, now);
+        filter.frequency.linearRampToValueAtTime(120, now + 0.4);
+        filter.frequency.linearRampToValueAtTime(300, now + 0.8);
+        filter.Q.value = 3;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.5, now + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        whiteNoise.start(now);
+        whiteNoise.stop(now + 0.8);
       } catch (e) {}
     }
 
@@ -485,6 +560,9 @@
       lastDate: '',
       daily_tasks: {},
       prayers_tasks: {},
+      task_targets: {}, 
+      snoozed_tasks: {}, 
+      office_goals: ["تجهيز النموذج والأعمال السابقة (Portfolio)", "تحديد الهوية والتسعير للخدمات", "مقر المكتب والمعدات"], 
       quran_page: 0,
       courses_data: { decorLesson: 0, finishingLesson: 0, decorToday: false, finishingToday: false },
       eng_data: { lessons: 0, hours: 0, lastLesson: '' },
@@ -564,6 +642,12 @@
       if (stored) {
         try { localState = JSON.parse(stored); } catch(e){}
       }
+      if (!localState.task_targets) localState.task_targets = {};
+      if (!localState.snoozed_tasks) localState.snoozed_tasks = {};
+      if (!localState.office_goals || localState.office_goals.length === 0) {
+        localState.office_goals = ["تجهيز النموذج والأعمال السابقة (Portfolio)", "تحديد الهوية والتسعير للخدمات", "مقر المكتب والمعدات"];
+      }
+
       checkAndResetNewDay();
       applyStateToUI();
     }
@@ -571,6 +655,7 @@
     function applyStateToUI() {
       renderTasks();
       renderPrayers();
+      renderOfficeGoals();
       renderHistory();
       calculateStreak();
       
@@ -603,32 +688,71 @@
     }
 
     function renderTasks() {
-      const container = document.getElementById('tasks-container');
-      let html = '';
+      const mainContainer = document.getElementById('tasks-container');
+      const snoozedContainer = document.getElementById('snoozed-tasks-container');
+      let mainHtml = '';
+      let snoozedHtml = '';
       let doneCount = 0;
+      let activeTasksCount = 0;
 
       defaultTasks.forEach(task => {
+        const isSnoozed = localState.snoozed_tasks[task.id];
         const checked = localState.daily_tasks && localState.daily_tasks[task.id] ? 'checked' : '';
-        if (checked) doneCount++;
-        html += `
-          <div class="task-item">
-            <label>
-              <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
-              <span>${task.title}</span>
-            </label>
-          </div>
-        `;
+        const targetDays = localState.task_targets[task.id] || 30;
+
+        if (isSnoozed) {
+          snoozedHtml += `
+            <div class="task-item">
+              <span style="text-decoration: line-through; opacity: 0.7; font-weight:600;">${task.title}</span>
+              <button class="btn-restore" onclick="toggleSnoozeTask('${task.id}', false)">▶️ استعادة للرئيسية</button>
+            </div>
+          `;
+        } else {
+          activeTasksCount++;
+          if (checked) doneCount++;
+          mainHtml += `
+            <div class="task-item">
+              <label>
+                <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
+                <span>${task.title}</span>
+              </label>
+              <div class="task-meta">
+                <span>🎯 مستهدف:</span>
+                <input type="number" class="target-days-input" value="${targetDays}" onchange="updateTaskTarget('${task.id}', this.value)"> يوم
+                <button class="btn-snooze" onclick="toggleSnoozeTask('${task.id}', true)">⏸️ تأجيل</button>
+              </div>
+            </div>
+          `;
+        }
       });
 
-      container.innerHTML = html;
-      const pct = Math.round((doneCount / defaultTasks.length) * 100);
+      mainContainer.innerHTML = mainHtml || '<p style="text-align:center; color:var(--text-muted); padding:10px;">جميع المهام مؤجلة حالياً! افتح خانة المؤجل واستعدها.</p>';
+      snoozedContainer.innerHTML = snoozedHtml || '<p style="text-align:center; color:var(--text-muted); padding:10px;">لا يوجد أهداف مؤجلة حالياً.</p>';
+
+      const pct = activeTasksCount > 0 ? Math.round((doneCount / activeTasksCount) * 100) : 0;
       document.getElementById('tasks-progress').style.width = pct + '%';
+
+      if (activeTasksCount > 0 && doneCount === activeTasksCount) {
+        playTigerSound();
+      }
     }
 
     function toggleTask(id, isChecked) {
-      playClickSound();
+      if (isChecked) playEagleSound();
       if (!localState.daily_tasks) localState.daily_tasks = {};
       localState.daily_tasks[id] = isChecked;
+      saveStateLocally();
+      renderTasks();
+    }
+
+    function updateTaskTarget(id, days) {
+      localState.task_targets[id] = parseInt(days) || 30;
+      saveStateLocally();
+    }
+
+    function toggleSnoozeTask(id, snoozeState) {
+      playEagleSound();
+      localState.snoozed_tasks[id] = snoozeState;
       saveStateLocally();
       renderTasks();
     }
@@ -657,18 +781,57 @@
       container.innerHTML = html;
       const pct = Math.round((doneCount / prayersList.length) * 100);
       document.getElementById('prayers-progress').style.width = pct + '%';
+
+      if (doneCount === prayersList.length) {
+        playTigerSound();
+      }
     }
 
     function togglePrayer(id, isChecked) {
-      playClickSound();
+      if (isChecked) playEagleSound();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
       renderPrayers();
     }
 
+    // 🏢 قسم الهدف الأكبر: فتح مكتب تشطيبات
+    function renderOfficeGoals() {
+      const container = document.getElementById('office-goals-container');
+      let html = '';
+      localState.office_goals.forEach((goalText, index) => {
+        html += `
+          <div class="office-goal-row">
+            <span class="office-goal-num">${index + 1}.</span>
+            <input type="text" class="office-goal-input" value="${goalText}" onchange="updateOfficeGoal(${index}, this.value)" placeholder="اكتب بنداً استراتيجياً يخدم تأسيس المكتب...">
+            <button class="btn-delete" onclick="deleteOfficeGoalRow(${index})">🗑️</button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function addOfficeGoalRow() {
+      playEagleSound();
+      localState.office_goals.push("");
+      saveStateLocally();
+      renderOfficeGoals();
+    }
+
+    function updateOfficeGoal(index, val) {
+      localState.office_goals[index] = val;
+      saveStateLocally();
+    }
+
+    function deleteOfficeGoalRow(index) {
+      playEagleSound();
+      localState.office_goals.splice(index, 1);
+      saveStateLocally();
+      renderOfficeGoals();
+    }
+
     function updateQuran(val) {
-      playClickSound();
+      playEagleSound();
       let current = parseInt(localState.quran_page || 0) + val;
       if (current < 0) current = 0;
       if (current > 48) current = 48;
@@ -695,7 +858,7 @@
     }
 
     function updateLesson(course, change) {
-      playClickSound();
+      playEagleSound();
       if (!localState.courses_data) localState.courses_data = { decorLesson: 0, finishingLesson: 0 };
       if (course === 'decor') {
         localState.courses_data.decorLesson = Math.max(0, (localState.courses_data.decorLesson || 0) + change);
@@ -724,7 +887,7 @@
     }
 
     function adjustSavings(val) {
-      playClickSound();
+      playEagleSound();
       localState.savings = Math.max(0, (localState.savings || 0) + val);
       document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       saveStateLocally();
@@ -751,7 +914,7 @@
     }
 
     function toggleTimer() {
-      playClickSound();
+      playEagleSound();
       const btn = document.getElementById('start-timer-btn');
       if (isTimerRunning) {
         clearInterval(timerInterval);
@@ -768,6 +931,7 @@
             clearInterval(timerInterval);
             isTimerRunning = false;
             btn.innerText = 'بدء';
+            playTigerSound();
             alert('انتهى وقت البومودورو! خذ استراحة قصيرة.');
           }
         }, 1000);
@@ -775,7 +939,7 @@
     }
 
     function resetTimer() {
-      playClickSound();
+      playEagleSound();
       clearInterval(timerInterval);
       isTimerRunning = false;
       timerTime = 25 * 60;
@@ -819,7 +983,7 @@
     }
 
     function openSelectedCustomDate() {
-      playClickSound();
+      playEagleSound();
       const customDate = document.getElementById('custom-day-picker').value;
       if (!customDate) {
         alert("يرجى اختيار تاريخ أولاً من الخانة!");
@@ -829,7 +993,7 @@
     }
 
     function openEditDayModal(dateKey) {
-      playClickSound();
+      playEagleSound();
       activeEditDate = dateKey;
       document.getElementById('edit-modal-title').innerText = `✏️ تعديل مهام يوم: (${dateKey})`;
       
@@ -872,7 +1036,7 @@
     }
 
     function saveEditedDay() {
-      playClickSound();
+      playEagleSound();
       if (!activeEditDate) return;
       const dayData = localState.history_details[activeEditDate];
 
@@ -894,13 +1058,13 @@
     }
 
     function closeEditModal() {
-      playClickSound();
+      playEagleSound();
       document.getElementById('edit-day-modal').style.display = 'none';
       activeEditDate = null;
     }
 
     function undoDayReset() {
-      playClickSound();
+      playEagleSound();
       if (!localState.last_backup_data) {
         alert("لا يوجد تقفيل سابق للتراجع عنه حالياً!");
         return;
@@ -924,7 +1088,7 @@
     }
 
     function deleteHistoryDate(dateKey) {
-      playClickSound();
+      playEagleSound();
       if (confirm(`هل أنت تأكد من مسح سجل يوم (${dateKey}) نهائياً؟`)) {
         if (localState.history && localState.history[dateKey]) delete localState.history[dateKey];
         if (localState.history_details && localState.history_details[dateKey]) delete localState.history_details[dateKey];
@@ -950,7 +1114,7 @@
     }
 
     function forceNewDay() {
-      playClickSound();
+      playEagleSound();
       if (confirm("هل تريد تقفيل إنجاز اليوم الحالي ونقله للأيام السابقة وتصفير المهام لليوم الجديد؟")) {
         const currentDate = localState.lastDate || getTodayString();
         performDayReset(currentDate);
@@ -961,17 +1125,17 @@
     }
 
     function toggleTheme() {
-      playClickSound();
+      playEagleSound();
       document.body.classList.toggle('dark-mode');
     }
 
     function openDistractModal() {
-      playClickSound();
+      playEagleSound();
       document.getElementById('distract-modal').style.display = 'flex';
     }
 
     function closeDistractModal() {
-      playClickSound();
+      playEagleSound();
       document.getElementById('distract-modal').style.display = 'none';
     }
 
