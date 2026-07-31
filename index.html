@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم الشخصية | Architect Dashboard</title>
+  <title>Eng-Mustafa Helmy | لوحة التحكم الشخصية</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -113,7 +113,7 @@
 
     <header class="glass-card dashboard-header">
       <div class="welcome-box">
-        <h1>👋 مرحباً بك، باشمهندس! <span class="badge-offline" id="status-badge">⚡ جاري الفحص...</span></h1>
+        <h1>👋 Eng-Mustafa Helmy <span class="badge-offline" id="status-badge">⚡ جاري الفحص...</span></h1>
         <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
       </div>
 
@@ -313,12 +313,11 @@
   </div>
 
   <script>
-    // --- تسجيل الـ Service Worker لضمان التشغيل أوفلاين ---
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then(reg => {
-            console.log('Service Worker Registered successfully!');
+            console.log('Service Worker Registered!');
             document.getElementById('status-badge').innerText = '⚡ جاهز أوفلاين';
           })
           .catch(err => {
@@ -405,9 +404,7 @@
           localStorage.setItem('cached_prayer_times', JSON.stringify({ prayerTimes24, prayerTimes12 }));
           renderPrayers();
         }
-      } catch (e) {
-        console.log("استخدام البيانات المحفوظة أوفلاين للصلاة");
-      }
+      } catch (e) {}
     }
 
     function checkPrayerTimeAndPlayAzan() {
