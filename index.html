@@ -6,18 +6,6 @@
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="app-manifest.json">
-  
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for(let registration of registrations) {
-            registration.update();
-          }
-        }).catch(() => {});
-      });
-    }
-  </script>
 
   <!-- مكتبات Firebase السحابية -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -118,8 +106,8 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت المحلي الخفي -->
-  <audio id="local-azan-audio" src="azan.mp3" preload="auto"></audio>
+  <!-- عنصر الصوت المحلي -->
+  <audio id="local-azan-audio" src="azan.mp3" preload="auto" playsinline webkit-playsinline></audio>
 
   <div class="container">
 
@@ -156,7 +144,7 @@
 <section class="glass-card col-6">
   <div class="section-title">
     <span>🕌 الصلوات الخمس ومواقيتها</span>
-    <button class="btn-edit" style="font-size:0.75rem;" onclick="playAzanSound()">🔊 تجربة الأذان</button>
+    <button class="btn-edit" id="enable-audio-btn" style="font-size:0.75rem;" onclick="activateMobileNotificationsAndAudio()">🔔 تفعيل أذان الموبايل والإشعارات</button>
   </div>
   <div style="margin-bottom: 12px;">
     <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
@@ -325,26 +313,52 @@
   </div>
 
   <script>
-    // --- إعدادات نظام الأصوات التفاعلي والأذان ---
+    // --- إعدادات نُظم الإشعارات والأذان المحسنة للموبايل ---
     let soundEnabled = true;
     let audioCtx = null;
     let playedPrayersToday = {};
-    let userHasInteracted = false;
-
     const azanAudio = document.getElementById('local-azan-audio');
 
-    // إتاحة تفعيل الصوت على الموبايل من أول ضغطة أو لمسة شاشة
-    function initMobileAudioPermission() {
-      if (!userHasInteracted && azanAudio) {
-        userHasInteracted = true;
+    // تفعيل الإشعارات وفك حظر الصوت في وقت واحد
+    function activateMobileNotificationsAndAudio() {
+      // 1. طلب إذن الإشعارات من الموبايل
+      if ("Notification" in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            const btn = document.getElementById('enable-audio-btn');
+            if (btn) {
+              btn.innerText = '✅ تم تفعيل الصوت والإشعارات';
+              btn.style.background = '#2E7D32';
+              btn.style.color = '#fff';
+            }
+          }
+        });
+      }
+
+      // 2. تشغيل جزء صامت لفك قيود Safari / Chrome
+      if (azanAudio) {
+        azanAudio.play().then(() => {
+          azanAudio.pause();
+          azanAudio.currentTime = 0;
+        }).catch(e => console.log(e));
+      }
+
+      // 3. تجهيز Web Audio API
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      } catch(e){}
+    }
+
+    // فك حظر الصوت فوراً مع أول لمسة شاشة
+    document.addEventListener('touchstart', () => {
+      if (azanAudio && azanAudio.paused) {
         azanAudio.play().then(() => {
           azanAudio.pause();
           azanAudio.currentTime = 0;
         }).catch(() => {});
       }
-    }
-    document.addEventListener('click', initMobileAudioPermission, { once: true });
-    document.addEventListener('touchstart', initMobileAudioPermission, { once: true });
+    }, { once: true });
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
@@ -375,14 +389,25 @@
       } catch (e) {}
     }
 
-    function playAzanSound() {
-      if (!soundEnabled || !azanAudio) return;
-      try {
-        azanAudio.currentTime = 0;
-        azanAudio.play().catch(() => {
-          alert("يرجى الضغط مرة واحدة على الشاشة لمنح المتصفح إذن تشغيل الصوت.");
+    function triggerAzanNotificationAndSound(prayerName) {
+      if (!soundEnabled) return;
+
+      // إرسال إشعار للموبايل حتى لو الشاشة مقفولة
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(`🕌 حان الآن موعد ${prayerName}`, {
+          body: 'الله أكبر، حي على الصلاة.',
+          icon: 'logo.png',
+          vibrate: [200, 100, 200]
         });
-      } catch(e){}
+      }
+
+      // تشغيل ملف الأذان
+      if (azanAudio) {
+        azanAudio.currentTime = 0;
+        azanAudio.play().catch(err => {
+          console.log("المتصفح منع التشغيل التلقائي:", err);
+        });
+      }
     }
 
     // --- إعدادات Firebase ---
@@ -510,7 +535,7 @@
         if (prayerTime && prayerTime === currentTimeStr) {
           const key = `${todayStr}-${p.key}`;
           if (!playedPrayersToday[key]) {
-            playAzanSound();
+            triggerAzanNotificationAndSound(p.title);
             playedPrayersToday[key] = true;
           }
         }
@@ -719,7 +744,6 @@
       }
     }
 
-    // حفظ التغييرات محلياً ورفعها فوراً للسحابة
     function saveStateLocally() {
       localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
       if (!isUpdatingFromRemote) {
@@ -742,7 +766,6 @@
       }
     }
 
-    // ربط التزامن اللحظي المباشر بين الموبايل واللاب
     function setupFirebaseRealtimeSync() {
       dbRef.on('value', (snapshot) => {
         const data = snapshot.val();
@@ -1050,12 +1073,21 @@
       checkPrayerTimesForAzan();
     }
 
-    // التشغيل المبدئي للوحة
     window.onload = function() {
       loadStateLocally();
       fetchPrayerTimes();
       setDailyQuote();
       setupFirebaseRealtimeSync();
+
+      // التحقق من إذن الإشعارات تلقائياً
+      if ("Notification" in window && Notification.permission === "granted") {
+        const btn = document.getElementById('enable-audio-btn');
+        if (btn) {
+          btn.innerText = '✅ تم تفعيل الأذان والإشعارات';
+          btn.style.background = '#2E7D32';
+          btn.style.color = '#fff';
+        }
+      }
       
       setInterval(updateLiveClockAndCheck, 1000);
       setInterval(checkAndResetNewDay, 60000);
