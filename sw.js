@@ -1,12 +1,13 @@
-const CACHE_NAME = 'eng-mustafa-dashboard-v1';
+const CACHE_NAME = 'eng-mustafa-dashboard-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './logo.png'
+  './logo.png',
+  './azan.mp3',
+  './tiger.mp3' // 👈 تم إضافة ملف صوت النمر لتخزينه أوفلاين
 ];
 
-// 1. التثبيت وحفظ الملفات في الكاش
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -16,7 +17,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. التفعيل وتنظيف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -31,7 +31,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. معالجة الطلبات للعمل أوفلاين
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
