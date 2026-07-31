@@ -170,7 +170,7 @@
     .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-    /* --- تنسيقات كورس الإنجليزي الخاصة --- */
+    /* --- تنسيقات كورس الإنجليزي الخاص --- */
     .eng-level-card {
       background: var(--card-bg);
       border: 1px solid var(--card-stroke);
@@ -274,7 +274,7 @@
       </div>
 
       <div class="header-widgets-row">
-        <button class="circle-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="الصوت">🔊</button>
+        <div></div>
 
         <div class="widgets-group">
           <div class="time-widget">
@@ -535,11 +535,12 @@
   </div>
 
   <script>
-    let soundEnabled = true;
+    function playSoundEffect() {
+      // إيقاف جميع المؤثرات الصوتية عند الضغط بالنقر
+      return;
+    }
 
     function switchPage(pageId, navEl = null) {
-      playSoundEffect();
-      
       localState.current_page = pageId;
       saveStateLocally();
 
@@ -568,32 +569,9 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'flex'; }
-    function closeModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'none'; }
+    function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+    function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
     function openDistractModal() { openModal('distract-modal'); }
-
-    function playSoundEffect() {
-      if (!soundEnabled) return;
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); 
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch(e) {}
-    }
-
-    function toggleSoundMaster() {
-      soundEnabled = !soundEnabled;
-      document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
-    }
 
     function toggleTheme() {
       document.body.classList.toggle('dark-mode');
@@ -850,7 +828,6 @@
       if (!localState.task_days_count) localState.task_days_count = {};
 
       if (isChecked) {
-        playSoundEffect();
         localState.daily_tasks[id] = true;
         localState.task_days_count[id] = (localState.task_days_count[id] || 0) + 1;
       } else {
@@ -884,7 +861,6 @@
     }
 
     function togglePrayer(id, isChecked) {
-      if (isChecked) playSoundEffect();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
       localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
@@ -908,14 +884,13 @@
             totalLessons++;
             const lessonKey = `${level.id}_${u.title}_${l}`;
             const stIndex = localState.english_lessons_status?.[lessonKey] || 0;
-            if (stIndex === 2) completedLessons++; // مكتمل
+            if (stIndex === 2) completedLessons++;
           });
         });
 
         const levelPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
         const isLocked = lvlIdx > 0 && lvlIdx <= 5 && !previousLevelCompleted;
 
-        // لتحديد فتح المستوى القادم (للمستويات الدراسية الأساسية من A0 لـ C1)
         if (lvlIdx <= 5) {
           previousLevelCompleted = (levelPct === 100);
         }
@@ -961,11 +936,9 @@
 
     function toggleEngLevel(levelId, isLocked) {
       if (isLocked) {
-        playSoundEffect();
         alert("هذا المستوى مغلق حالياً! أكمل المستوى السابق 100% ليفتح لك تلقائياً 🎯");
         return;
       }
-      playSoundEffect();
       const card = document.getElementById(`eng-card-${levelId}`);
       if (card) {
         card.classList.toggle('open');
@@ -973,7 +946,6 @@
     }
 
     function cycleEngStatus(lessonKey) {
-      playSoundEffect();
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
       let currentIdx = localState.english_lessons_status[lessonKey] || 0;
       currentIdx = (currentIdx + 1) % statusMap.length;
@@ -984,7 +956,6 @@
     }
 
     function updateCourseLessons(type, val) {
-      playSoundEffect();
       if (!localState.courses_data) localState.courses_data = { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' };
       if (type === 'decor') {
         localState.courses_data.decorLessons = Math.max(0, (localState.courses_data.decorLessons || 0) + val);
@@ -1012,7 +983,6 @@
     }
 
     function adjustSavings(val) {
-      playSoundEffect();
       localState.savings = Math.max(0, (localState.savings || 0) + val);
       document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       updateSavingsUI();
@@ -1051,7 +1021,6 @@
     }
 
     function addOfficeGoalRow() {
-      playSoundEffect();
       if (!localState.office_goals) localState.office_goals = [];
       localState.office_goals.push("خطوة جديدة...");
       saveStateLocally();
@@ -1064,14 +1033,12 @@
     }
 
     function removeOfficeGoalRow(idx) {
-      playSoundEffect();
       localState.office_goals.splice(idx, 1);
       saveStateLocally();
       renderOfficeGoals();
     }
 
     function updateQuran(val) {
-      playSoundEffect();
       localState.quran_page = Math.max(2, Math.min(49, (localState.quran_page || 2) + val));
       document.getElementById('quran-page-input').value = localState.quran_page;
       saveStateLocally();
