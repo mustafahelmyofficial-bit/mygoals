@@ -4,8 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="manifest" href="app-manifest.json">
+  
+  <!-- أيقونة الموقع والـ Manifest مع تحايل الكاش v=2 -->
+  <link rel="icon" type="image/png" href="logo.png?v=2">
+  <link rel="manifest" href="app-manifest.json?v=2">
+
+  <!-- إعدادات إضافية لدعم أيقونة التطبيق على أجهزة iPhone / iOS -->
+  <link rel="apple-touch-icon" href="logo.png?v=2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <!-- مكتبات Firebase السحابية -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -106,188 +114,188 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت المحلي -->
+  <!-- عنصر الصوت المحلي للأذان -->
   <audio id="local-azan-audio" src="azan.mp3" preload="auto" playsinline webkit-playsinline></audio>
 
   <div class="container">
 
-<header class="glass-card dashboard-header">
-  <div class="welcome-box">
-    <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">🔄 جاري الاتصال...</span></h1>
-    <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
-  </div>
-
-  <div class="header-actions">
-    <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="تشغيل/كتم الأصوات">🔊</button>
-    <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
-    <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
-    <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">🌙</button>
-    <button class="icon-btn btn-panic" id="distract-btn" title="أنا مشتت!">🧠</button>
-  </div>
-</header>
-
-<div class="glass-card quote-card">
-  <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
-</div>
-
-<!-- Daily Tasks -->
-<section class="glass-card col-6">
-  <div class="section-title"><span>📋 المهام اليومية</span></div>
-  <div style="margin-bottom: 12px;">
-    <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة الإنجاز اليومي:</span>
-    <div class="progress-container"><div class="progress-bar" id="tasks-progress"></div></div>
-  </div>
-  <div class="task-list" id="tasks-container"></div>
-</section>
-
-<!-- Prayers -->
-<section class="glass-card col-6">
-  <div class="section-title">
-    <span>🕌 الصلوات الخمس ومواقيتها</span>
-    <button class="btn-edit" id="enable-audio-btn" style="font-size:0.75rem;" onclick="activateMobileNotificationsAndAudio()">🔔 تفعيل أذان الموبايل والإشعارات</button>
-  </div>
-  <div style="margin-bottom: 12px;">
-    <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
-    <div class="progress-container"><div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div></div>
-  </div>
-  <div class="task-list" id="prayers-container"></div>
-</section>
-
-<!-- Quran -->
-<section class="glass-card col-4">
-  <div class="section-title">📖 سورة البقرة</div>
-  <p style="font-size: 0.85rem; color: var(--text-muted);">الصفحات المحفوظة / المقروءة:</p>
-  <div class="counter-control">
-    <button class="btn-counter" onclick="updateQuran(-1)">-</button>
-    <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
-    <button class="btn-counter" onclick="updateQuran(1)">+</button>
-    <span style="font-size: 0.85rem;">من 48 صفحة</span>
-  </div>
-  <div class="progress-container" style="margin-top: 15px;">
-    <div class="progress-bar" id="quran-progress"></div>
-  </div>
-  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;" id="quran-status">آخر صفحة وصلت لها: 0</p>
-</section>
-
-<!-- Courses -->
-<section class="glass-card col-4">
-  <div class="section-title">📐 الكورسات الفنية</div>
-  <div style="margin-bottom: 15px;">
-    <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
-      <div class="counter-control" style="margin: 0;">
-        <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
-        <span id="decor-lesson-val" style="font-weight: bold;">0</span>
-        <button class="btn-counter" onclick="updateLesson('decor', 1)">+</button>
+    <header class="glass-card dashboard-header">
+      <div class="welcome-box">
+        <h1>👋 مرحباً بك، باشمهندس! <span id="sync-status" class="status-online">🔄 جاري الاتصال...</span></h1>
+        <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
       </div>
-    </div>
-  </div>
-  <hr style="border: 0; border-top: 1px dashed var(--glass-border); margin: 10px 0;">
-  <div>
-    <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-      <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
-      <div class="counter-control" style="margin: 0;">
-        <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
-        <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
-        <button class="btn-counter" onclick="updateLesson('finishing', 1)">+</button>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="تشغيل/كتم الأصوات">🔊</button>
+        <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
+        <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
+        <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">🌙</button>
+        <button class="icon-btn btn-panic" id="distract-btn" title="أنا مشتت!">🧠</button>
       </div>
+    </header>
+
+    <div class="glass-card quote-card">
+      <p id="daily-quote">"تحميل الحكمة اليومية..."</p>
     </div>
-  </div>
-</section>
 
-<!-- English -->
-<section class="glass-card col-4">
-  <div class="section-title">🇬🇧 تطوير الإنجليزية</div>
-  <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span>عدد الدروس المكتملة:</span>
-      <input type="number" id="eng-lessons" class="number-input" value="0" onchange="saveEngData()">
-    </div>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span>ساعات المذاكرة:</span>
-      <input type="number" id="eng-hours" class="number-input" value="0" onchange="saveEngData()">
-    </div>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span>آخر درس:</span>
-      <input type="text" id="eng-last" placeholder="اسم/رقم الدرس" style="border-radius: 8px; border: 1px solid var(--glass-border); padding: 4px 8px; width: 55%;" onchange="saveEngData()">
-    </div>
-  </div>
-</section>
+    <!-- Daily Tasks -->
+    <section class="glass-card col-6">
+      <div class="section-title"><span>📋 المهام اليومية</span></div>
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة الإنجاز اليومي:</span>
+        <div class="progress-container"><div class="progress-bar" id="tasks-progress"></div></div>
+      </div>
+      <div class="task-list" id="tasks-container"></div>
+    </section>
 
-<!-- Savings -->
-<section class="glass-card col-6">
-  <div class="section-title">🍎 الادخار للآيفون</div>
-  <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem;">
-    <span>المبلغ الحالي: <strong id="savings-current">0</strong> ج.م</span>
-    <span>المستهدف: <strong id="savings-target">50000</strong> ج.م</span>
-  </div>
-  <div class="progress-container"><div class="progress-bar" id="savings-progress"></div></div>
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
-    <div class="counter-control" style="margin:0;">
-      <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
-      <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
-    </div>
-    <span style="font-size: 0.8rem; color: var(--text-muted);" id="savings-estimate">التوقع: --</span>
-  </div>
-</section>
+    <!-- Prayers -->
+    <section class="glass-card col-6">
+      <div class="section-title">
+        <span>🕌 الصلوات الخمس ومواقيتها</span>
+        <button class="btn-edit" id="enable-audio-btn" style="font-size:0.75rem;" onclick="activateMobileNotificationsAndAudio()">🔔 تفعيل أذان الموبايل والإشعارات</button>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">نسبة التزام الصلوات:</span>
+        <div class="progress-container"><div class="progress-bar" id="prayers-progress" style="background: var(--accent-green);"></div></div>
+      </div>
+      <div class="task-list" id="prayers-container"></div>
+    </section>
 
-<!-- Followers -->
-<section class="glass-card col-6">
-  <div class="section-title">🎯 هدف 10K متابع</div>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <span style="font-size: 0.9rem;">المتابعين الحاليين:</span>
-    <input type="number" id="followers-count" class="number-input" value="1200" style="width: 100px;" onchange="updateFollowers()">
-  </div>
-  <div class="progress-container" style="margin-top: 15px;">
-    <div class="progress-bar" id="followers-progress" style="background: linear-gradient(90deg, #E1306C, #FD1D1D);"></div>
-  </div>
-  <p style="font-size: 0.8rem; text-align: center; margin-top: 8px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
-</section>
+    <!-- Quran -->
+    <section class="glass-card col-4">
+      <div class="section-title">📖 سورة البقرة</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">الصفحات المحفوظة / المقروءة:</p>
+      <div class="counter-control">
+        <button class="btn-counter" onclick="updateQuran(-1)">-</button>
+        <input type="number" id="quran-page-input" class="number-input" value="0" min="0" max="48" onchange="setQuranPage(this.value)">
+        <button class="btn-counter" onclick="updateQuran(1)">+</button>
+        <span style="font-size: 0.85rem;">من 48 صفحة</span>
+      </div>
+      <div class="progress-container" style="margin-top: 15px;">
+        <div class="progress-bar" id="quran-progress"></div>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;" id="quran-status">آخر صفحة وصلت لها: 0</p>
+    </section>
 
-<!-- Pomodoro -->
-<section class="glass-card col-4">
-  <div class="section-title">⏱️ مؤقت البومودورو</div>
-  <div class="timer-display" id="timer-display">25:00</div>
-  <div style="display: flex; justify-content: center; gap: 10px;">
-    <button class="btn-action" id="start-timer-btn" onclick="toggleTimer()">بدء</button>
-    <button class="btn-action" style="background: var(--text-muted);" onclick="resetTimer()">إعادة ضبط</button>
-  </div>
-</section>
+    <!-- Courses -->
+    <section class="glass-card col-4">
+      <div class="section-title">📐 الكورسات الفنية</div>
+      <div style="margin-bottom: 15px;">
+        <p style="font-weight: bold; font-size: 0.9rem;">🎨 كورس الديكور</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="decor-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
+          <div class="counter-control" style="margin: 0;">
+            <button class="btn-counter" onclick="updateLesson('decor', -1)">-</button>
+            <span id="decor-lesson-val" style="font-weight: bold;">0</span>
+            <button class="btn-counter" onclick="updateLesson('decor', 1)">+</button>
+          </div>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px dashed var(--glass-border); margin: 10px 0;">
+      <div>
+        <p style="font-weight: bold; font-size: 0.9rem;">🛠️ كورس التشطيبات</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+          <label style="font-size: 0.85rem;"><input type="checkbox" id="finishing-today" onchange="saveCoursesData(); playClickSound();"> تمت المذاكرة اليوم</label>
+          <div class="counter-control" style="margin: 0;">
+            <button class="btn-counter" onclick="updateLesson('finishing', -1)">-</button>
+            <span id="finishing-lesson-val" style="font-weight: bold;">0</span>
+            <button class="btn-counter" onclick="updateLesson('finishing', 1)">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Notes -->
-<section class="glass-card col-8">
-  <div class="section-title">📝 ملاحظات اليوم</div>
-  <textarea id="daily-notes" placeholder="اكتب ملاحظاتك هنا..." style="width: 100%; height: 90px; border-radius: 12px; border: 1px solid var(--glass-border); padding: 10px; background: rgba(255,255,255,0.4); resize: none; font-family: inherit;" oninput="saveNotes()"></textarea>
-</section>
+    <!-- English -->
+    <section class="glass-card col-4">
+      <div class="section-title">🇬🇧 تطوير الإنجليزية</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>عدد الدروس المكتملة:</span>
+          <input type="number" id="eng-lessons" class="number-input" value="0" onchange="saveEngData()">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>ساعات المذاكرة:</span>
+          <input type="number" id="eng-hours" class="number-input" value="0" onchange="saveEngData()">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>آخر درس:</span>
+          <input type="text" id="eng-last" placeholder="اسم/رقم الدرس" style="border-radius: 8px; border: 1px solid var(--glass-border); padding: 4px 8px; width: 55%;" onchange="saveEngData()">
+        </div>
+      </div>
+    </section>
 
-<!-- History Section -->
-<section class="glass-card col-12">
-  <div class="section-title">
-    <span>📜 سجل الأيام السابقة وتعديل الإنجازات</span>
-    <div style="display: flex; gap: 8px;">
-      <button class="btn-action btn-undo" style="font-size: 0.75rem; padding: 4px 10px;" onclick="undoDayReset()">↩️ تراجع عن التقفيل</button>
-      <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="forceNewDay()">🔄 تقفيل وتصفير اليوم يدوياً</button>
-    </div>
-  </div>
+    <!-- Savings -->
+    <section class="glass-card col-6">
+      <div class="section-title">🍎 الادخار للآيفون</div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem;">
+        <span>المبلغ الحالي: <strong id="savings-current">0</strong> ج.م</span>
+        <span>المستهدف: <strong id="savings-target">50000</strong> ج.م</span>
+      </div>
+      <div class="progress-container"><div class="progress-bar" id="savings-progress"></div></div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+        <div class="counter-control" style="margin:0;">
+          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
+          <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
+        </div>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="savings-estimate">التوقع: --</span>
+      </div>
+    </section>
 
-  <div class="date-picker-box" style="background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold);">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span>📅 <strong>اختر تاريخ أي يوم سابق لإضافته وتعديل مهامه:</strong></span>
-      <input type="date" id="custom-day-picker" class="custom-input-date">
-    </div>
-    <button class="btn-action" onclick="openSelectedCustomDate()">➕ فتح وتعديل هذا التاريخ</button>
-  </div>
+    <!-- Followers -->
+    <section class="glass-card col-6">
+      <div class="section-title">🎯 هدف 10K متابع</div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.9rem;">المتابعين الحاليين:</span>
+        <input type="number" id="followers-count" class="number-input" value="1200" style="width: 100px;" onchange="updateFollowers()">
+      </div>
+      <div class="progress-container" style="margin-top: 15px;">
+        <div class="progress-bar" id="followers-progress" style="background: linear-gradient(90deg, #E1306C, #FD1D1D);"></div>
+      </div>
+      <p style="font-size: 0.8rem; text-align: center; margin-top: 8px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
+    </section>
 
-  <div class="date-picker-box">
-    <span>🗓️ **تاريخ بداية الالتزام الشخصي:**</span>
-    <input type="date" id="start-date-input" class="custom-input-date" onchange="updateStartDate(this.value)">
-    <span style="font-size: 0.75rem; color: var(--text-muted);">(تعديله يغير عدد أيام الـ Streak)</span>
-  </div>
+    <!-- Pomodoro -->
+    <section class="glass-card col-4">
+      <div class="section-title">⏱️ مؤقت البومودورو</div>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div style="display: flex; justify-content: center; gap: 10px;">
+        <button class="btn-action" id="start-timer-btn" onclick="toggleTimer()">بدء</button>
+        <button class="btn-action" style="background: var(--text-muted);" onclick="resetTimer()">إعادة ضبط</button>
+      </div>
+    </section>
 
-  <div id="history-container"></div>
-</section>
+    <!-- Notes -->
+    <section class="glass-card col-8">
+      <div class="section-title">📝 ملاحظات اليوم</div>
+      <textarea id="daily-notes" placeholder="اكتب ملاحظاتك هنا..." style="width: 100%; height: 90px; border-radius: 12px; border: 1px solid var(--glass-border); padding: 10px; background: rgba(255,255,255,0.4); resize: none; font-family: inherit;" oninput="saveNotes()"></textarea>
+    </section>
+
+    <!-- History Section -->
+    <section class="glass-card col-12">
+      <div class="section-title">
+        <span>📜 سجل الأيام السابقة وتعديل الإنجازات</span>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-action btn-undo" style="font-size: 0.75rem; padding: 4px 10px;" onclick="undoDayReset()">↩️ تراجع عن التقفيل</button>
+          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="forceNewDay()">🔄 تقفيل وتصفير اليوم يدوياً</button>
+        </div>
+      </div>
+
+      <div class="date-picker-box" style="background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span>📅 <strong>اختر تاريخ أي يوم سابق لإضافته وتعديل مهامه:</strong></span>
+          <input type="date" id="custom-day-picker" class="custom-input-date">
+        </div>
+        <button class="btn-action" onclick="openSelectedCustomDate()">➕ فتح وتعديل هذا التاريخ</button>
+      </div>
+
+      <div class="date-picker-box">
+        <span>🗓️ **تاريخ بداية الالتزام الشخصي:**</span>
+        <input type="date" id="start-date-input" class="custom-input-date" onchange="updateStartDate(this.value)">
+        <span style="font-size: 0.75rem; color: var(--text-muted);">(تعديله يغير عدد أيام الـ Streak)</span>
+      </div>
+
+      <div id="history-container"></div>
+    </section>
 
   </div>
 
@@ -313,15 +321,13 @@
   </div>
 
   <script>
-    // --- إعدادات نُظم الإشعارات والأذان المحسنة للموبايل ---
+    // --- إعدادات الأذان والإشعارات ---
     let soundEnabled = true;
     let audioCtx = null;
     let playedPrayersToday = {};
     const azanAudio = document.getElementById('local-azan-audio');
 
-    // تفعيل الإشعارات وفك حظر الصوت في وقت واحد
     function activateMobileNotificationsAndAudio() {
-      // 1. طلب إذن الإشعارات من الموبايل
       if ("Notification" in window) {
         Notification.requestPermission().then(permission => {
           if (permission === "granted") {
@@ -335,7 +341,6 @@
         });
       }
 
-      // 2. تشغيل جزء صامت لفك قيود Safari / Chrome
       if (azanAudio) {
         azanAudio.play().then(() => {
           azanAudio.pause();
@@ -343,14 +348,12 @@
         }).catch(e => console.log(e));
       }
 
-      // 3. تجهيز Web Audio API
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
       } catch(e){}
     }
 
-    // فك حظر الصوت فوراً مع أول لمسة شاشة
     document.addEventListener('touchstart', () => {
       if (azanAudio && azanAudio.paused) {
         azanAudio.play().then(() => {
@@ -392,21 +395,17 @@
     function triggerAzanNotificationAndSound(prayerName) {
       if (!soundEnabled) return;
 
-      // إرسال إشعار للموبايل حتى لو الشاشة مقفولة
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification(`🕌 حان الآن موعد ${prayerName}`, {
           body: 'الله أكبر، حي على الصلاة.',
-          icon: 'logo.png',
+          icon: 'logo.png?v=2',
           vibrate: [200, 100, 200]
         });
       }
 
-      // تشغيل ملف الأذان
       if (azanAudio) {
         azanAudio.currentTime = 0;
-        azanAudio.play().catch(err => {
-          console.log("المتصفح منع التشغيل التلقائي:", err);
-        });
+        azanAudio.play().catch(err => console.log("المتصفح منع التشغيل:", err));
       }
     }
 
@@ -472,14 +471,7 @@
       { id: 'isha', title: '🌙 صلاة العشاء', key: 'Isha' }
     ];
 
-    let prayerTimesObj = {
-      Fajr: "04:30",
-      Dhuhr: "12:00",
-      Asr: "15:30",
-      Maghrib: "18:45",
-      Isha: "20:15"
-    };
-    
+    let prayerTimesObj = { Fajr: "04:30", Dhuhr: "12:00", Asr: "15:30", Maghrib: "18:45", Isha: "20:15" };
     let activeEditDate = null;
     let isUpdatingFromRemote = false;
 
@@ -1003,7 +995,7 @@
       container.innerHTML = html;
     }
 
-    // --- نظام مؤقت البومودورو ---
+    // --- مؤقت البومودورو ---
     let timerInterval = null;
     let timerSeconds = 25 * 60;
     let timerRunning = false;
@@ -1079,7 +1071,6 @@
       setDailyQuote();
       setupFirebaseRealtimeSync();
 
-      // التحقق من إذن الإشعارات تلقائياً
       if ("Notification" in window && Notification.permission === "granted") {
         const btn = document.getElementById('enable-audio-btn');
         if (btn) {
