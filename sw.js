@@ -1,11 +1,22 @@
-const CACHE_NAME = 'dashboard-v8';
+const CACHE_NAME = 'architect-dashboard-v10';
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './manifest.json',
+  './logo.png'
+];
 
-// 1. تثبيت فوري وبدون أي انتظار لضمان عدم تعليق المتصفح
+// 1. التثبيت وحفظ الملفات الرئيسية فوراً
 self.addEventListener('install', (event) => {
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
+  );
 });
 
-// 2. تفعيل وتنظيف الكاش القديم فوراً
+// 2. تفعيل وتنظيف أي كاش قديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -20,25 +31,32 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. الاستجابة للطلبات مع حفظ الكاش أوفلاين ديناميكياً
+// 3. استراتيجية Cache First مع الرد أوفلاين فوراً
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        if (response && response.status === 200 && event.request.url.startsWith('http')) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        // إرجاع النسخة المخزنة فوراً للعمل أوفلاين
+        fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+          }
+        }).catch(() => {});
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && event.request.url.startsWith('http')) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         }
-        return response;
-      })
-      .catch(() => {
-        return caches.match(event.request).then((cachedResponse) => {
-          return cachedResponse || caches.match('./index.html');
-        });
-      })
+        return networkResponse;
+      }).catch(() => {
+        // لو مفيش نت والطلب فشل، رجّع صفحة index.html المخزنة
+        return caches.match('./index.html') || caches.match('./');
+      });
+    })
   );
 });
