@@ -60,7 +60,7 @@
     .quote-card { text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); padding: 14px; }
     .quote-card p { font-size: 1rem; font-weight: 700; color: var(--text-main); line-height: 1.5; }
 
-    /* 🔻 القوائم المنسدلة (Accordion Header & Body) */
+    /* 🔻 القوائم المنسدلة */
     .accordion-header {
       display: flex;
       justify-content: space-between;
@@ -86,18 +86,40 @@
     .progress-container { background: rgba(0, 0, 0, 0.08); border-radius: 20px; height: 8px; width: 100%; overflow: hidden; margin: 8px 0; }
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
+    /* 🎯 تعديل تنسيق المهام ليصبح أفقياً دائماً كعنصر الجيم */
     .task-list { display: flex; flex-direction: column; gap: 10px; }
-    .task-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); flex-wrap: wrap; gap: 8px; }
-    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex-grow: 1; font-weight: 600; }
-    .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-gold); cursor: pointer; }
+    .task-item { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 10px 12px; 
+      background: rgba(255, 255, 255, 0.4); 
+      border-radius: 12px; 
+      border: 1px solid rgba(255, 255, 255, 0.5); 
+      flex-wrap: nowrap; /* إجبار العناصر على البقاء في نفس السطر */
+      gap: 10px; 
+    }
+    .task-item label { 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      cursor: pointer; 
+      flex-grow: 1; 
+      font-weight: 600; 
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-gold); cursor: pointer; flex-shrink: 0; }
 
-    .task-meta { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
-    .target-days-input { width: 50px; padding: 2px 4px; border-radius: 6px; border: 1px solid var(--glass-border); text-align: center; font-weight: bold; background: rgba(255,255,255,0.7); }
+    .task-meta { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; flex-shrink: 0; }
+    .target-days-input { width: 42px; padding: 3px 2px; border-radius: 6px; border: 1px solid var(--glass-border); text-align: center; font-weight: bold; background: rgba(255,255,255,0.7); }
     
-    .btn-snooze { background: rgba(212, 160, 23, 0.2); border: 1px solid var(--accent-gold); color: var(--accent-brown); border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
-    .btn-restore { background: rgba(46, 125, 50, 0.2); border: 1px solid var(--accent-green); color: var(--accent-green); border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+    .btn-snooze { background: rgba(212, 160, 23, 0.2); border: 1px solid var(--accent-gold); color: var(--accent-brown); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
+    .btn-restore { background: rgba(46, 125, 50, 0.2); border: 1px solid var(--accent-green); color: var(--accent-green); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
 
-    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; background: rgba(197, 155, 39, 0.15); color: var(--accent-brown); padding: 4px 8px; border-radius: 6px; }
+    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; background: rgba(197, 155, 39, 0.15); color: var(--accent-brown); padding: 4px 8px; border-radius: 6px; flex-shrink: 0; }
     body.dark-mode .prayer-time-badge { color: var(--accent-gold); }
 
     .counter-control { display: flex; align-items: center; gap: 8px; }
@@ -132,7 +154,6 @@
 </head>
 <body>
 
-  <!-- 🔊 عناصر الصوت -->
   <audio id="azan-audio" src="azan.mp3" preload="auto"></audio>
   <audio id="tiger-audio" src="tiger.mp3" preload="auto"></audio>
 
@@ -188,7 +209,7 @@
       </div>
     </div>
 
-    <!-- 3️⃣ 📐 الكورسات الفنية (محدث باسم المحاضرة والأرقام الموجبة) -->
+    <!-- 3️⃣ 📐 الكورسات الفنية -->
     <div class="glass-card">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span>📐 الكورسات الفنية</span>
@@ -233,7 +254,7 @@
       </div>
     </div>
 
-    <!-- 4️⃣ 🇬🇧 تطوير الإنجليزية (محدث بحد أدنى 0) -->
+    <!-- 4️⃣ 🇬🇧 تطوير الإنجليزية -->
     <div class="glass-card">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span>🇬🇧 تطوير اللغة الإنجليزية</span>
@@ -284,7 +305,7 @@
     </div>
 
     <!-- 6️⃣ 🏢 الهدف الأكبر: المكتب -->
-    <div class="glass-card" style="border: 1.5 solid var(--accent-gold);">
+    <div class="glass-card">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span>🏢 الهدف الأكبر: فتح مكتب تشطيبات وديكور خاص</span>
         <span class="arrow-icon">▼</span>
@@ -607,13 +628,11 @@
       document.getElementById('quran-page-input').value = Math.max(0, localState.quran_page || 0);
       updateQuranUI();
 
-      // تطبيق بيانات الكورسات المحدثة
       document.getElementById('decor-lesson-count').value = Math.max(0, localState.courses_data.decorLessons || 0);
       document.getElementById('decor-lesson-title').value = localState.courses_data.decorTitle || '';
       document.getElementById('finishing-lesson-count').value = Math.max(0, localState.courses_data.finishingLessons || 0);
       document.getElementById('finishing-lesson-title').value = localState.courses_data.finishingTitle || '';
 
-      // تطبيق بيانات الإنجليزية المحدثة
       if (localState.eng_data) {
         document.getElementById('eng-lessons').value = Math.max(0, localState.eng_data.lessons || 0);
         document.getElementById('eng-hours').value = Math.max(0, localState.eng_data.hours || 0);
@@ -651,14 +670,14 @@
           if (checked) doneCount++;
           mainHtml += `
             <div class="task-item">
-              <label>
-                <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
-                <span>${task.title}</span>
-              </label>
               <div class="task-meta">
-                <input type="number" class="target-days-input" value="${targetDays}" min="1" onchange="updateTaskTarget('${task.id}', this.value)"> يوم
                 <button class="btn-snooze" onclick="toggleSnoozeTask('${task.id}', true)">⏸️ تأجيل</button>
+                <input type="number" class="target-days-input" value="${targetDays}" min="1" onchange="updateTaskTarget('${task.id}', this.value)"> يوم
               </div>
+              <label>
+                <span>${task.title}</span>
+                <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
+              </label>
             </div>`;
         }
       });
@@ -699,11 +718,11 @@
         const pTime = prayerTimes12[prayer.id] || "--:--";
         html += `
           <div class="task-item">
-            <label>
-              <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
-              <span>${prayer.title}</span>
-            </label>
             <span class="prayer-time-badge">🕒 ${pTime}</span>
+            <label>
+              <span>${prayer.title}</span>
+              <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
+            </label>
           </div>`;
       });
 
@@ -719,7 +738,6 @@
       renderPrayers();
     }
 
-    /* 🟢 الكورسات الفنية (حماية الأرقام الموجبة) */
     function updateCourseLessons(type, change) {
       playSoundEffect();
       if (type === 'decor') {
@@ -753,7 +771,6 @@
       saveStateLocally();
     }
 
-    /* 🟢 اللغة الإنجليزية (حماية الأرقام الموجبة) */
     function updateEngLessons(change) {
       playSoundEffect();
       const current = Math.max(0, (localState.eng_data?.lessons || 0) + change);
@@ -778,7 +795,6 @@
       saveStateLocally();
     }
 
-    /* 🟢 القرآن الكريم (حماية الأرقام الموجبة) */
     function updateQuran(val) {
       playSoundEffect();
       let current = Math.max(0, Math.min(48, (localState.quran_page || 0) + val));
@@ -940,11 +956,11 @@
       const dayData = localState.history_details[dateKey];
       let html = '<p style="font-weight:bold; margin-bottom:8px;">📋 المهام:</p>';
       defaultTasks.forEach(t => {
-        html += `<div class="task-item"><label><input type="checkbox" id="edit-task-${t.id}" ${dayData.daily_tasks?.[t.id] ? 'checked' : ''}><span>${t.title}</span></label></div>`;
+        html += `<div class="task-item"><label><span>${t.title}</span><input type="checkbox" id="edit-task-${t.id}" ${dayData.daily_tasks?.[t.id] ? 'checked' : ''}></label></div>`;
       });
       html += '<p style="font-weight:bold; margin:15px 0 8px 0;">🕌 الصلوات:</p>';
       prayersList.forEach(p => {
-        html += `<div class="task-item"><label><input type="checkbox" id="edit-prayer-${p.id}" ${dayData.prayers_tasks?.[p.id] ? 'checked' : ''}><span>${p.title}</span></label></div>`;
+        html += `<div class="task-item"><label><span>${p.title}</span><input type="checkbox" id="edit-prayer-${p.id}" ${dayData.prayers_tasks?.[p.id] ? 'checked' : ''}></label></div>`;
       });
 
       document.getElementById('edit-tasks-list').innerHTML = html;
