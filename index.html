@@ -50,7 +50,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
-    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 15px; transition: var(--transition); }
+    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 15px; transition: var(--transition); text-align: right; }
     .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; } 
     
     .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--card-radius); box-shadow: var(--glass-shadow); padding: 18px; transition: var(--transition); overflow: hidden; backdrop-filter: blur(10px); }
@@ -94,7 +94,7 @@
     .progress-container { background: rgba(0, 0, 0, 0.06); border-radius: 20px; height: 8px; width: 100%; overflow: hidden; margin: 8px 0; }
     .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-sage), var(--accent-wood)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
-    /* 🎯 تنسيق أفقي متناسق للمهام */
+    /* 🎯 تعديل ترتيب المهام من اليمين لليسار */
     .task-list { display: flex; flex-direction: column; gap: 10px; }
     .task-item { 
       display: flex; 
@@ -106,12 +106,14 @@
       border: 1px solid rgba(255, 255, 255, 0.6); 
       flex-wrap: nowrap;
       gap: 10px; 
+      direction: rtl;
     }
     body.dark-mode .task-item { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+    
     .task-item label { 
       display: flex; 
       align-items: center; 
-      gap: 8px; 
+      gap: 10px; 
       cursor: pointer; 
       flex-grow: 1; 
       font-weight: 600; 
@@ -119,6 +121,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      text-align: right;
     }
     .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-sage); cursor: pointer; flex-shrink: 0; }
 
@@ -135,7 +138,7 @@
     .btn-counter { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent-sage); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
     .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6); font-weight: bold; color: var(--text-main); }
 
-    .text-input-field { border-radius: 8px; border: 1px solid var(--glass-border); padding: 6px 10px; background: rgba(255,255,255,0.6); font-weight: 500; color: var(--text-main); width: 100%; margin-top: 5px; }
+    .text-input-field { border-radius: 8px; border: 1px solid var(--glass-border); padding: 6px 10px; background: rgba(255,255,255,0.6); font-weight: 500; color: var(--text-main); width: 100%; margin-top: 5px; text-align: right; }
 
     .btn-action { background: linear-gradient(135deg, var(--accent-sage), var(--accent-sage-dark)); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-undo { background: var(--accent-wood); color: white; }
@@ -146,7 +149,7 @@
     .office-goal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .office-goal-num { font-weight: 800; font-size: 1.1rem; color: var(--accent-sage-dark); width: 25px; text-align: center; }
     body.dark-mode .office-goal-num { color: var(--accent-sage); }
-    .office-goal-input { flex-grow: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); font-weight: 600; color: var(--text-main); }
+    .office-goal-input { flex-grow: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); font-weight: 600; color: var(--text-main); text-align: right; }
 
     .timer-display { font-size: 2.5rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-sage-dark); margin: 10px 0; }
     body.dark-mode .timer-display { color: var(--accent-sage); }
@@ -159,7 +162,7 @@
     .date-picker-box { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; padding: 10px 14px; background: rgba(255,255,255,0.4); border-radius: 12px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.5); }
     .custom-input-date { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-primary); font-weight: bold; color: var(--text-main); }
     
-    .course-card-box { background: rgba(255,255,255,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.6); margin-bottom: 12px; }
+    .course-card-box { background: rgba(255,255,255,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.6); margin-bottom: 12px; text-align: right; }
   </style>
 </head>
 <body>
@@ -380,7 +383,7 @@
           <button class="btn-action" id="start-timer-btn" onclick="toggleTimer()">بدء</button>
           <button class="btn-action" style="background: var(--text-muted);" onclick="resetTimer()">إعادة ضبط</button>
         </div>
-        <textarea id="daily-notes" placeholder="اكتب ملاحظاتك اليومية هنا..." style="width: 100%; height: 80px; border-radius: 10px; border: 1px solid var(--glass-border); padding: 8px; background: rgba(255,255,255,0.4); resize: none; font-family: inherit;" oninput="saveNotes()"></textarea>
+        <textarea id="daily-notes" placeholder="اكتب ملاحظاتك اليومية هنا..." style="width: 100%; height: 80px; border-radius: 10px; border: 1px solid var(--glass-border); padding: 8px; background: rgba(255,255,255,0.4); resize: none; font-family: inherit; text-align: right;" oninput="saveNotes()"></textarea>
       </div>
     </div>
 
@@ -416,7 +419,7 @@
         </div>
 
         <div class="date-picker-box">
-          <span>🗓️ **تاريخ بداية الالتزام:**</span>
+          <span>🗓️ <strong>تاريخ بداية الالتزام:</strong></span>
           <input type="date" id="start-date-input" class="custom-input-date" onchange="updateStartDate(this.value)">
         </div>
 
@@ -659,6 +662,7 @@
       if (localState.startDate) document.getElementById('start-date-input').value = localState.startDate;
     }
 
+    /* 🔻 التعديل هنا: عنوان المهام أولاً على اليمين ثم مربعات الاختيار والتأجيل على اليسار */
     function renderTasks() {
       const mainContainer = document.getElementById('tasks-container');
       const snoozedContainer = document.getElementById('snoozed-tasks-container');
@@ -680,14 +684,14 @@
           if (checked) doneCount++;
           mainHtml += `
             <div class="task-item">
+              <label>
+                <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
+                <span>${task.title}</span>
+              </label>
               <div class="task-meta">
                 <button class="btn-snooze" onclick="toggleSnoozeTask('${task.id}', true)">⏸️ تأجيل</button>
                 <input type="number" class="target-days-input" value="${targetDays}" min="1" onchange="updateTaskTarget('${task.id}', this.value)"> يوم
               </div>
-              <label>
-                <span>${task.title}</span>
-                <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
-              </label>
             </div>`;
         }
       });
@@ -718,6 +722,7 @@
       renderTasks();
     }
 
+    /* 🔻 التعديل هنا: عنوان الصلاة أولاً على اليمين والتوقيت على اليسار */
     function renderPrayers() {
       const container = document.getElementById('prayers-container');
       let html = '', doneCount = 0;
@@ -728,11 +733,11 @@
         const pTime = prayerTimes12[prayer.id] || "--:--";
         html += `
           <div class="task-item">
-            <span class="prayer-time-badge">🕒 ${pTime}</span>
             <label>
-              <span>${prayer.title}</span>
               <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
+              <span>${prayer.title}</span>
             </label>
+            <span class="prayer-time-badge">🕒 ${pTime}</span>
           </div>`;
       });
 
@@ -966,11 +971,11 @@
       const dayData = localState.history_details[dateKey];
       let html = '<p style="font-weight:bold; margin-bottom:8px;">📋 المهام:</p>';
       defaultTasks.forEach(t => {
-        html += `<div class="task-item"><label><span>${t.title}</span><input type="checkbox" id="edit-task-${t.id}" ${dayData.daily_tasks?.[t.id] ? 'checked' : ''}></label></div>`;
+        html += `<div class="task-item"><label><input type="checkbox" id="edit-task-${t.id}" ${dayData.daily_tasks?.[t.id] ? 'checked' : ''}><span>${t.title}</span></label></div>`;
       });
       html += '<p style="font-weight:bold; margin:15px 0 8px 0;">🕌 الصلوات:</p>';
       prayersList.forEach(p => {
-        html += `<div class="task-item"><label><span>${p.title}</span><input type="checkbox" id="edit-prayer-${p.id}" ${dayData.prayers_tasks?.[p.id] ? 'checked' : ''}></label></div>`;
+        html += `<div class="task-item"><label><input type="checkbox" id="edit-prayer-${p.id}" ${dayData.prayers_tasks?.[p.id] ? 'checked' : ''}><span>${p.title}</span></label></div>`;
       });
 
       document.getElementById('edit-tasks-list').innerHTML = html;
