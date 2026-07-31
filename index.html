@@ -113,13 +113,11 @@
 
     <header class="glass-card dashboard-header">
       <div class="welcome-box">
-        <h1>👋 مرحباً بك، باشمهندس! <span class="badge-offline">⚡ نظام محلي (أوفلاين)</span></h1>
+        <h1>👋 مرحباً بك، باشمهندس! <span class="badge-offline" id="status-badge">⚡ جاري الفحص...</span></h1>
         <p id="live-date" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;"></p>
       </div>
 
       <div class="header-actions">
-        <!-- زرار تثبيت التطبيق المباشر -->
-        <button class="btn-action" id="pwa-install-btn" style="display: none; background: var(--accent-gold); color: #fff;" onclick="triggerPwaInstall()">📲 تثبيت التطبيق</button>
         <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="تشغيل/كتم الأصوات">🔊</button>
         <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
         <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
@@ -315,34 +313,19 @@
   </div>
 
   <script>
-    // --- PWA Service Worker Registration & Install Trigger ---
-    let deferredPrompt = null;
-
+    // --- تسجيل الـ Service Worker لضمان التشغيل أوفلاين ---
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker Registered!'))
-          .catch(err => console.log('Service Worker Error: ', err));
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => {
+            console.log('Service Worker Registered successfully!');
+            document.getElementById('status-badge').innerText = '⚡ جاهز أوفلاين';
+          })
+          .catch(err => {
+            console.log('Service Worker Failed: ', err);
+            document.getElementById('status-badge').innerText = '⚠️ وضع المتصفح';
+          });
       });
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const installBtn = document.getElementById('pwa-install-btn');
-      if (installBtn) installBtn.style.display = 'inline-block';
-    });
-
-    function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            document.getElementById('pwa-install-btn').style.display = 'none';
-          }
-          deferredPrompt = null;
-        });
-      }
     }
 
     let soundEnabled = true;
@@ -384,7 +367,6 @@
       } catch (e) {}
     }
 
-    // --- مواقيت الصلاة والأذان الأوفلاين ---
     function convertTo12Hour(time24) {
       if (!time24) return "--:--";
       let [hours, minutes] = time24.split(':');
