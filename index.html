@@ -11,53 +11,61 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#5C4333">
+  <meta name="theme-color" content="#5A6B5C">
 
   <style>
     :root {
-      --bg-primary: #F4EFEA;
-      --bg-gradient: linear-gradient(135deg, #EFE8DF 0%, #E3D7C7 100%);
-      --glass-bg: rgba(255, 255, 255, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.9);
-      --glass-shadow: 0 8px 32px 0 rgba(60, 48, 38, 0.08);
-      --text-main: #2D221E;
-      --text-muted: #7A6A5D;
-      --accent-gold: #C59B27;
-      --accent-gold-dark: #A37F1E;
-      --accent-brown: #5C4333;
-      --accent-green: #2E7D32;
+      /* 🌿 باليتة الأخضر الزيتوني والرمل الدافئ (Sage Green & Warm Sand) */
+      --bg-primary: #F3EFEA;
+      --bg-gradient: linear-gradient(135deg, #F3EFEA 0%, #E2DDD5 100%);
+      --glass-bg: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.95);
+      --glass-shadow: 0 8px 32px 0 rgba(50, 60, 52, 0.07);
+      
+      --text-main: #242B25;
+      --text-muted: #6E7B70;
+      
+      --accent-sage: #5A6B5C;        /* الأخضر الزيتوني الرئيسي */
+      --accent-sage-dark: #3F4D41;   /* أخضر زيتوني غامق للتفاعل */
+      --accent-wood: #8C6D53;        /* لون خشبي دافئ ثانوي */
+      --accent-green: #3B7A57;       /* إنجاز / نجاح */
+      
       --card-radius: 18px;
       --transition: all 0.3s ease;
     }
 
     body.dark-mode {
-      --bg-primary: #1C1816;
-      --bg-gradient: linear-gradient(135deg, #1A1614 0%, #29221D 100%);
-      --glass-bg: rgba(45, 34, 30, 0.85);
-      --glass-border: rgba(212, 175, 55, 0.25);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-      --text-main: #EFE8DF;
-      --text-muted: #B0A093;
-      --accent-gold: #E5B83B;
-      --accent-brown: #8D6E58;
+      --bg-primary: #161B17;
+      --bg-gradient: linear-gradient(135deg, #121613 0%, #1E2620 100%);
+      --glass-bg: rgba(28, 35, 30, 0.85);
+      --glass-border: rgba(90, 107, 92, 0.3);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+      
+      --text-main: #E2ECE4;
+      --text-muted: #9BB09F;
+      
+      --accent-sage: #7C947F;
+      --accent-sage-dark: #5A6B5C;
+      --accent-wood: #A8886D;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
     body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 15px; transition: var(--transition); }
     .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; } 
     
-    .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--card-radius); box-shadow: var(--glass-shadow); padding: 18px; transition: var(--transition); overflow: hidden; }
+    .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--card-radius); box-shadow: var(--glass-shadow); padding: 18px; transition: var(--transition); overflow: hidden; backdrop-filter: blur(10px); }
 
     header.dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .welcome-box h1 { font-size: 1.3rem; font-weight: 800; color: var(--accent-brown); display: flex; align-items: center; gap: 8px; }
-    body.dark-mode .welcome-box h1 { color: var(--accent-gold); }
+    .welcome-box h1 { font-size: 1.3rem; font-weight: 800; color: var(--accent-sage-dark); display: flex; align-items: center; gap: 8px; }
+    body.dark-mode .welcome-box h1 { color: var(--accent-sage); }
     .header-actions { display: flex; align-items: center; gap: 10px; }
 
-    .badge-offline { background: rgba(46, 125, 50, 0.15); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 4px 10px; border-radius: 50px; font-weight: bold; font-size: 0.75rem; }
-    .badge-streak { background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold-dark); padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+    .badge-offline { background: rgba(59, 122, 87, 0.15); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 4px 10px; border-radius: 50px; font-weight: bold; font-size: 0.75rem; }
+    .badge-streak { background: rgba(90, 107, 92, 0.15); border: 1px solid var(--accent-sage); color: var(--accent-sage-dark); padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+    body.dark-mode .badge-streak { color: var(--accent-sage); }
     .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; }
 
-    .quote-card { text-align: center; border-right: 4px solid var(--accent-gold); font-style: italic; color: var(--text-muted); padding: 14px; }
+    .quote-card { text-align: center; border-right: 4px solid var(--accent-sage); font-style: italic; color: var(--text-muted); padding: 14px; }
     .quote-card p { font-size: 1rem; font-weight: 700; color: var(--text-main); line-height: 1.5; }
 
     /* 🔻 القوائم المنسدلة */
@@ -68,10 +76,10 @@
       cursor: pointer;
       font-size: 1.05rem;
       font-weight: 700;
-      color: var(--accent-brown);
+      color: var(--accent-sage-dark);
       padding: 5px 0;
     }
-    body.dark-mode .accordion-header { color: var(--accent-gold); }
+    body.dark-mode .accordion-header { color: var(--accent-sage); }
     .accordion-header .arrow-icon { transition: transform 0.3s ease; font-size: 0.9rem; }
     .accordion-header.active .arrow-icon { transform: rotate(180deg); }
 
@@ -79,26 +87,27 @@
       display: none;
       padding-top: 15px;
       margin-top: 10px;
-      border-top: 1px solid rgba(197, 155, 39, 0.2);
+      border-top: 1px solid rgba(90, 107, 92, 0.2);
     }
     .accordion-content.open { display: block; }
 
-    .progress-container { background: rgba(0, 0, 0, 0.08); border-radius: 20px; height: 8px; width: 100%; overflow: hidden; margin: 8px 0; }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-brown)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
+    .progress-container { background: rgba(0, 0, 0, 0.06); border-radius: 20px; height: 8px; width: 100%; overflow: hidden; margin: 8px 0; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-sage), var(--accent-wood)); width: 0%; transition: width 0.4s ease; border-radius: 20px; }
 
-    /* 🎯 تعديل تنسيق المهام ليصبح أفقياً دائماً كعنصر الجيم */
+    /* 🎯 تنسيق أفقي متناسق للمهام */
     .task-list { display: flex; flex-direction: column; gap: 10px; }
     .task-item { 
       display: flex; 
       align-items: center; 
       justify-content: space-between; 
       padding: 10px 12px; 
-      background: rgba(255, 255, 255, 0.4); 
+      background: rgba(255, 255, 255, 0.5); 
       border-radius: 12px; 
-      border: 1px solid rgba(255, 255, 255, 0.5); 
-      flex-wrap: nowrap; /* إجبار العناصر على البقاء في نفس السطر */
+      border: 1px solid rgba(255, 255, 255, 0.6); 
+      flex-wrap: nowrap;
       gap: 10px; 
     }
+    body.dark-mode .task-item { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
     .task-item label { 
       display: flex; 
       align-items: center; 
@@ -111,35 +120,36 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-gold); cursor: pointer; flex-shrink: 0; }
+    .task-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-sage); cursor: pointer; flex-shrink: 0; }
 
     .task-meta { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; flex-shrink: 0; }
     .target-days-input { width: 42px; padding: 3px 2px; border-radius: 6px; border: 1px solid var(--glass-border); text-align: center; font-weight: bold; background: rgba(255,255,255,0.7); }
     
-    .btn-snooze { background: rgba(212, 160, 23, 0.2); border: 1px solid var(--accent-gold); color: var(--accent-brown); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
-    .btn-restore { background: rgba(46, 125, 50, 0.2); border: 1px solid var(--accent-green); color: var(--accent-green); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
+    .btn-snooze { background: rgba(140, 109, 83, 0.15); border: 1px solid var(--accent-wood); color: var(--accent-wood); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
+    .btn-restore { background: rgba(59, 122, 87, 0.15); border: 1px solid var(--accent-green); color: var(--accent-green); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; white-space: nowrap; }
 
-    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; background: rgba(197, 155, 39, 0.15); color: var(--accent-brown); padding: 4px 8px; border-radius: 6px; flex-shrink: 0; }
-    body.dark-mode .prayer-time-badge { color: var(--accent-gold); }
+    .prayer-time-badge { font-size: 0.85rem; font-weight: bold; background: rgba(90, 107, 92, 0.15); color: var(--accent-sage-dark); padding: 4px 8px; border-radius: 6px; flex-shrink: 0; }
+    body.dark-mode .prayer-time-badge { color: var(--accent-sage); }
 
     .counter-control { display: flex; align-items: center; gap: 8px; }
-    .btn-counter { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent-brown); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+    .btn-counter { width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent-sage); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
     .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6); font-weight: bold; color: var(--text-main); }
 
     .text-input-field { border-radius: 8px; border: 1px solid var(--glass-border); padding: 6px 10px; background: rgba(255,255,255,0.6); font-weight: 500; color: var(--text-main); width: 100%; margin-top: 5px; }
 
-    .btn-action { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-    .btn-undo { background: #5C4333; color: white; }
-    .btn-edit { background: rgba(197, 155, 39, 0.2); color: var(--accent-brown); border: 1px solid var(--accent-gold); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+    .btn-action { background: linear-gradient(135deg, var(--accent-sage), var(--accent-sage-dark)); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+    .btn-undo { background: var(--accent-wood); color: white; }
+    .btn-edit { background: rgba(90, 107, 92, 0.2); color: var(--accent-sage-dark); border: 1px solid var(--accent-sage); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+    body.dark-mode .btn-edit { color: var(--accent-sage); }
     .btn-delete { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid #d9534f; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
 
     .office-goal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .office-goal-num { font-weight: 800; font-size: 1.1rem; color: var(--accent-brown); width: 25px; text-align: center; }
-    body.dark-mode .office-goal-num { color: var(--accent-gold); }
+    .office-goal-num { font-weight: 800; font-size: 1.1rem; color: var(--accent-sage-dark); width: 25px; text-align: center; }
+    body.dark-mode .office-goal-num { color: var(--accent-sage); }
     .office-goal-input { flex-grow: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); font-weight: 600; color: var(--text-main); }
 
-    .timer-display { font-size: 2.5rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-brown); margin: 10px 0; }
-    body.dark-mode .timer-display { color: var(--accent-gold); }
+    .timer-display { font-size: 2.5rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--accent-sage-dark); margin: 10px 0; }
+    body.dark-mode .timer-display { color: var(--accent-sage); }
 
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
     .modal-content { max-width: 500px; width: 92%; max-height: 85vh; overflow-y: auto; text-align: right; background: var(--bg-primary); padding: 20px; border-radius: 20px; color: var(--text-main); border: 1px solid var(--glass-border); }
@@ -168,7 +178,7 @@
       <div class="header-actions">
         <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="كتم/تشغيل الصوت">🔊</button>
         <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
-        <div id="live-clock" style="font-size: 1rem; font-weight: bold; color: var(--accent-brown);"></div>
+        <div id="live-clock" style="font-size: 1rem; font-weight: bold; color: var(--accent-sage-dark);"></div>
         <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">🌙</button>
         <button class="icon-btn" onclick="openDistractModal()" title="أنا مشتت!">🧠</button>
       </div>
@@ -375,7 +385,7 @@
     </div>
 
     <!-- 🔟 ⏸️ الأهداف المؤجلة -->
-    <div class="glass-card" style="background: rgba(227, 215, 199, 0.4);">
+    <div class="glass-card" style="background: rgba(226, 221, 213, 0.4);">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span>⏸️ الأهداف المؤجلة</span>
         <span class="arrow-icon">▼</span>
@@ -397,7 +407,7 @@
           <button class="btn-action" style="font-size: 0.75rem;" onclick="forceNewDay()">🔄 تقفيل اليوم يدوياً</button>
         </div>
 
-        <div class="date-picker-box" style="background: rgba(197, 155, 39, 0.15); border: 1px solid var(--accent-gold);">
+        <div class="date-picker-box" style="background: rgba(90, 107, 92, 0.15); border: 1px solid var(--accent-sage);">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>📅 <strong>تعديل تاريخ سابق:</strong></span>
             <input type="date" id="custom-day-picker" class="custom-input-date">
@@ -419,7 +429,7 @@
   <!-- Modals -->
   <div class="modal" id="edit-day-modal">
     <div class="modal-content">
-      <h3 style="color: var(--accent-brown); margin-bottom: 12px;" id="edit-modal-title">تعديل يوم</h3>
+      <h3 style="color: var(--accent-sage-dark); margin-bottom: 12px;" id="edit-modal-title">تعديل يوم</h3>
       <div id="edit-tasks-list" class="task-list" style="margin-bottom: 15px;"></div>
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--glass-border); padding-top: 12px;">
         <button class="btn-action" onclick="saveEditedDay()">💾 حفظ التعديلات</button>
@@ -430,7 +440,7 @@
 
   <div class="modal" id="distract-modal">
     <div class="modal-content" style="text-align: center;">
-      <h3 style="color: var(--accent-brown); margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
+      <h3 style="color: var(--accent-sage-dark); margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
       <button class="btn-action" onclick="closeDistractModal()">جاهز للعودة 💪</button>
     </div>
