@@ -118,7 +118,7 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت المحلي الخفي للعمل بدون إنترنت -->
+  <!-- عنصر الصوت المحلي الخفي -->
   <audio id="local-azan-audio" src="azan.mp3" preload="auto"></audio>
 
   <div class="container">
@@ -325,7 +325,7 @@
   </div>
 
   <script>
-    // --- إعدادات نظام الأصوات التفاعلي والأذان (المحلي والأوفلاين) ---
+    // --- إعدادات نظام الأصوات التفاعلي والأذان ---
     let soundEnabled = true;
     let audioCtx = null;
     let playedPrayersToday = {};
@@ -333,18 +333,18 @@
 
     const azanAudio = document.getElementById('local-azan-audio');
 
-    // تجهيز الإذن الصوتي بالخلفية فور أول ضغطة للمستخدم
-    document.addEventListener('click', () => {
-      if (!userHasInteracted) {
+    // إتاحة تفعيل الصوت على الموبايل من أول ضغطة أو لمسة شاشة
+    function initMobileAudioPermission() {
+      if (!userHasInteracted && azanAudio) {
         userHasInteracted = true;
-        if (azanAudio) {
-          azanAudio.play().then(() => {
-            azanAudio.pause();
-            azanAudio.currentTime = 0;
-          }).catch(() => {});
-        }
+        azanAudio.play().then(() => {
+          azanAudio.pause();
+          azanAudio.currentTime = 0;
+        }).catch(() => {});
       }
-    }, { once: true });
+    }
+    document.addEventListener('click', initMobileAudioPermission, { once: true });
+    document.addEventListener('touchstart', initMobileAudioPermission, { once: true });
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
@@ -380,7 +380,7 @@
       try {
         azanAudio.currentTime = 0;
         azanAudio.play().catch(() => {
-          alert("يرجى الضغط مرة واحدة على الصفحة لتسمح للمتصفح بتشغيل الأذان تلقائياً بالخلفية.");
+          alert("يرجى الضغط مرة واحدة على الشاشة لمنح المتصفح إذن تشغيل الصوت.");
         });
       } catch(e){}
     }
@@ -447,7 +447,6 @@
       { id: 'isha', title: '🌙 صلاة العشاء', key: 'Isha' }
     ];
 
-    // مواقيت احتياطية مثبتة لتعمل بدقة بدون إنترنت أوفلاين 100%
     let prayerTimesObj = {
       Fajr: "04:30",
       Dhuhr: "12:00",
@@ -457,6 +456,7 @@
     };
     
     let activeEditDate = null;
+    let isUpdatingFromRemote = false;
 
     let localState = {
       startDate: '',
@@ -719,9 +719,12 @@
       }
     }
 
+    // حفظ التغييرات محلياً ورفعها فوراً للسحابة
     function saveStateLocally() {
       localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
-      syncToFirebase();
+      if (!isUpdatingFromRemote) {
+        syncToFirebase();
+      }
     }
 
     function loadStateLocally() {
@@ -735,17 +738,28 @@
 
     function syncToFirebase() {
       if (navigator.onLine && dbRef) {
-        dbRef.set(localState).then(() => {
-          document.getElementById('sync-status').innerText = '🟢 متصل ومحفوظ سحابياً';
+        dbRef.set(localState).catch(() => {});
+      }
+    }
+
+    // ربط التزامن اللحظي المباشر بين الموبايل واللاب
+    function setupFirebaseRealtimeSync() {
+      dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          isUpdatingFromRemote = true;
+          localState = data;
+          localStorage.setItem('dashboard_local_state', JSON.stringify(localState));
+          applyStateToUI();
+          isUpdatingFromRemote = false;
+
+          document.getElementById('sync-status').innerText = '🟢 متصل ومُتزامن لحظياً';
           document.getElementById('sync-status').className = 'status-online';
-        }).catch(() => {
-          document.getElementById('sync-status').innerText = '🟡 حفظ محلي فقط';
-          document.getElementById('sync-status').className = 'status-offline';
-        });
-      } else {
+        }
+      }, (error) => {
         document.getElementById('sync-status').innerText = '🔴 أوفلاين (حفظ محلي)';
         document.getElementById('sync-status').className = 'status-offline';
-      }
+      });
     }
 
     function applyStateToUI() {
@@ -1041,6 +1055,7 @@
       loadStateLocally();
       fetchPrayerTimes();
       setDailyQuote();
+      setupFirebaseRealtimeSync();
       
       setInterval(updateLiveClockAndCheck, 1000);
       setInterval(checkAndResetNewDay, 60000);
