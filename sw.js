@@ -1,23 +1,11 @@
-const CACHE_NAME = 'dashboard-v6';
+const CACHE_NAME = 'dashboard-v7';
 
-// اقتصار الكاش في البداية على الملفات الأساسية فقط لضمان التثبيت الفوري
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json'
-];
-
-// 1. تثبيت فوري وتخطي الانتظار
+// 1. تثبيت فوري وبدون أي انتظار أو تحميل ملفات قد تعطله
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // تجبر المتصفح يفعل الـ SW فوراً بدون تعليق
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+  self.skipWaiting();
 });
 
-// 2. تفعيل وتنظيف أي كاش قديم مع السيطرة الفورية على الصفحات
+// 2. التفعيل الفوري والسيطرة على التطبيق
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -28,11 +16,11 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    }).then(() => self.clients.claim()) // سيطرة فورية على التطبيق
+    }).then(() => self.clients.claim())
   );
 });
 
-// 3. استراتيجية الشبكة أولاً مع حماية من الأخطاء
+// 3. كاش ديناميكي أثناء التصفح فقط
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
