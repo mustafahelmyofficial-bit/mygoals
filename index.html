@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم والأكاديمية</title>
+  <title>Eng-Mustafa Helmy | لوحة التحكم</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -24,9 +24,6 @@
       
       --text-dark: #2B2621;
       --text-muted: #8C827A;
-      --success-green: #2E7D32;
-      --danger-red: #D32F2F;
-      
       --card-radius: 24px;
       --inner-radius: 16px;
       --shadow-soft: 0 10px 25px rgba(180, 160, 140, 0.08);
@@ -40,7 +37,6 @@
       --accent-gold: #D4A84B;
       --accent-gold-light: #332B20;
       --accent-gold-border: #594830;
-      
       --text-dark: #F5EFE8;
       --text-muted: #A3978C;
       --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -65,32 +61,31 @@
       gap: 14px;
     }
 
-    .header-card, .quote-card-bar { display: flex; }
-
+    /* الهيدر الرئيسي */
     .header-card {
       background: var(--card-bg);
       border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke);
       padding: 20px;
       box-shadow: var(--shadow-soft);
-      flex-direction: column; gap: 18px;
+      display: flex; flex-direction: column; gap: 18px;
     }
 
     .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .welcome-text h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
-    .welcome-text p { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+    .welcome-text h1 { font-size: 1.45rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
+    .welcome-text p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
 
     .badge-offline-pill {
       background: var(--accent-gold-light);
       border: 1px solid var(--accent-gold-border);
-      color: var(--text-dark); padding: 8px 16px; border-radius: 50px;
-      font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
+      color: var(--text-dark); padding: 6px 14px; border-radius: 50px;
+      font-weight: 700; font-size: 0.78rem; display: flex; align-items: center; gap: 4px;
     }
 
-    .header-widgets-row { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
+    .header-widgets-row { display: flex; justify-content: space-between; align-items: center; }
     .widgets-group { display: flex; align-items: center; gap: 10px; }
     .time-widget { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
-    .time-widget span.ampm { font-size: 0.75rem; color: var(--text-muted); }
+    .time-widget span.ampm { font-size: 0.7rem; color: var(--text-muted); }
 
     .circle-btn {
       width: 38px; height: 38px; border-radius: 50%;
@@ -98,137 +93,130 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem; cursor: pointer; color: var(--text-dark); transition: var(--transition);
     }
-    .circle-btn:active { transform: scale(0.9); }
 
+    /* كارت الحكمة */
     .quote-card-bar {
       background: var(--card-bg); border-radius: var(--inner-radius);
       border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
-      box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
-      justify-content: center; align-items: center;
+      box-shadow: var(--shadow-soft); display: flex; justify-content: center; align-items: center;
     }
-    .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
-    .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
+    .quote-card-bar p { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
 
     .app-page { display: none; flex-direction: column; gap: 14px; }
-    .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
+    .app-page.active { display: flex; animation: fadeIn 0.25s ease; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .section-card {
       background: var(--card-bg); border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke); padding: 18px;
-      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 14px;
+      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 12px;
     }
 
     .section-header-row { display: flex; justify-content: space-between; align-items: center; }
-    .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
-    .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-gold-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
+    .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 800; color: var(--text-dark); }
+    .section-title .sec-icon { font-size: 1.1rem; background: var(--accent-gold-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
 
-    .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--card-stroke), transparent); margin: 2px 0; position: relative; }
-    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent-gold); }
+    .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--card-stroke), transparent); position: relative; margin: 2px 0; }
+    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.55rem; color: var(--accent-gold); }
 
     .progress-section { display: flex; flex-direction: column; gap: 6px; }
     .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
     .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
-    .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
+    .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.3s ease; }
 
+    /* عناصر المهام اليومية بالتصميم المطلوب 100% */
     .task-item {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
-      border-radius: var(--inner-radius); padding: 12px 14px;
+      border-radius: 14px; padding: 12px 14px;
       display: flex; align-items: center; justify-content: space-between;
-      direction: rtl; transition: var(--transition); margin-bottom: 8px; gap: 8px;
+      transition: var(--transition); margin-bottom: 8px;
     }
-    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
-    .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
+    .task-left { display: flex; align-items: center; }
+    .streak-badge {
+      background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border);
+      color: var(--text-dark); padding: 4px 10px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 4px;
+    }
+    .task-right { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
+    .task-right input[type="checkbox"] { width: 18px; height: 18px; border-radius: 5px; accent-color: var(--accent-gold); cursor: pointer; }
 
-    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي الفاخرة ==================== */
-    .english-dashboard-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px;
-    }
-    .eng-dash-card {
+    /* عناصر الصلوات */
+    .prayer-item {
       background: var(--bg-main); border: 1px solid var(--card-stroke);
-      border-radius: 14px; padding: 10px; text-align: center;
+      border-radius: 14px; padding: 12px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
     }
-    .eng-dash-card .val { font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); }
-    .eng-dash-card .lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
+    .prayer-time-lbl { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+    .prayer-right { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
+    .prayer-right input[type="checkbox"] { width: 18px; height: 18px; border-radius: 5px; accent-color: var(--accent-gold); cursor: pointer; }
 
-    .level-selector-tabs {
-      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none;
-    }
+    /* الأكاديمية */
+    .english-dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px; }
+    .eng-dash-card { background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 14px; padding: 10px; text-align: center; }
+    .eng-dash-card .val { font-size: 1.05rem; font-weight: 800; color: var(--accent-gold); }
+    .eng-dash-card .lbl { font-size: 0.68rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
+
+    .level-selector-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .level-tab {
-      padding: 8px 14px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-stroke);
-      font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; color: var(--text-muted);
+      padding: 8px 12px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-stroke);
+      font-weight: 700; font-size: 0.78rem; cursor: pointer; white-space: nowrap; color: var(--text-muted);
       transition: var(--transition); flex-shrink: 0;
     }
     .level-tab.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
 
-    .level-block {
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
-      border-radius: 16px; margin-bottom: 12px; overflow: hidden;
-      transition: var(--transition);
-    }
-    .level-block.locked { opacity: 0.7; }
-    .level-block-header {
-      padding: 12px 16px; background: var(--card-bg); border-bottom: 1px solid var(--card-stroke);
-      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-    }
-    .level-block-title { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
+    .level-block { background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 16px; margin-bottom: 10px; overflow: hidden; }
+    .level-block-header { padding: 12px 14px; background: var(--card-bg); border-bottom: 1px solid var(--card-stroke); display: flex; justify-content: space-between; align-items: center; }
+    .level-block-title { font-weight: 800; font-size: 0.9rem; color: var(--text-dark); }
 
-    .unit-box { padding: 12px 14px; border-bottom: 1px dashed var(--card-stroke); }
+    .unit-box { padding: 10px 12px; border-bottom: 1px dashed var(--card-stroke); }
     .unit-box:last-child { border-bottom: none; }
-    .unit-title-head { font-size: 0.88rem; font-weight: 800; color: var(--accent-gold); margin-bottom: 8px; }
+    .unit-title-head { font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); margin-bottom: 6px; }
 
-    .eng-lesson-row {
-      display: flex; justify-content: space-between; align-items: center;
-      background: var(--card-bg); padding: 8px 12px; border-radius: 10px;
-      border: 1px solid var(--card-stroke); margin-bottom: 6px; gap: 8px;
-    }
-    .eng-lesson-name { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); flex-grow: 1; }
-
-    .status-select-btn {
-      padding: 4px 8px; border-radius: 8px; border: 1px solid var(--card-stroke);
-      background: var(--bg-main); font-size: 0.75rem; font-weight: 700; color: var(--text-dark);
-      cursor: pointer; outline: none;
-    }
+    .eng-lesson-row { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--card-stroke); margin-bottom: 6px; gap: 6px; }
+    .eng-lesson-name { font-size: 0.82rem; font-weight: 700; color: var(--text-dark); flex-grow: 1; }
+    .status-select-btn { padding: 4px 6px; border-radius: 6px; border: 1px solid var(--card-stroke); background: var(--bg-main); font-size: 0.72rem; font-weight: 700; color: var(--text-dark); outline: none; }
 
     .counter-control { display: flex; align-items: center; gap: 8px; }
-    .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+    .btn-counter { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1rem; }
     .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
     .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
-    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.82rem; }
 
+    /* الشريط السفلي */
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
-      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
+      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 8px;
       display: flex; justify-content: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
     }
 
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer;
-      padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: var(--text-muted); font-size: 0.7rem; font-weight: 700; cursor: pointer;
+      padding: 6px 8px; border-radius: 12px; transition: var(--transition); flex-grow: 1;
     }
-    .nav-item .nav-icon { font-size: 1.25rem; }
+    .nav-item .nav-icon { font-size: 1.2rem; }
     .nav-item.active { background: var(--accent-gold-light); color: var(--accent-gold); border: 1px solid var(--accent-gold-border); }
 
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
-    .modal-content { max-width: 420px; width: 92%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); max-height: 85vh; overflow-y: auto; }
+    .modal-content { max-width: 420px; width: 92%; text-align: center; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
   </style>
 </head>
 <body>
 
   <div class="app-container">
 
-    <!-- 🎴 كارت الترحيب الرئيسي -->
-    <div class="header-card" id="top-welcome-card">
+    <!-- 🎴 الهيدر الرئيسي كما بالصورة بالضبط -->
+    <div class="header-card">
       <div class="header-top-row">
         <div class="welcome-text">
-          <h1>👋 مرحباً بك،<br>يا مهندس!</h1>
+          <h1>مرحباً بك،<br>يا مهندس! 👋</h1>
           <p id="live-date">الجمعة، 31 يوليو 2026</p>
         </div>
         <div class="badge-offline-pill">
@@ -237,27 +225,29 @@
       </div>
 
       <div class="header-widgets-row">
-        <button class="circle-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="الصوت">🔊</button>
+        <button class="circle-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()">🔊</button>
 
         <div class="widgets-group">
           <div class="time-widget">
-            <span id="live-clock-time">03:51:02</span>
+            <span id="live-clock-time">09:32:44</span>
             <span class="ampm" id="live-clock-ampm">م</span>
           </div>
 
-          <button class="circle-btn" id="theme-toggle" onclick="toggleTheme()" title="المظهر">🌙</button>
-          <button class="circle-btn" onclick="openDistractModal()" title="التشتت">🧠</button>
+          <button class="circle-btn" onclick="toggleTheme()">🌙</button>
+          <button class="circle-btn" onclick="openDistractModal()">🧠</button>
         </div>
       </div>
     </div>
 
     <!-- 📜 كارت الحكمة -->
-    <div class="quote-card-bar" id="top-quote-card">
-      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
+    <div class="quote-card-bar">
+      <p>"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
     </div>
 
-    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
+    <!-- ==================== 🏠 1. الصفحة الرئيسية (مرفقة بالسكرين شوت 100%) ==================== -->
     <div class="app-page active" id="page-home">
+      
+      <!-- المهام اليومية -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -278,9 +268,87 @@
           </div>
         </div>
 
-        <div id="tasks-container" style="margin-top: 10px;"></div>
+        <div id="daily-tasks-list" style="margin-top: 6px;">
+          <!-- 1. حفظ سورة البقرة -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-quran">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span>حفظ سورة البقرة</span>
+              <input type="checkbox" onchange="updateTaskStatus('quran', this.checked)">
+            </div>
+          </div>
+
+          <!-- 2. تعلم الإنجليزية -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-eng">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span>تعلم الإنجليزية (الأكاديمية) GB</span>
+              <input type="checkbox" onchange="updateTaskStatus('eng', this.checked)">
+            </div>
+          </div>
+
+          <!-- 3. SketchUp -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-sketchup">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span style="display:flex; align-items:center; gap:4px;">📐 SketchUp</span>
+              <input type="checkbox" onchange="updateTaskStatus('sketchup', this.checked)">
+            </div>
+          </div>
+
+          <!-- 4. AutoCAD -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-autocad">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span style="display:flex; align-items:center; gap:4px;">🖥️ AutoCAD</span>
+              <input type="checkbox" onchange="updateTaskStatus('autocad', this.checked)">
+            </div>
+          </div>
+
+          <!-- 5. D5 Render -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-d5">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span style="display:flex; align-items:center; gap:4px;">🎬 D5 Render</span>
+              <input type="checkbox" onchange="updateTaskStatus('d5', this.checked)">
+            </div>
+          </div>
+
+          <!-- 6. الجيم -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-gym">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span>الجيم 💪</span>
+              <input type="checkbox" onchange="updateTaskStatus('gym', this.checked)">
+            </div>
+          </div>
+
+          <!-- 7. صناعة المحتوى -->
+          <div class="task-item">
+            <div class="task-left">
+              <span class="streak-badge">🏆 <span id="streak-content">0</span> يوم</span>
+            </div>
+            <div class="task-right">
+              <span>صناعة المحتوى 🎥</span>
+              <input type="checkbox" onchange="updateTaskStatus('content', this.checked)">
+            </div>
+          </div>
+        </div>
       </div>
 
+      <!-- مواقيت الصلوات الخمس -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -294,20 +362,59 @@
         <div class="progress-section">
           <div class="progress-info">
             <span>نسبة الالتزام بالصلوات:</span>
+            <span id="prayers-progress-text">40%</span>
           </div>
           <div class="progress-track">
-            <div class="progress-fill" id="prayers-progress"></div>
+            <div class="progress-fill" id="prayers-progress" style="width: 40%;"></div>
           </div>
         </div>
 
-        <div id="prayers-container" style="margin-top: 10px;"></div>
+        <div id="prayers-list" style="margin-top: 6px;">
+          <div class="prayer-item">
+            <span class="prayer-time-lbl">04:32 ص</span>
+            <div class="prayer-right">
+              <span>صلاة الفجر</span>
+              <input type="checkbox" onchange="updatePrayerProgress()">
+            </div>
+          </div>
+
+          <div class="prayer-item">
+            <span class="prayer-time-lbl">01:04 م</span>
+            <div class="prayer-right">
+              <span>صلاة الظهر</span>
+              <input type="checkbox" checked onchange="updatePrayerProgress()">
+            </div>
+          </div>
+
+          <div class="prayer-item">
+            <span class="prayer-time-lbl">04:41 م</span>
+            <div class="prayer-right">
+              <span>صلاة العصر</span>
+              <input type="checkbox" checked onchange="updatePrayerProgress()">
+            </div>
+          </div>
+
+          <div class="prayer-item">
+            <span class="prayer-time-lbl">07:56 م</span>
+            <div class="prayer-right">
+              <span>صلاة المغرب</span>
+              <input type="checkbox" onchange="updatePrayerProgress()">
+            </div>
+          </div>
+
+          <div class="prayer-item">
+            <span class="prayer-time-lbl">09:24 م</span>
+            <div class="prayer-right">
+              <span>صلاة العشاء</span>
+              <input type="checkbox" onchange="updatePrayerProgress()">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- ==================== 🇬🇧 2. منصة تعلم الإنجليزية الاحترافية ==================== -->
+    <!-- ==================== 🇬🇧 2. الإنجليزي GB ==================== -->
     <div class="app-page" id="page-english">
-      
-      <!-- لوحة الإحصائيات والإنجازات -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -319,7 +426,7 @@
 
         <div class="english-dashboard-grid">
           <div class="eng-dash-card">
-            <div class="val" id="eng-dash-streak">3 🔥</div>
+            <div class="val">3 🔥</div>
             <div class="lbl">أيام متتالية</div>
           </div>
           <div class="eng-dash-card">
@@ -343,7 +450,6 @@
         </div>
       </div>
 
-      <!-- تبويبات التنقل في المنهاج -->
       <div class="level-selector-tabs">
         <div class="level-tab active" onclick="switchEngTab('levels', this)">🇺🇸 المستويات الرئيسية</div>
         <div class="level-tab" onclick="switchEngTab('vocab', this)">📖 قسم المفردات</div>
@@ -351,7 +457,6 @@
         <div class="level-tab" onclick="switchEngTab('speaking', this)">🗣 قسم المحادثة</div>
       </div>
 
-      <!-- حاوية لعرض الدروس والفهرس -->
       <div id="english-main-content"></div>
     </div>
 
@@ -366,7 +471,7 @@
         </div>
         <div class="divider-line"></div>
 
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
+        <div style="background:var(--bg-main); padding:12px; border-radius:14px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
           <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
@@ -376,10 +481,10 @@
               <button class="btn-counter" onclick="updateCourseLessons('decor', 1)">+</button>
             </div>
           </div>
-          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveStateLocally()">
+          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي...">
         </div>
 
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
+        <div style="background:var(--bg-main); padding:12px; border-radius:14px; border:1px solid var(--card-stroke);">
           <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
@@ -389,13 +494,15 @@
               <button class="btn-counter" onclick="updateCourseLessons('finishing', 1)">+</button>
             </div>
           </div>
-          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveStateLocally()">
+          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي...">
         </div>
       </div>
     </div>
 
-    <!-- ==================== 🎯 4. الأهداف ==================== -->
+    <!-- ==================== 🎯 4. قسم الأهداف (تمت إعادة هدف المكتب) ==================== -->
     <div class="app-page" id="page-goals">
+      
+      <!-- 1. صناعة المحتوى -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -405,24 +512,48 @@
         </div>
         <div class="divider-line"></div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.85rem;">المتابعين الحاليين:</span>
-          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 80px;" onchange="updateFollowers()">
+          <span style="font-size: 0.85rem; font-weight:700;">المتابعين الحاليين:</span>
+          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 85px;" onchange="updateFollowers()">
         </div>
         <div class="progress-track" style="margin-top: 10px;">
           <div class="progress-fill" id="followers-progress"></div>
         </div>
-        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
+        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted); font-weight:700;" id="followers-percent">12% مكتمل</p>
       </div>
 
+      <!-- 2. هدف المكتب (إعادة القسم كاملاً) -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🏢</span>
+            <span>2. تأسيس وتجهيز المكتب الخاص</span>
+          </div>
+        </div>
+        <div class="divider-line"></div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight:600;">تجهيز مقومات المكتب الهندسي، الأجهزة، واللوجيستيات.</p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight:700; margin-top:4px;">
+          <span>التقدم في التجهيزات:</span>
+          <span id="office-percent-text">25%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="office-progress" style="width: 25%;"></div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button class="btn-action" style="flex:1;" onclick="adjustOfficeProgress(10)">+ زيادة 10%</button>
+          <button class="btn-action" style="background: var(--text-muted);" onclick="adjustOfficeProgress(-10)">- 10%</button>
+        </div>
+      </div>
+
+      <!-- 3. الادخار للآيفون -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">🍎</span>
-            <span>2. الادخار للآيفون</span>
+            <span>3. الادخار للآيفون</span>
           </div>
         </div>
         <div class="divider-line"></div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight:700;">
           <span>الحالي: <strong id="savings-current">0</strong> ج.م</span>
           <span>المستهدف: <strong>50,000</strong> ج.م</span>
         </div>
@@ -430,10 +561,11 @@
           <div class="progress-fill" id="savings-progress"></div>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
+          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000 ج.م</button>
           <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
         </div>
       </div>
+
     </div>
 
     <!-- ==================== 📖 5. سورة البقرة ==================== -->
@@ -448,7 +580,7 @@
         <div class="divider-line"></div>
         <div style="text-align: center; padding: 10px;">
           <p style="font-weight: bold;">سورة البقرة - مرتل</p>
-          <audio id="quran-audio-player" controls style="width: 100%; margin-top: 10px;">
+          <audio controls style="width: 100%; margin-top: 10px;">
             <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
           </audio>
         </div>
@@ -457,25 +589,25 @@
 
   </div>
 
-  <!-- 📱 شريط التنقل السفلي -->
+  <!-- 📱 شريط التنقل السفلي كما بالصورة -->
   <div class="bottom-nav">
-    <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home', this)">
+    <div class="nav-item active" onclick="switchPage('page-home', this)">
       <span class="nav-icon">🏠</span>
       <span>الرئيسية</span>
     </div>
-    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english', this)">
-      <span class="nav-icon">🇬🇧</span>
+    <div class="nav-item" onclick="switchPage('page-english', this)">
+      <span class="nav-icon">GB</span>
       <span>الإنجليزي</span>
     </div>
-    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses', this)">
+    <div class="nav-item" onclick="switchPage('page-courses', this)">
       <span class="nav-icon">📐</span>
       <span>الكورسات</span>
     </div>
-    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals', this)">
+    <div class="nav-item" onclick="switchPage('page-goals', this)">
       <span class="nav-icon">🎯</span>
       <span>الأهداف</span>
     </div>
-    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran', this)">
+    <div class="nav-item" onclick="switchPage('page-quran', this)">
       <span class="nav-icon">📖</span>
       <span>البقرة</span>
     </div>
@@ -483,7 +615,7 @@
 
   <!-- Modal التشتت -->
   <div class="modal" id="distract-modal">
-    <div class="modal-content" style="text-align: center;">
+    <div class="modal-content">
       <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
       <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
@@ -493,7 +625,6 @@
   <script>
     let currentEngTab = 'levels';
 
-    /* ==================== 📚 الفهرس الكامل لمنهاج الإنجليزي الشامل ==================== */
     const englishCurriculumData = {
       levels: [
         {
@@ -509,86 +640,47 @@
           id: "a1", title: "🇺🇸 المستوى A1", unlocked: false,
           units: [
             { title: "الوحدة الأولى", lessons: ["Present Simple", "استخدام Do و Does", "ظروف التكرار", "الروتين اليومي", "مراجعة", "اختبار"] },
-            { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] },
-            { title: "الوحدة الثالثة", lessons: ["الصفات", "المقارنة", "التفضيل", "مراجعة", "اختبار"] },
-            { title: "الوحدة الرابعة", lessons: ["الطلب في المطعم", "التسوق", "في الفندق", "في البنك", "في الصيدلية", "مراجعة", "اختبار"] }
+            { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] }
           ]
         },
         {
           id: "a2", title: "🇺🇸 المستوى A2", unlocked: false,
           units: [
-            { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] },
-            { title: "الوحدة الثانية", lessons: ["Future Simple", "Going To", "الخطط", "المواعيد", "مراجعة", "اختبار"] },
-            { title: "الوحدة الثالثة", lessons: ["Present Continuous", "Past Continuous", "Future Continuous", "مراجعة", "اختبار"] },
-            { title: "الوحدة الرابعة", lessons: ["كتابة رسالة", "كتابة Email", "وصف مكان", "وصف شخص", "وصف يوم", "مراجعة", "اختبار"] }
+            { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] }
           ]
         },
         {
           id: "b1", title: "🇺🇸 المستوى B1", unlocked: false,
           units: [
-            { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] },
-            { title: "الوحدة الثانية", lessons: ["Reading قصيرة", "استخراج المفردات", "فهم النصوص", "مراجعة"] },
-            { title: "الوحدة الثالثة", lessons: ["محادثات السفر", "المطار", "الفندق", "العمل", "المطعم", "المستشفى", "مراجعة"] },
-            { title: "الوحدة الرابعة", lessons: ["كتابة Paragraph", "كتابة Essay", "مراجعة", "اختبار"] }
+            { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] }
           ]
         },
         {
           id: "b2", title: "🇺🇸 المستوى B2", unlocked: false,
           units: [
-            { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] },
-            { title: "الوحدة الثانية", lessons: ["Business English", "Meetings", "Negotiation", "Emails"] },
-            { title: "الوحدة الثالثة", lessons: ["Speaking Fluently", "Pronunciation", "Accent"] },
-            { title: "الوحدة الرابعة", lessons: ["مشاهدة فيديوهات بدون ترجمة", "تلخيصها", "مناقشتها"] }
+            { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] }
           ]
         },
         {
           id: "c1", title: "🇺🇸 المستوى C1", unlocked: false,
           units: [
-            { title: "الوحدة الأولى", lessons: ["التفكير بالإنجليزية", "التحدث بطلاقة"] },
-            { title: "الوحدة الثانية", lessons: ["Presentation Skills", "Public Speaking"] },
-            { title: "الوحدة الثالثة", lessons: ["Academic English", "Professional Writing"] },
-            { title: "الوحدة الرابعة: English for Interior Design", lessons: ["أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات", "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أسماء الحوائط", "أسماء الأجهزة", "أسماء أدوات الموقع", "أسماء اللوحات التنفيذية", "التعامل مع العميل", "كتابة عروض الأسعار", "كتابة الإيميلات الاحترافية", "تقديم المشروع بالإنجليزية"] }
+            { title: "الوحدة الأولى: English for Interior Design", lessons: ["أسماء عناصر المنزل والتشطيبات", "الأثاث والخامات", "الإضاءة والأسقف والأرضيات", "اللوحات التنفيذية والعميل", "تقديم المشروع بالإنجليزية"] }
           ]
         }
       ],
-      vocab: [
-        { title: "📖 قائمة المفردات المستقلة", lessons: ["أهم 500 كلمة (A0)", "أهم 1000 كلمة (A1)", "أهم 1500 كلمة (A2)", "أهم 2000 كلمة (B1)", "أهم 2500 كلمة (B2)", "أهم 3000 كلمة (C1)", "Vocabulary for Interior Design"] }
-      ],
-      listening: [
-        { title: "🎧 تمارين الاستماع حسب المستوى", lessons: ["Beginner Listening", "Elementary Listening", "Intermediate Listening", "Advanced Listening", "Native Listening"] }
-      ],
-      speaking: [
-        { title: "🗣 مواضيع المحادثات والتحدث", lessons: ["التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار", "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"] }
-      ]
+      vocab: [{ title: "📖 قائمة المفردات", lessons: ["أهم 500 كلمة (A0)", "أهم 1000 كلمة (A1)", "Vocabulary for Interior Design"] }],
+      listening: [{ title: "🎧 تمارين الاستماع", lessons: ["Beginner Listening", "Elementary Listening", "Intermediate Listening"] }],
+      speaking: [{ title: "🗣 مواضيع المحادثة", lessons: ["التعارف", "العائلة", "المكتب الهندسي والعميل"] }]
     };
 
-    // استرجاع التقدم
     let engUserProgress = JSON.parse(localStorage.getItem('eng_app_progress_data')) || {};
 
-    function saveEngProgress() {
-      localStorage.setItem('eng_app_progress_data', JSON.stringify(engUserProgress));
-    }
+    function saveEngProgress() { localStorage.setItem('eng_app_progress_data', JSON.stringify(engUserProgress)); }
 
     function calculateLevelPercent(level) {
-      let total = 0;
-      let completed = 0;
-      level.units.forEach(u => {
-        u.lessons.forEach(l => {
-          total++;
-          if (engUserProgress[`${level.id}_${l}`] === 'completed') completed++;
-        });
-      });
+      let total = 0, completed = 0;
+      level.units.forEach(u => u.lessons.forEach(l => { total++; if (engUserProgress[`${level.id}_${l}`] === 'completed') completed++; }));
       return total > 0 ? Math.round((completed / total) * 100) : 0;
-    }
-
-    function checkLevelUnlocks() {
-      for (let i = 0; i < englishCurriculumData.levels.length - 1; i++) {
-        const curr = englishCurriculumData.levels[i];
-        const next = englishCurriculumData.levels[i + 1];
-        if (calculateLevelPercent(curr) === 100) {
-          next.unlocked = true;
-        }
-      }
     }
 
     function switchEngTab(tab, el) {
@@ -605,90 +697,44 @@
     }
 
     function renderEnglishAcademy() {
-      checkLevelUnlocks();
       const container = document.getElementById('english-main-content');
       container.innerHTML = '';
-
-      // تحديث إحصائيات الشاشة الرئيسية للمستوى الحالي
-      const currentActiveLevel = englishCurriculumData.levels.find(l => calculateLevelPercent(l) < 100) || englishCurriculumData.levels[0];
+      const currentActiveLevel = englishCurriculumData.levels[0];
       const currentPercent = calculateLevelPercent(currentActiveLevel);
       
-      document.getElementById('eng-dash-level').innerText = `${currentActiveLevel.id.toUpperCase()} 🎯`;
       document.getElementById('eng-overall-progress').style.width = `${currentPercent}%`;
       document.getElementById('eng-overall-progress-text').innerText = `${currentPercent}%`;
-
-      // حساب عدد الدروس المكتملة كلياً
-      let completedCount = 0;
-      Object.values(engUserProgress).forEach(val => { if (val === 'completed') completedCount++; });
-      document.getElementById('eng-dash-words').innerText = `${completedCount} 📚`;
 
       if (currentEngTab === 'levels') {
         englishCurriculumData.levels.forEach(level => {
           const percent = calculateLevelPercent(level);
-          const isLocked = !level.unlocked;
-
           const block = document.createElement('div');
-          block.className = `level-block ${isLocked ? 'locked' : ''}`;
-          
+          block.className = `level-block`;
           block.innerHTML = `
             <div class="level-block-header">
-              <div class="level-block-title">
-                ${isLocked ? '🔒' : '🎯'} ${level.title}
-              </div>
+              <div class="level-block-title">${level.title}</div>
               <div style="font-size:0.8rem; font-weight:bold; color:var(--accent-gold);">${percent}%</div>
             </div>
-            ${!isLocked ? `
-              <div>
-                ${level.units.map(unit => `
-                  <div class="unit-box">
-                    <div class="unit-title-head">${unit.title}</div>
-                    ${unit.lessons.map(lesson => {
-                      const key = `${level.id}_${lesson}`;
-                      const status = engUserProgress[key] || 'not_started';
-                      return `
-                        <div class="eng-lesson-row">
-                          <span class="eng-lesson-name">${lesson}</span>
-                          <select class="status-select-btn" onchange="updateLessonStatus('${key}', this.value)">
-                            <option value="not_started" ${status === 'not_started' ? 'selected' : ''}>⭕ لم يبدأ</option>
-                            <option value="in_progress" ${status === 'in_progress' ? 'selected' : ''}>🟡 قيد الدراسة</option>
-                            <option value="completed" ${status === 'completed' ? 'selected' : ''}>✅ مكتمل</option>
-                            <option value="needs_review" ${status === 'needs_review' ? 'selected' : ''}>🔁 يحتاج مراجعة</option>
-                          </select>
-                        </div>
-                      `;
-                    }).join('')}
-                  </div>
-                `).join('')}
-              </div>
-            ` : ''}
-          `;
-          container.appendChild(block);
-        });
-      } else {
-        const dataArr = englishCurriculumData[currentEngTab];
-        dataArr.forEach(sec => {
-          const block = document.createElement('div');
-          block.className = 'level-block';
-          block.innerHTML = `
-            <div class="level-block-header">
-              <div class="level-block-title">${sec.title}</div>
-            </div>
-            <div class="unit-box">
-              ${sec.lessons.map(lesson => {
-                const key = `${currentEngTab}_${lesson}`;
-                const status = engUserProgress[key] || 'not_started';
-                return `
-                  <div class="eng-lesson-row">
-                    <span class="eng-lesson-name">${lesson}</span>
-                    <select class="status-select-btn" onchange="updateLessonStatus('${key}', this.value)">
-                      <option value="not_started" ${status === 'not_started' ? 'selected' : ''}>⭕ لم يبدأ</option>
-                      <option value="in_progress" ${status === 'in_progress' ? 'selected' : ''}>🟡 قيد الدراسة</option>
-                      <option value="completed" ${status === 'completed' ? 'selected' : ''}>✅ مكتمل</option>
-                      <option value="needs_review" ${status === 'needs_review' ? 'selected' : ''}>🔁 يحتاج مراجعة</option>
-                    </select>
-                  </div>
-                `;
-              }).join('')}
+            <div>
+              ${level.units.map(unit => `
+                <div class="unit-box">
+                  <div class="unit-title-head">${unit.title}</div>
+                  ${unit.lessons.map(lesson => {
+                    const key = `${level.id}_${lesson}`;
+                    const status = engUserProgress[key] || 'not_started';
+                    return `
+                      <div class="eng-lesson-row">
+                        <span class="eng-lesson-name">${lesson}</span>
+                        <select class="status-select-btn" onchange="updateLessonStatus('${key}', this.value)">
+                          <option value="not_started" ${status === 'not_started' ? 'selected' : ''}>⭕ لم يبدأ</option>
+                          <option value="in_progress" ${status === 'in_progress' ? 'selected' : ''}>🟡 قيد الدراسة</option>
+                          <option value="completed" ${status === 'completed' ? 'selected' : ''}>✅ مكتمل</option>
+                        </select>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `).join('')}
             </div>
           `;
           container.appendChild(block);
@@ -696,38 +742,37 @@
       }
     }
 
-    /* ==================== 🛠️ وظائف التطبيق العامة التنقل والمظهر ==================== */
     function switchPage(pageId, navEl) {
       document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      
       document.getElementById(pageId).classList.add('active');
       if(navEl) navEl.classList.add('active');
-
-      if (pageId === 'page-english') {
-        renderEnglishAcademy();
-      }
+      if (pageId === 'page-english') renderEnglishAcademy();
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-    }
-
+    function toggleTheme() { document.body.classList.toggle('dark-mode'); }
     function toggleSoundMaster() {
       const btn = document.getElementById('sound-toggle-btn');
-      if (btn.innerText === '🔊') {
-        btn.innerText = '🔇';
-      } else {
-        btn.innerText = '🔊';
-      }
+      btn.innerText = btn.innerText === '🔊' ? '🔇' : '🔊';
     }
 
-    function openDistractModal() {
-      document.getElementById('distract-modal').style.display = 'flex';
+    function openDistractModal() { document.getElementById('distract-modal').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function updateTaskStatus(taskKey, isChecked) {
+      let total = 7;
+      let checkedCount = document.querySelectorAll('#daily-tasks-list input[type="checkbox"]:checked').length;
+      let percent = Math.round((checkedCount / total) * 100);
+      document.getElementById('tasks-progress').style.width = `${percent}%`;
+      document.getElementById('tasks-progress-text').innerText = `${percent}%`;
     }
 
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
+    function updatePrayerProgress() {
+      let total = 5;
+      let checkedCount = document.querySelectorAll('#prayers-list input[type="checkbox"]:checked').length;
+      let percent = Math.round((checkedCount / total) * 100);
+      document.getElementById('prayers-progress').style.width = `${percent}%`;
+      document.getElementById('prayers-progress-text').innerText = `${percent}%`;
     }
 
     function updateCourseLessons(type, val) {
@@ -744,11 +789,17 @@
 
     function adjustSavings(amt) {
       const el = document.getElementById('savings-current');
-      let curr = parseInt(el.innerText || 0) + amt;
-      curr = Math.max(0, curr);
+      let curr = Math.max(0, parseInt(el.innerText || 0) + amt);
       el.innerText = curr;
-      const percent = Math.min(100, Math.round((curr / 50000) * 100));
-      document.getElementById('savings-progress').style.width = `${percent}%`;
+      document.getElementById('savings-progress').style.width = `${Math.min(100, Math.round((curr / 50000) * 100))}%`;
+    }
+
+    function adjustOfficeProgress(amt) {
+      const bar = document.getElementById('office-progress');
+      let curr = parseInt(bar.style.width || '25');
+      curr = Math.max(0, Math.min(100, curr + amt));
+      bar.style.width = `${curr}%`;
+      document.getElementById('office-percent-text').innerText = `${curr}%`;
     }
 
     // الساعة المباشرة
@@ -763,9 +814,7 @@
       document.getElementById('live-clock-ampm').innerText = ampm;
     }, 1000);
 
-    // التشغيل المبدئي
     renderEnglishAcademy();
-    updateFollowers();
   </script>
 </body>
 </html>
