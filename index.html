@@ -1,1309 +1,653 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eng-Mustafa Helmy | لوحة التحكم والأكاديمية</title>
+  <title>Academy LMS - Personal Learning Hub</title>
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="logo.png">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#F7F4EE">
-
   <style>
     :root {
-      --bg-main: #F4EFEA;
-      --card-bg: #FFFFFF;
-      --card-stroke: #EAE3D9;
-      --accent-gold: #C69A3D;
-      --accent-gold-light: #FDF9ED;
-      --accent-gold-border: #E8D3A7;
+      /* Color Palette: Beige, Brown, Gold & Glassmorphic Accents */
+      --bg-gradient-dark: linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%);
+      --glass-bg-dark: rgba(41, 37, 36, 0.65);
+      --glass-border-dark: rgba(217, 119, 6, 0.2);
+      --text-main-dark: #f5f5f4;
+      --text-muted-dark: #a8a29e;
       
-      --text-dark: #2B2621;
-      --text-muted: #8C827A;
-      --success-green: #2E7D32;
-      --danger-red: #D32F2F;
-      
-      --card-radius: 24px;
-      --inner-radius: 16px;
-      --shadow-soft: 0 10px 25px rgba(180, 160, 140, 0.08);
-      --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --bg-gradient-light: linear-gradient(135deg, #fef3c7 0%, #fef3c7 30%, #f5f5f4 100%);
+      --glass-bg-light: rgba(255, 255, 255, 0.75);
+      --glass-border-light: rgba(180, 83, 9, 0.15);
+      --text-main-light: #292524;
+      --text-muted-light: #78716c;
+
+      --accent-gold: #d97706;
+      --accent-gold-hover: #b45309;
+      --accent-green: #10b981;
+      --accent-brown: #78350f;
+      --card-radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    body.dark-mode {
-      --bg-main: #1A1715;
-      --card-bg: #26221E;
-      --card-stroke: #3B342E;
-      --accent-gold: #D4A84B;
-      --accent-gold-light: #332B20;
-      --accent-gold-border: #594830;
-      
-      --text-dark: #F5EFE8;
-      --text-muted: #A3978C;
-      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.3);
+    [data-theme="dark"] {
+      --bg: var(--bg-gradient-dark);
+      --glass: var(--glass-bg-dark);
+      --border: var(--glass-border-dark);
+      --text: var(--text-main-dark);
+      --text-muted: var(--text-muted-dark);
+      --card-bg: rgba(28, 25, 23, 0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
-    
+    [data-theme="light"] {
+      --bg: var(--bg-gradient-light);
+      --glass: var(--glass-bg-light);
+      --border: var(--glass-border-light);
+      --text: var(--text-main-light);
+      --text-muted: var(--text-muted-light);
+      --card-bg: rgba(255, 255, 255, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
     body {
-      background-color: var(--bg-main);
-      color: var(--text-dark);
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      padding: 16px 12px 90px 12px;
-      transition: var(--transition);
-      text-align: right;
-    }
-
-    .app-container {
-      max-width: 480px;
-      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      transition: var(--transition);
+      background-attachment: fixed;
     }
 
-    .header-card, .quote-card-bar { display: flex; }
-
-    .header-card {
-      background: var(--card-bg);
+    /* Glassmorphic Container */
+    .glass-panel {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
       border-radius: var(--card-radius);
-      border: 1px solid var(--card-stroke);
-      padding: 20px;
-      box-shadow: var(--shadow-soft);
-      flex-direction: column; gap: 18px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     }
 
-    .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .welcome-text h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
-    .welcome-text p { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
-
-    .badge-offline-pill {
-      background: var(--accent-gold-light);
-      border: 1px solid var(--accent-gold-border);
-      color: var(--text-dark); padding: 8px 16px; border-radius: 50px;
-      font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
+    /* Navbar Header */
+    header {
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.5rem 2rem 0 2rem;
     }
 
-    .header-widgets-row { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
-    .widgets-group { display: flex; align-items: center; gap: 10px; }
-    .time-widget { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
-    .time-widget span.ampm { font-size: 0.75rem; color: var(--text-muted); }
-
-    .circle-btn {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; cursor: pointer; color: var(--text-dark); transition: var(--transition);
-    }
-    .circle-btn:active { transform: scale(0.9); }
-
-    .quote-card-bar {
-      background: var(--card-bg); border-radius: var(--inner-radius);
-      border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
-      box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
-      justify-content: center; align-items: center;
-    }
-    .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
-    .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
-
-    .app-page { display: none; flex-direction: column; gap: 14px; }
-    .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-gold);
     }
 
-    .section-card {
-      background: var(--card-bg); border-radius: var(--card-radius);
-      border: 1px solid var(--card-stroke); padding: 18px;
-      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 14px;
+    .nav-tools {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
     }
 
-    .section-header-row { display: flex; justify-content: space-between; align-items: center; }
-    .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
-    .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-gold-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-gold-border); }
-
-    .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--card-stroke), transparent); margin: 2px 0; position: relative; }
-    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent-gold); }
-
-    .progress-section { display: flex; flex-direction: column; gap: 6px; }
-    .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
-    .progress-track { background: var(--bg-main); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
-    .progress-fill { height: 100%; background: var(--accent-gold); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
-
-    .task-item {
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
-      border-radius: var(--inner-radius); padding: 12px 14px;
-      display: flex; align-items: center; justify-content: space-between;
-      direction: rtl; transition: var(--transition); margin-bottom: 8px; gap: 8px;
-    }
-    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
-    .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
-
-    .days-badge {
-      background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border);
-      color: var(--accent-gold); font-size: 0.75rem; font-weight: 800;
-      padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
-    }
-
-    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي الفاخرة ==================== */
-    .english-dashboard-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;
-    }
-    .eng-dash-card {
-      background: var(--bg-main); border: 1px solid var(--card-stroke);
-      border-radius: 14px; padding: 10px; text-align: center;
-    }
-    .eng-dash-card .val { font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); }
-    .eng-dash-card .lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
-
-    .level-selector-tabs {
-      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none;
-    }
-    .level-tab {
-      padding: 8px 14px; border-radius: 12px; background: var(--bg-main); border: 1px solid var(--card-stroke);
-      font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; color: var(--text-muted);
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: var(--transition);
     }
-    .level-tab.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
-    .level-tab.locked { opacity: 0.6; cursor: not-allowed; }
 
-    .lesson-card-item {
-      background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 16px;
-      padding: 14px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;
-      position: relative; transition: var(--transition);
+    .btn-icon:hover {
+      background: var(--accent-gold);
+      color: #fff;
+      border-color: var(--accent-gold);
     }
-    .lesson-card-item.locked { opacity: 0.65; filter: grayscale(0.5); }
-    .lesson-top { display: flex; justify-content: space-between; align-items: center; }
-    .lesson-title { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
-    
-    .vocab-card {
-      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 18px;
-      overflow: hidden; box-shadow: var(--shadow-soft); display: flex; flex-direction: column;
+
+    /* Layout Structure */
+    .app-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 2rem;
+      flex-grow: 1;
     }
-    .vocab-img { width: 100%; height: 180px; object-fit: cover; background: #e0e0e0; }
-    .vocab-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-    .vocab-header { display: flex; justify-content: space-between; align-items: center; }
-    .vocab-word { font-size: 1.4rem; font-weight: 900; color: var(--accent-gold); letter-spacing: 0.5px; }
-    .vocab-type { font-size: 0.75rem; background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); padding: 2px 8px; border-radius: 6px; color: var(--text-dark); font-weight: 700; }
 
-    .speed-controls { display: flex; gap: 4px; justify-content: center; align-items: center; margin-top: 4px; }
-    .btn-speed { padding: 3px 8px; border-radius: 6px; border: 1px solid var(--card-stroke); background: var(--bg-main); font-size: 0.7rem; font-weight: bold; cursor: pointer; color: var(--text-dark); }
-    .btn-speed.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
-
-    /* فقاعات المحادثة Chat Bubbles */
-    .chat-container { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-    .chat-bubble { display: flex; gap: 10px; max-width: 90%; align-items: flex-start; }
-    .chat-bubble.left { align-self: flex-start; flex-direction: row; }
-    .chat-bubble.right { align-self: flex-end; flex-direction: row-reverse; }
-    
-    .chat-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent-gold); background: #fff; flex-shrink: 0; }
-    .chat-content {
-      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 16px; padding: 12px;
-      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;
+    /* Sidebar Navigation */
+    .sidebar {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
-    .chat-bubble.right .chat-content { background: var(--accent-gold-light); border-color: var(--accent-gold-border); }
-    .chat-speaker-name { font-size: 0.75rem; font-weight: 800; color: var(--accent-gold); }
-    .chat-text-en { font-weight: 700; color: var(--text-dark); dir: ltr; text-align: left; }
-    .chat-text-ar { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-    .btn-mic-talk {
-      width: 60px; height: 60px; border-radius: 50%; background: var(--accent-gold); color: #fff;
-      border: none; font-size: 1.5rem; display: flex; justify-content: center; align-items: center;
-      margin: 10px auto; cursor: pointer; box-shadow: 0 4px 15px rgba(198, 154, 61, 0.4); transition: var(--transition);
+    .menu-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
     }
-    .btn-mic-talk.recording { background: var(--danger-red); animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
 
-    .counter-control { display: flex; align-items: center; gap: 8px; }
-    .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-    .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
-    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
-    .btn-action { background: var(--accent-gold); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-    .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
-
-    .bottom-nav {
-      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 24px); max-width: 450px; background: var(--card-bg);
-      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
-      display: flex; justify-content: space-around; align-items: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer;
-      padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: var(--transition);
     }
-    .nav-item .nav-icon { font-size: 1.25rem; }
-    .nav-item.active { background: var(--accent-gold-light); color: var(--accent-gold); border: 1px solid var(--accent-gold-border); }
 
-    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
-    .modal-content { max-width: 420px; width: 92%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); max-height: 85vh; overflow-y: auto; }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(217, 119, 6, 0.15);
+      color: var(--accent-gold);
+      border-left: 3px solid var(--accent-gold);
+    }
+
+    /* Main View Area */
+    .main-content {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    /* Categories Grid */
+    .grid-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .category-card {
+      padding: 1.5rem;
+      border-radius: var(--card-radius);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .category-icon {
+      font-size: 2rem;
+    }
+
+    /* Level Accordions & Lesson Cards */
+    .level-container {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .level-header {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .lesson-card {
+      padding: 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .lesson-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .badge-completed {
+      color: var(--accent-green);
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Single Lesson View / Checklist */
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--card-bg);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      accent-color: var(--accent-gold);
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Progress & Statistics Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      padding: 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background: rgba(120, 113, 108, 0.3);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      header {
+        margin: 1rem 1rem 0 1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Top Glass Header -->
+  <header class="glass-panel">
+    <div class="brand">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>Academy</span>
+    </div>
+    <div class="nav-tools">
+      <button class="btn-icon" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main App Layout -->
   <div class="app-container">
-
-    <!-- 🎴 كارت الترحيب الرئيسي -->
-    <div class="header-card" id="top-welcome-card">
-      <div class="header-top-row">
-        <div class="welcome-text">
-          <h1>👋 مرحباً بك،<br>يا مهندس!</h1>
-          <p id="live-date">الجمعة، 31 يوليو 2026</p>
-        </div>
-        <div class="badge-offline-pill">
-          ⚡ نظام محلي (أوفلاين)
-        </div>
+    
+    <!-- Navigation Sidebar -->
+    <aside class="sidebar glass-panel">
+      <div>
+        <div class="menu-title">Main Dashboard</div>
+        <ul class="nav-list">
+          <li class="nav-item active" onclick="switchTab('categories')">
+            <i class="fa-solid fa-layer-group"></i> Categories
+          </li>
+          <li class="nav-item" onclick="switchTab('reviews')">
+            <i class="fa-solid fa-clock-rotate-left"></i> Today's Reviews
+          </li>
+          <li class="nav-item" onclick="switchTab('progress')">
+            <i class="fa-solid fa-chart-line"></i> Progress & Stats
+          </li>
+          <li class="nav-item" onclick="switchTab('vocab')">
+            <i class="fa-solid fa-book-bookmark"></i> Vocabulary Tracker
+          </li>
+        </ul>
       </div>
+    </aside>
 
-      <div class="header-widgets-row">
-        <button class="circle-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="الصوت">🔊</button>
+    <!-- Content Workspace -->
+    <main class="main-content glass-panel" id="workspace">
+      <!-- Dynamic View Rendered via JavaScript -->
+    </main>
 
-        <div class="widgets-group">
-          <div class="time-widget">
-            <span id="live-clock-time">03:51:02</span>
-            <span class="ampm" id="live-clock-ampm">م</span>
-          </div>
-
-          <button class="circle-btn" id="theme-toggle" onclick="toggleTheme()" title="المظهر">🌙</button>
-          <button class="circle-btn" onclick="openDistractModal()" title="التشتت">🧠</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 📜 كارت الحكمة -->
-    <div class="quote-card-bar" id="top-quote-card">
-      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
-    </div>
-
-    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
-    <div class="app-page active" id="page-home">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📋</span>
-            <span>المهام اليومية</span>
-          </div>
-        </div>
-
-        <div class="divider-line"></div>
-
-        <div class="progress-section">
-          <div class="progress-info">
-            <span>نسبة الإنجاز اليومي:</span>
-            <span id="tasks-progress-text">0%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="tasks-progress"></div>
-          </div>
-        </div>
-
-        <div id="tasks-container" style="margin-top: 10px;"></div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🕌</span>
-            <span>مواقيت الصلوات الخمس</span>
-          </div>
-        </div>
-
-        <div class="divider-line"></div>
-
-        <div class="progress-section">
-          <div class="progress-info">
-            <span>نسبة الالتزام بالصلوات:</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="prayers-progress"></div>
-          </div>
-        </div>
-
-        <div id="prayers-container" style="margin-top: 10px;"></div>
-      </div>
-    </div>
-
-    <!-- ==================== 🇬🇧 2. منصة تعلم الإنجليزية الاحترافية ==================== -->
-    <div class="app-page" id="page-english">
-      
-      <!-- لوحة الإحصائيات والإنجازات -->
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🎓</span>
-            <span>أكاديمية الإنجليزية (A0 → C1)</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-
-        <div class="english-dashboard-grid">
-          <div class="eng-dash-card">
-            <div class="val" id="eng-dash-streak">0 🔥</div>
-            <div class="lbl">أيام متتالية</div>
-          </div>
-          <div class="eng-dash-card">
-            <div class="val" id="eng-dash-words">0 📚</div>
-            <div class="lbl">كلمة محفوظة</div>
-          </div>
-          <div class="eng-dash-card">
-            <div class="val" id="eng-dash-level">A0 🎯</div>
-            <div class="lbl">المستوى الحالي</div>
-          </div>
-        </div>
-
-        <div class="progress-section">
-          <div class="progress-info">
-            <span>تقدم المستويات الكلي:</span>
-            <span id="eng-overall-progress-text">0%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="eng-overall-progress"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- تبويب المستويات -->
-      <div class="level-selector-tabs" id="english-level-tabs">
-        <div class="level-tab active" onclick="switchEngLevel('A0_A1', this)">A0 → A1 (التأسيس)</div>
-        <div class="level-tab" onclick="switchEngLevel('A1_A2', this)">A1 → A2 (المبتدئ)</div>
-        <div class="level-tab" onclick="switchEngLevel('A2_B1', this)">A2 → B1 (المتوسط)</div>
-        <div class="level-tab" onclick="switchEngLevel('B1_B2', this)">B1 → B2 (فوق المتوسط)</div>
-        <div class="level-tab" onclick="switchEngLevel('B2_C1', this)">B2 → C1 (الهندسة والاحتراف)</div>
-      </div>
-
-      <!-- قائمة دروس المستوى المختار -->
-      <div class="section-card" id="english-lessons-container">
-        <!-- يتم توليد الدروس تفاعلياً بواسطة JavaScript -->
-      </div>
-    </div>
-
-    <!-- ==================== 📐 3. الكورسات ==================== -->
-    <div class="app-page" id="page-courses">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📐</span>
-            <span>كورسات الهندسة والتشطيبات</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
-            <div class="counter-control">
-              <button class="btn-counter" onclick="updateCourseLessons('decor', -1)">-</button>
-              <input type="number" id="decor-lesson-count" class="number-input" value="0" min="0">
-              <button class="btn-counter" onclick="updateCourseLessons('decor', 1)">+</button>
-            </div>
-          </div>
-          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveStateLocally()">
-        </div>
-
-        <div style="background:var(--bg-main); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
-            <div class="counter-control">
-              <button class="btn-counter" onclick="updateCourseLessons('finishing', -1)">-</button>
-              <input type="number" id="finishing-lesson-count" class="number-input" value="0" min="0">
-              <button class="btn-counter" onclick="updateCourseLessons('finishing', 1)">+</button>
-            </div>
-          </div>
-          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveStateLocally()">
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== 🎯 4. الأهداف ==================== -->
-    <div class="app-page" id="page-goals">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🎥</span>
-            <span>1. صناعة المحتوى (10K متابع)</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.85rem;">المتابعين الحاليين:</span>
-          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 80px;" onchange="updateFollowers()">
-        </div>
-        <div class="progress-track" style="margin-top: 10px;">
-          <div class="progress-fill" id="followers-progress"></div>
-        </div>
-        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
-      </div>
-
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🍎</span>
-            <span>2. الادخار للآيفون</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
-          <span>الحالي: <strong id="savings-current">0</strong> ج.م</span>
-          <span>المستهدف: <strong>50,000</strong> ج.م</span>
-        </div>
-        <div class="progress-track" style="margin-top: 6px;">
-          <div class="progress-fill" id="savings-progress"></div>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
-          <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🏢</span>
-            <span>3. تأسيس مكتب التشطيبات</span>
-          </div>
-          <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow()">➕ إضافة خطوة</button>
-        </div>
-        <div class="divider-line"></div>
-        <div id="office-goals-container"></div>
-      </div>
-    </div>
-
-    <!-- ==================== 📖 5. سورة البقرة ==================== -->
-    <div class="app-page" id="page-quran">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📖</span>
-            <span>سورة البقرة (التلاوة المتزامنة)</span>
-          </div>
-        </div>
-
-        <div class="divider-line"></div>
-
-        <div style="background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); border-radius: 14px; padding: 12px; text-align: center;">
-          <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري (مرتل)</p>
-          <audio id="quran-audio-player" controls style="width: 100%; height: 40px; border-radius: 8px;">
-            <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
-          </audio>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-          <span style="font-size: 0.85rem; font-weight: bold;">الصفحة الحالية:</span>
-          <div class="counter-control">
-            <button class="btn-counter" onclick="updateQuran(-1)">السابقة</button>
-            <input type="number" id="quran-page-input" class="number-input" value="2" min="2" max="49" onchange="setQuranPage(this.value)">
-            <button class="btn-counter" onclick="updateQuran(1)">التالية</button>
-          </div>
-        </div>
-
-        <div class="quran-img-container">
-          <img id="quran-page-image" class="quran-page-img" src="" alt="صفحة المصحف" onerror="handleQuranImgError()" onload="handleQuranImgSuccess()">
-          <div id="quran-fallback" class="quran-fallback-card">
-            <h2 style="font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
-            <p style="font-weight: bold; color: var(--text-dark);">سورة البقرة</p>
-          </div>
-        </div>
-
-        <div class="progress-track" style="margin-top: 10px;">
-          <div class="progress-fill" id="quran-progress"></div>
-        </div>
-        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-gold); margin-top: 6px;" id="quran-status">الصفحة 2 من 49</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 📱 شريط التنقل السفلي -->
-  <div class="bottom-nav">
-    <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home', this)">
-      <span class="nav-icon">🏠</span>
-      <span>الرئيسية</span>
-    </div>
-    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english', this)">
-      <span class="nav-icon">🇬🇧</span>
-      <span>الإنجليزي</span>
-    </div>
-    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses', this)">
-      <span class="nav-icon">📐</span>
-      <span>الكورسات</span>
-    </div>
-    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals', this)">
-      <span class="nav-icon">🎯</span>
-      <span>الأهداف</span>
-    </div>
-    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran', this)">
-      <span class="nav-icon">📖</span>
-      <span>البقرة</span>
-    </div>
-  </div>
-
-  <!-- Modal التشتت -->
-  <div class="modal" id="distract-modal">
-    <div class="modal-content" style="text-align: center;">
-      <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
-      <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
-      <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
-    </div>
-  </div>
-
-  <!-- Modal عرض الدرس والتفاعل الكامل -->
-  <div class="modal" id="english-lesson-modal">
-    <div class="modal-content" id="english-lesson-modal-body">
-      <!-- يتم حقن محتوى الدرس تفاعلياً -->
-    </div>
   </div>
 
   <script>
-    let soundEnabled = true;
-    let currentTTSPlaybackRate = 1.0;
-
-    /* ==================== 📚 قاعدة بيانات منهاج الإنجليزي (A0 → C1) ==================== */
-    const englishCurriculum = {
-      A0_A1: {
-        title: 'المرحلة الأولى (A0 → A1) - التأسيس',
-        lessons: [
+    /* ===================================================
+       1. DATA ARCHITECTURE & EXTENSIBLE LMS STRUCTURE
+    =================================================== */
+    const defaultData = {
+      userStats: {
+        streak: 5,
+        totalHours: 12.5,
+      },
+      categories: [
+        { id: 'english', name: 'English', icon: '🇺🇸', description: 'Complete fluency roadmap' },
+        { id: 'interior', name: 'Interior Design', icon: '🏠', description: 'Spatial layout & concepts' },
+        { id: 'sketchup', name: 'SketchUp', icon: '📐', description: '3D Architectural modeling' },
+        { id: 'vray', name: 'V-Ray', icon: '🎨', description: 'Photorealistic Rendering' },
+        { id: 'd5', name: 'D5 Render', icon: '💡', description: 'Real-time Architectural Viz' },
+        { id: 'photoshop', name: 'Photoshop', icon: '🖼', description: 'Post-production & Editing' },
+        { id: 'social', name: 'Social Media', icon: '📱', description: 'Content creation & Growth' },
+        { id: 'freelance', name: 'Freelancing', icon: '💼', description: 'Client management & Sales' }
+      ],
+      roadmaps: {
+        english: [
           {
-            id: 'l_a0_1', title: '1. الحروف الإنجليزية والنطق الصحيح', icon: '🔤',
-            desc_ar: 'التعرف على الأصوات والمخارج الصحيحة لكل حرف الإنجليزية.',
-            desc_en: 'Learn English letters and their exact pronunciation.',
-            words: [
-              { word: 'Apple', type: 'Noun', ar: 'تفاحة', img: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80', ex: 'She is eating a fresh apple.' },
-              { word: 'Car', type: 'Noun', ar: 'سيارة', img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80', ex: 'The red car is fast.' }
-            ],
-            conversation: {
-              location: 'المدرسة (School)',
-              speakers: { A: 'Teacher', B: 'Student' },
-              lines: [
-                { speaker: 'A', en: 'Good morning! Welcome to class.', ar: 'صباح الخير! مرحباً بكم في الفصل.' },
-                { speaker: 'B', en: 'Good morning, Teacher!', ar: 'صباح الخير يا معلمي!' }
-              ]
-            },
-            speaking_sentence: 'Good morning! Welcome to class.',
-            quiz: {
-              question: 'ما هو المعنى الصحيح لكلمة "Car"؟',
-              options: ['تفاحة', 'سيارة', 'طائرة', 'مدرسة'],
-              correct: 1
-            }
+            level: 'A0 - Absolute Beginner',
+            lessons: [
+              { id: 'a0_1', title: 'Alphabet & Phonetics', time: '20 mins', vocabCount: 26, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] },
+              { id: 'a0_2', title: 'Greetings & Introductions', time: '25 mins', vocabCount: 15, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] },
+              { id: 'a0_3', title: 'Days, Months & Numbers', time: '30 mins', vocabCount: 40, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] }
+            ]
           },
           {
-            id: 'l_a0_2', title: '2. أهم الضمائر والمفردات التأسيسية', icon: '👥',
-            desc_ar: 'شرح الضمائر (I, You, He, She, They) وتكوين الجملة.',
-            desc_en: 'Mastering personal pronouns and basic sentence structure.',
-            words: [
-              { word: 'Teacher', type: 'Noun', ar: 'مدرس / معلم', img: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80', ex: 'The teacher is explaining the lesson.' }
-            ],
-            conversation: {
-              location: 'الكافيه (Coffee Shop)',
-              speakers: { A: 'Alex', B: 'Sara' },
-              lines: [
-                { speaker: 'A', en: 'Hello, I am Alex. What is your name?', ar: 'أهلاً، أنا أليكس. ما اسمك؟' },
-                { speaker: 'B', en: 'Hi Alex, I am Sara.', ar: 'مرحباً أليكس، أنا سارة.' }
-              ]
-            },
-            speaking_sentence: 'Hello, I am Alex. What is your name?',
-            quiz: {
-              question: 'اختر الضمير المناسب لـ "هو":',
-              options: ['She', 'He', 'They', 'It'],
-              correct: 1
-            }
+            level: 'A1 - Beginner',
+            lessons: [
+              { id: 'a1_1', title: 'Personal Pronouns & To Be', time: '30 mins', vocabCount: 12, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] },
+              { id: 'a1_2', title: 'Present Simple & Daily Routine', time: '40 mins', vocabCount: 20, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] }
+            ]
+          },
+          {
+            level: 'B2 - Upper Intermediate',
+            lessons: [
+              { id: 'b2_1', title: 'Business English & Emails', time: '45 mins', vocabCount: 25, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] }
+            ]
+          },
+          {
+            level: 'C1 - Advanced & Professional',
+            lessons: [
+              { id: 'c1_1', title: 'Interior Design English & Client Communication', time: '60 mins', vocabCount: 35, completed: false, checklist: ['Watch the lesson', 'Read the summary', 'Learn the vocabulary', 'Complete the exercises', 'Review after 24 hours'] }
+            ]
           }
         ]
       },
-      A1_A2: {
-        title: 'المرحلة الثانية (A1 → A2) - الأزمنة والتوسع',
-        lessons: [
-          {
-            id: 'l_a1_1', title: '1. زمن المضارع البسيط وتأثيث الأفكار', icon: '⏱️',
-            desc_ar: 'الحديث عن الروتين واليوميات والوصف.',
-            desc_en: 'Talking about daily routines and facts.',
-            words: [
-              { word: 'Boat', type: 'Noun', ar: 'قارب / مركب', img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80', ex: 'The boat sails on the river.' }
-            ],
-            conversation: {
-              location: 'المطعم (Restaurant)',
-              speakers: { A: 'Waiter', B: 'Customer' },
-              lines: [
-                { speaker: 'A', en: 'Are you ready to order sir?', ar: 'هل أنت جاهز للطلب يا سيدي؟' },
-                { speaker: 'B', en: 'Yes, I would like coffee please.', ar: 'نعم، أرغب في قهوة من فضلك.' }
-              ]
-            },
-            speaking_sentence: 'Are you ready to order sir?',
-            quiz: {
-              question: 'نستخدم المضارع البسيط لـ:',
-              options: ['الروتين والحقائق', 'أحداث وانتهت في الماضي', 'التخطيط البعيد'],
-              correct: 0
-            }
-          }
-        ]
-      },
-      A2_B1: {
-        title: 'المرحلة الثالثة (A2 → B1) - التواصل والمحادثات',
-        lessons: [
-          {
-            id: 'l_a2_1', title: '1. كتابة الإيميلات وتنسيق الحوارات', icon: '✉️',
-            desc_ar: 'طريقة كتابة إيميل رسمي وغير رسمي بكفاءة.',
-            desc_en: 'Writing formal and informal emails effectively.',
-            words: [
-              { word: 'Hospital', type: 'Noun', ar: 'مستشفى', img: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&w=600&q=80', ex: 'The hospital is clean and big.' }
-            ],
-            conversation: {
-              location: 'الفندق (Hotel)',
-              speakers: { A: 'Receptionist', B: 'Guest' },
-              lines: [
-                { speaker: 'A', en: 'Welcome! How can I help you today?', ar: 'أهلاً بك! كيف يمكنني مساعدتك اليوم؟' },
-                { speaker: 'B', en: 'I have a room reservation under Helmy.', ar: 'حجزت غرفة باسم حلمي.' }
-              ]
-            },
-            speaking_sentence: 'I have a room reservation under Helmy.',
-            quiz: {
-              question: 'الجملة الافتتاحية الإيميل الرسمي تكون:',
-              options: ['Dear Mr. Smith,', 'Hey bro!', 'What is up?'],
-              correct: 0
-            }
-          }
-        ]
-      },
-      B1_B2: {
-        title: 'المرحلة الرابعة (B1 → B2) - الطلاقة القصصية',
-        lessons: [
-          {
-            id: 'l_b1_1', title: '1. التعبيرات الشائعة (Idioms & Fluency)', icon: '🗣️',
-            desc_ar: 'استخدام المصطلحات القوية للتحدث مثل الناطقين الأصليين.',
-            desc_en: 'Using common idioms to sound like a native speaker.',
-            words: [
-              { word: 'Mountain', type: 'Noun', ar: 'جبل', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80', ex: 'They climbed the high mountain.' }
-            ],
-            conversation: {
-              location: 'المطار (Airport)',
-              speakers: { A: 'Officer', B: 'Traveler' },
-              lines: [
-                { speaker: 'A', en: 'May I see your passport and ticket?', ar: 'هل يمكنني رؤية جواز سفرك والتذكرة؟' },
-                { speaker: 'B', en: 'Sure, here you go.', ar: 'بالتأكيد، تفضل.' }
-              ]
-            },
-            speaking_sentence: 'May I see your passport and ticket?',
-            quiz: {
-              question: 'معنى "Piece of cake":',
-              options: ['قطعة كيك', 'شيء سهل جداً', 'طعام لديد'],
-              correct: 1
-            }
-          }
-        ]
-      },
-      B2_C1: {
-        title: 'المرحلة الخامسة (B2 → C1) - الهندسة والتصميم الداخلي',
-        lessons: [
-          {
-            id: 'l_b2_1', title: '1. مصطلحات الديكور والتعامل مع العملاء الأجانب', icon: '🏛️',
-            desc_ar: 'مصطلحات التصميم الداخلي، تقديم Presenting للعميل، والمفاوضات.',
-            desc_en: 'Interior design vocabulary, presentation skills, and negotiations.',
-            words: [
-              { word: 'Glassmorphism', type: 'Noun', ar: 'نمط التزجيج (تصميم)', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', ex: 'We used Glassmorphism in our UI design project.' }
-            ],
-            conversation: {
-              location: 'مكتب الهندسة (Office)',
-              speakers: { A: 'Architect', B: 'Client' },
-              lines: [
-                { speaker: 'A', en: 'We recommend using warm beige tones with smooth gold accents.', ar: 'نوصي باستخدام درجات البيج الدافئة مع لمسات ذهبية ناعمة.' },
-                { speaker: 'B', en: 'That looks elegant and modern!', ar: 'هذا يبدو أنيقاً ومودرن جداً!' }
-              ]
-            },
-            speaking_sentence: 'We recommend using warm beige tones with smooth gold accents.',
-            quiz: {
-              question: 'الكلمة المناسبة لـ "مخطط معماري":',
-              options: ['Blueprint / Layout', 'Kitchen', 'Wallpaper'],
-              correct: 0
-            }
-          }
-        ]
-      }
+      reviews: [
+        { lessonTitle: 'Alphabet & Phonetics', level: 'A0', dueIn: '1 Day (Spaced Repetition)' },
+        { lessonTitle: 'Greetings & Introductions', level: 'A0', dueIn: '3 Days' }
+      ],
+      vocab: { learned: 42, total: 173 }
     };
 
-    let localState = {
-      current_page: 'page-home',
-      current_eng_level: 'A0_A1',
-      eng_completed_lessons: [],
-      eng_saved_words_count: 5,
-      eng_streak_days: 3,
-      daily_tasks: {}, 
-      task_days_count: {},
-      prayers_tasks: {}, 
-      office_goals: ["تجهيز Portfolio الأعمال", "تحديد تسعير الخدمات"], 
-      quran_page: 2,
-      courses_data: { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' },
-      savings: 15000, followers: 1200
-    };
-
-    function saveStateLocally() { localStorage.setItem('dashboard_local_state', JSON.stringify(localState)); }
-
-    function loadStateLocally() {
-      const stored = localStorage.getItem('dashboard_local_state');
-      if (stored) { try { localState = JSON.parse(stored); } catch(e){} }
-      if (!localState.eng_completed_lessons) localState.eng_completed_lessons = [];
-      if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
-      if (!localState.current_page) localState.current_page = 'page-home';
-      
-      applyStateToUI();
+    // Load or initialize state in LocalStorage
+    let state = JSON.parse(localStorage.getItem('academy_lms_db')) || defaultData;
+    function saveData() {
+      localStorage.setItem('academy_lms_db', JSON.stringify(state));
     }
 
-    function applyStateToUI() {
-      renderTasks();
-      renderPrayers();
-      renderOfficeGoals();
-      renderEnglishDashboard();
+    /* ===================================================
+       2. UI NAVIGATION & NAVIGATION RENDERING
+    =================================================== */
+    function switchTab(tabName) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
       
-      document.getElementById('quran-page-input').value = localState.quran_page || 2;
-      updateQuranUI();
-
-      if (localState.courses_data) {
-        document.getElementById('decor-lesson-count').value = localState.courses_data.decorLessons || 0;
-        document.getElementById('decor-lesson-title').value = localState.courses_data.decorTitle || '';
-        document.getElementById('finishing-lesson-count').value = localState.courses_data.finishingLessons || 0;
-        document.getElementById('finishing-lesson-title').value = localState.courses_data.finishingTitle || '';
-      }
-
-      document.getElementById('savings-current').innerText = (localState.savings || 0).toLocaleString();
-      updateSavingsUI();
-
-      document.getElementById('followers-count').value = localState.followers || 1200;
-      updateFollowersUI();
-
-      switchPage(localState.current_page);
+      const workspace = document.getElementById('workspace');
+      
+      if (tabName === 'categories') renderCategories();
+      else if (tabName === 'reviews') renderReviews();
+      else if (tabName === 'progress') renderProgress();
+      else if (tabName === 'vocab') renderVocab();
     }
 
-    /* ==================== 🔊 محرك النطق الأمريكي (Text To Speech) ==================== */
-    function speakTextUS(text, rate = null) {
-      if (!('speechSynthesis' in window)) {
-        alert('المتصفح لا يدعم محرك الصوت الصوتي.');
+    // Render Main Learning Categories
+    function renderCategories() {
+      const workspace = document.getElementById('workspace');
+      workspace.innerHTML = `
+        <h2>Learning Categories</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Select a track to view its personalized learning roadmap.</p>
+        <div class="grid-categories">
+          ${state.categories.map(cat => `
+            <div class="category-card" onclick="openRoadmap('${cat.id}', '${cat.name}')">
+              <div class="category-icon">${cat.icon}</div>
+              <h3>${cat.name}</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">${cat.description}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Render Category Roadmap (e.g., English A0 to C1)
+    function openRoadmap(catId, catName) {
+      const workspace = document.getElementById('workspace');
+      const roadmap = state.roadmaps[catId] || [];
+
+      if (roadmap.length === 0) {
+        workspace.innerHTML = `
+          <button class="btn-icon" onclick="renderCategories()" style="margin-bottom:1rem;"><i class="fa-solid fa-arrow-left"></i></button>
+          <h2>${catName} Roadmap</h2>
+          <p style="color: var(--text-muted); margin-top: 1rem;">This track is currently being prepared. Check back soon!</p>
+        `;
         return;
       }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = rate || currentTTSPlaybackRate;
-      window.speechSynthesis.speak(utterance);
-    }
 
-    function setTTSRate(rate, btnEl) {
-      currentTTSPlaybackRate = rate;
-      document.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active'));
-      if(btnEl) btnEl.classList.add('active');
-    }
-
-    /* ==================== 🇬🇧 منطق أكاديمية الإنجليزية ==================== */
-    function renderEnglishDashboard() {
-      document.getElementById('eng-dash-streak').innerText = `${localState.eng_streak_days || 1} 🔥`;
-      document.getElementById('eng-dash-words').innerText = `${localState.eng_saved_words_count || 0} 📚`;
-      
-      const levelMap = { 'A0_A1': 'A0', 'A1_A2': 'A1', 'A2_B1': 'A2', 'B1_B2': 'B1', 'B2_C1': 'B2' };
-      document.getElementById('eng-dash-level').innerText = `${levelMap[localState.current_eng_level || 'A0_A1']} 🎯`;
-
-      let totalLessons = 0;
-      Object.keys(englishCurriculum).forEach(lvl => totalLessons += englishCurriculum[lvl].lessons.length);
-      const doneCount = localState.eng_completed_lessons.length;
-      const pct = Math.round((doneCount / totalLessons) * 100);
-
-      document.getElementById('eng-overall-progress').style.width = pct + '%';
-      document.getElementById('eng-overall-progress-text').innerText = pct + '%';
-
-      renderEnglishLessons();
-    }
-
-    function switchEngLevel(levelKey, tabEl) {
-      playSoundEffect();
-      localState.current_eng_level = levelKey;
-      saveStateLocally();
-
-      document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
-      if (tabEl) tabEl.classList.add('active');
-      renderEnglishLessons();
-    }
-
-    function renderEnglishLessons() {
-      const container = document.getElementById('english-lessons-container');
-      const levelData = englishCurriculum[localState.current_eng_level || 'A0_A1'];
-
-      let html = `<div class="section-title"><span class="sec-icon">📌</span><span>${levelData.title}</span></div><div class="divider-line"></div>`;
-
-      levelData.lessons.forEach((lesson, idx) => {
-        const isCompleted = localState.eng_completed_lessons.includes(lesson.id);
-        
-        // فحص هل الدرس السابق مكتمل لفتح الدرس الحالي
-        let isUnlocked = false;
-        if (idx === 0) {
-          isUnlocked = true;
-        } else {
-          const prevLessonId = levelData.lessons[idx - 1].id;
-          if (localState.eng_completed_lessons.includes(prevLessonId)) isUnlocked = true;
-        }
-
-        html += `
-          <div class="lesson-card-item ${!isUnlocked ? 'locked' : ''}">
-            <div class="lesson-top">
-              <div class="lesson-title">${lesson.icon} ${lesson.title}</div>
-              <span>${isCompleted ? '✅ مكتمل' : (isUnlocked ? '🔓 متاح' : '🔒 مغلق')}</span>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">${lesson.desc_ar}</p>
-            <p style="font-size: 0.78rem; color: var(--text-dark); font-weight: 700; dir: ltr; text-align: left;">${lesson.desc_en}</p>
-            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-              <button class="btn-action" ${!isUnlocked ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="openLessonModal('${lesson.id}')">
-                ${isCompleted ? 'مراجعة الدرس 📖' : 'ابدأ التعلم الآن 🚀'}
-              </button>
-            </div>
-          </div>`;
-      });
-
-      container.innerHTML = html;
-    }
-
-    /* فتح Modal الدرس التفاعلي */
-    function openLessonModal(lessonId) {
-      playSoundEffect();
-      let foundLesson = null;
-      Object.keys(englishCurriculum).forEach(lvl => {
-        const match = englishCurriculum[lvl].lessons.find(l => l.id === lessonId);
-        if (match) foundLesson = match;
-      });
-
-      if (!foundLesson) return;
-
-      const modalBody = document.getElementById('english-lesson-modal-body');
-      
-      let vocab = foundLesson.words[0];
-      let conv = foundLesson.conversation;
-
-      modalBody.innerHTML = `
-        <div style="display:flex; justify-between: space-between; align-items:center; margin-bottom: 12px;">
-          <h3 style="font-size: 1.1rem; color: var(--text-dark);">${foundLesson.title}</h3>
-          <button class="circle-btn" onclick="closeModal('english-lesson-modal')">✖️</button>
+      workspace.innerHTML = `
+        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+          <button class="btn-icon" onclick="renderCategories()"><i class="fa-solid fa-arrow-left"></i></button>
+          <h2>${catName} Learning Roadmap</h2>
         </div>
-
-        <!-- 1. التحكم بسرعات الصوت -->
-        <div style="background: var(--accent-gold-light); padding: 8px; border-radius: 12px; text-align: center; margin-bottom: 14px; border: 1px solid var(--accent-gold-border);">
-          <span style="font-size: 0.75rem; font-weight: bold;">سرعة تشغيل الصوت الأمريكي:</span>
-          <div class="speed-controls">
-            <button class="btn-speed" onclick="setTTSRate(0.5, this)">0.5x</button>
-            <button class="btn-speed" onclick="setTTSRate(0.75, this)">0.75x</button>
-            <button class="btn-speed active" onclick="setTTSRate(1.0, this)">1x</button>
-            <button class="btn-speed" onclick="setTTSRate(1.25, this)">1.25x</button>
-            <button class="btn-speed" onclick="setTTSRate(1.5, this)">1.5x</button>
-          </div>
-        </div>
-
-        <!-- 2. كارت المفردات المصور تفاعلي -->
-        <div class="vocab-card" style="margin-bottom: 16px;">
-          <img class="vocab-img" src="${vocab.img}" alt="${vocab.word}">
-          <div class="vocab-body">
-            <div class="vocab-header">
-              <span class="vocab-word">${vocab.word}</span>
-              <span class="vocab-type">${vocab.type}</span>
-            </div>
-            <p style="font-weight: 700; font-size: 0.95rem; color: var(--text-dark);">${vocab.ar}</p>
-            <p style="font-size: 0.8rem; color: var(--text-muted); dir: ltr; text-align: left;">" ${vocab.ex} "</p>
-            <button class="btn-action" style="align-self: flex-start; padding: 6px 12px; margin-top: 4px;" onclick="speakTextUS('${vocab.word}')">🔊 استمع للكلمة</button>
-          </div>
-        </div>
-
-        <!-- 3. قسم المحادثة التفاعلية -->
-        <div style="margin-bottom: 16px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h4 style="font-size: 0.95rem;">🗣️ محادثة: ${conv.location}</h4>
-            <select id="lang-toggle-select" style="padding:4px 8px; border-radius:8px; font-size:0.75rem; font-weight:bold;" onchange="toggleChatLangs(this.value)">
-              <option value="both">إظهار اللغتين</option>
-              <option value="en">إنجليزي فقط</option>
-              <option value="ar">عربي فقط</option>
-            </select>
-          </div>
-          
-          <div class="chat-container">
-            ${conv.lines.map((line, i) => `
-              <div class="chat-bubble ${line.speaker === 'A' ? 'right' : 'left'}">
-                <div class="chat-avatar" style="display:flex; justify-content:center; align-items:center; font-weight:bold; color:var(--accent-gold);">${line.speaker}</div>
-                <div class="chat-content">
-                  <span class="chat-speaker-name">${conv.speakers[line.speaker]}</span>
-                  <span class="chat-text-en chat-en">${line.en}</span>
-                  <span class="chat-text-ar chat-ar">${line.ar}</span>
-                  <button style="background:none; border:none; color:var(--accent-gold); font-size:0.75rem; cursor:pointer; text-align:left; font-weight:bold;" onclick="speakTextUS('${line.en.replace(/'/g, "\\'")}')">🔊 استمع</button>
-                </div>
+        <div class="level-container">
+          ${roadmap.map(lvl => `
+            <div>
+              <div class="level-header">
+                <span>${lvl.level}</span>
               </div>
-            `).join('')}
-          </div>
+              <div class="lessons-grid">
+                ${lvl.lessons.map(lesson => `
+                  <div class="lesson-card" onclick="openLesson('${catId}', '${lesson.id}')">
+                    <div>
+                      <h4 style="margin-bottom: 0.5rem;">${lesson.title}</h4>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> ${lesson.time}</p>
+                    </div>
+                    <div>
+                      ${lesson.completed 
+                        ? `<span class="badge-completed"><i class="fa-solid fa-circle-check"></i> Completed</span>` 
+                        : `<span style="font-size:0.8rem; color: var(--text-muted);">In Progress</span>`
+                      }
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
         </div>
+      `;
+    }
 
-        <!-- 4. النطق والتحدث المباشر AI -->
-        <div style="background: var(--bg-main); border:1px solid var(--card-stroke); padding: 14px; border-radius: 16px; text-align: center; margin-bottom: 16px;">
-          <h4 style="font-size: 0.9rem; margin-bottom: 6px;">🎙️ اختبر نطقك للجملة التالية:</h4>
-          <p style="font-weight: 800; font-size: 0.9rem; color: var(--accent-gold); dir: ltr;" id="target-speech-text">${foundLesson.speaking_sentence}</p>
-          <button class="btn-mic-talk" id="mic-btn" onclick="startSpeechRecognition()">🎙️</button>
-          <p style="font-size: 0.75rem; color: var(--text-muted);" id="speech-feedback">اضغط على الميكروفون واقرأ الجملة بصوت واضح</p>
+    // Render Single Lesson View & Interactive Checklist
+    function openLesson(catId, lessonId) {
+      const workspace = document.getElementById('workspace');
+      let foundLesson = null;
+
+      state.roadmaps[catId].forEach(lvl => {
+        lvl.lessons.forEach(l => { if (l.id === lessonId) foundLesson = l; });
+      });
+
+      workspace.innerHTML = `
+        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+          <button class="btn-icon" onclick="openRoadmap('${catId}', 'English')"><i class="fa-solid fa-arrow-left"></i></button>
+          <h2>${foundLesson.title}</h2>
         </div>
-
-        <!-- 5. اختبار الدرس Quiz -->
-        <div style="background: var(--card-bg); border:1px solid var(--accent-gold-border); padding: 14px; border-radius: 16px; margin-bottom: 16px;">
-          <h4 style="font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 8px;">📝 اختبار سريع وتأكيد الفهم</h4>
-          <p style="font-weight: 700; font-size: 0.85rem; margin-bottom: 8px;">${foundLesson.quiz.question}</p>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            ${foundLesson.quiz.options.map((opt, oIdx) => `
-              <button class="btn-action" style="background: var(--bg-main); color: var(--text-dark); border:1px solid var(--card-stroke); text-align:right;" onclick="checkQuizAnswer(${oIdx}, ${foundLesson.quiz.correct}, '${foundLesson.id}')">${opt}</button>
+        
+        <div style="max-width: 600px;">
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;"><i class="fa-regular fa-clock"></i> Estimated Study Time: ${foundLesson.time}</p>
+          
+          <h3 style="margin-bottom: 1rem;">Lesson Objectives & Checklist</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Complete all checklist items below to automatically mark this lesson as completed.</p>
+          
+          <div id="checklist-container">
+            ${foundLesson.checklist.map((item, idx) => `
+              <label class="checklist-item">
+                <input type="checkbox" ${foundLesson.completed ? 'checked' : ''} onchange="toggleChecklist('${catId}', '${lessonId}')">
+                <span>${item}</span>
+              </label>
             `).join('')}
           </div>
         </div>
       `;
-
-      openModal('english-lesson-modal');
     }
 
-    function toggleChatLangs(val) {
-      document.querySelectorAll('.chat-en').forEach(el => el.style.display = (val === 'ar') ? 'none' : 'block');
-      document.querySelectorAll('.chat-ar').forEach(el => el.style.display = (val === 'en') ? 'none' : 'block');
+    // Toggle Checklist Logic
+    function toggleChecklist(catId, lessonId) {
+      const checkboxes = document.querySelectorAll('#checklist-container input[type="checkbox"]');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+      state.roadmaps[catId].forEach(lvl => {
+        lvl.lessons.forEach(l => {
+          if (l.id === lessonId) {
+            l.completed = allChecked;
+          }
+        });
+      });
+      saveData();
     }
 
-    /* التعرف الذكي على الكلام ومطابقته */
-    function startSpeechRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert('متصفحك لا يدعم التعرف على الصوت. يُفضل استخدام Google Chrome.');
-        return;
-      }
-
-      const micBtn = document.getElementById('mic-btn');
-      const feedback = document.getElementById('speech-feedback');
-      const targetText = document.getElementById('target-speech-text').innerText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-
-      recognition.onstart = () => {
-        micBtn.classList.add('recording');
-        feedback.innerText = 'جاري الاستماع إليك... اتكلم الآن 🎧';
-      };
-
-      recognition.onresult = (event) => {
-        micBtn.classList.remove('recording');
-        const spokenText = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+    /* ===================================================
+       3. PROGRESS, REVIEWS & VOCABULARY VIEWS
+    =================================================== */
+    function renderReviews() {
+      const workspace = document.getElementById('workspace');
+      workspace.innerHTML = `
+        <h2>Smart Review System (Spaced Repetition)</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Scheduled reviews (1, 3, 7, 14, 30 Days) to ensure long-term memory retention.</p>
         
-        // حساب نسبة التطابق
-        let matchScore = 0;
-        if (spokenText === targetText) {
-          matchScore = 100;
-        } else {
-          const targetWords = targetText.split(' ');
-          const spokenWords = spokenText.split(' ');
-          let matches = 0;
-          targetWords.forEach(w => { if (spokenWords.includes(w)) matches++; });
-          matchScore = Math.round((matches / targetWords.length) * 100);
-        }
-
-        if (matchScore >= 70) {
-          feedback.innerHTML = `<strong style="color:var(--success-green);">ممتاز جداً! 🎉 النتيجة: ${matchScore}%</strong><br>نطقك: "${spokenText}"`;
-        } else {
-          feedback.innerHTML = `<strong style="color:var(--danger-red);">تحتاج محاولة أخرى. النتيجة: ${matchScore}%</strong><br>قلت: "${spokenText}"`;
-        }
-      };
-
-      recognition.onerror = () => {
-        micBtn.classList.remove('recording');
-        feedback.innerText = 'لم يتم التعرف على الصوت بوضوح، حاول مجدداً.';
-      };
-
-      recognition.start();
-    }
-
-    function checkQuizAnswer(selectedIdx, correctIdx, lessonId) {
-      if (selectedIdx === correctIdx) {
-        playSoundEffect();
-        alert('إجابة صحيحة وبطل! 🎉 تم اجتياز الدرس بنجاح.');
-        if (!localState.eng_completed_lessons.includes(lessonId)) {
-          localState.eng_completed_lessons.push(lessonId);
-          localState.eng_saved_words_count = (localState.eng_saved_words_count || 0) + 5;
-          saveStateLocally();
-          renderEnglishDashboard();
-        }
-        closeModal('english-lesson-modal');
-      } else {
-        alert('إجابة خاطئة، حاول مرة أخرى ❌');
-      }
-    }
-
-    /* ==================== 🏠 وظائف التطبيق العامة والملاحة ==================== */
-    function switchPage(pageId, navEl = null) {
-      playSoundEffect();
-      localState.current_page = pageId;
-      saveStateLocally();
-
-      document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-
-      const targetPage = document.getElementById(pageId);
-      if (targetPage) targetPage.classList.add('active');
-
-      if (!navEl) navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-      if (navEl) navEl.classList.add('active');
-
-      const welcomeCard = document.getElementById('top-welcome-card');
-      const quoteCard = document.getElementById('top-quote-card');
-
-      if (pageId === 'page-home') {
-        welcomeCard.style.display = 'flex';
-        quoteCard.style.display = 'flex';
-      } else {
-        welcomeCard.style.display = 'none';
-        quoteCard.style.display = 'none';
-      }
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'flex'; }
-    function closeModal(modalId) { playSoundEffect(); document.getElementById(modalId).style.display = 'none'; }
-    function openDistractModal() { openModal('distract-modal'); }
-
-    function playSoundEffect() {
-      if (!soundEnabled) return;
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); 
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch(e) {}
-    }
-
-    function toggleSoundMaster() {
-      soundEnabled = !soundEnabled;
-      document.getElementById('sound-toggle-btn').innerText = soundEnabled ? '🔊' : '🔇';
-    }
-
-    const defaultTasks = [
-      { id: 'quran', title: 'حفظ سورة البقرة', icon: '📖' },
-      { id: 'english', title: 'تعلم الإنجليزية (الأكاديمية)', icon: '🇬🇧' },
-      { id: 'sketchup', title: 'SketchUp', icon: '📐' },
-      { id: 'autocad', title: 'AutoCAD', icon: '🖥️' },
-      { id: 'd5', title: 'D5 Render', icon: '🎬' },
-      { id: 'gym', title: 'الجيم', icon: '💪' },
-      { id: 'content', title: 'صناعة المحتوى', icon: '🎥' }
-    ];
-
-    const prayersList = [
-      { id: 'fajr', title: 'صلاة الفجر', time: '04:32 ص' },
-      { id: 'dhuhr', title: 'صلاة الظهر', time: '01:04 م' },
-      { id: 'asr', title: 'صلاة العصر', time: '04:41 م' },
-      { id: 'maghrib', title: 'صلاة المغرب', time: '07:56 م' },
-      { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
-    ];
-
-    const pageAudioTimeMap = {
-      2: 0, 3: 132, 4: 260, 5: 395, 6: 540, 7: 685, 8: 835, 9: 1000, 
-      10: 1173, 11: 1335, 12: 1510, 13: 1680, 14: 1855, 15: 2020, 
-      16: 2190, 17: 2365, 18: 2540, 19: 2715, 20: 2890, 21: 3060, 
-      22: 3235, 23: 3410, 24: 3585, 25: 3760, 26: 3940, 27: 4120, 
-      28: 4300, 29: 4480, 30: 4660, 31: 4840, 32: 5020, 33: 5200, 
-      34: 5380, 35: 5560, 36: 5740, 37: 5920, 38: 6100, 39: 6280, 
-      40: 6460, 41: 6640, 42: 6820, 43: 7000, 44: 7180, 45: 7360, 
-      46: 7540, 47: 7720, 48: 7900, 49: 8100
-    };
-
-    function renderTasks() {
-      const mainContainer = document.getElementById('tasks-container');
-      let mainHtml = '', doneCount = 0, activeTasksCount = 0;
-
-      defaultTasks.forEach(task => {
-        activeTasksCount++;
-        const checked = localState.daily_tasks?.[task.id] ? 'checked' : '';
-        const daysCompleted = localState.task_days_count?.[task.id] || 0;
-        if (checked) doneCount++;
-
-        mainHtml += `
-          <div class="task-item">
-            <label>
-              <input type="checkbox" onchange="toggleTask('${task.id}', this.checked)" ${checked}>
-              <span>${task.title} ${task.icon}</span>
-            </label>
-            <div class="task-actions">
-              <span class="days-badge">🏆 ${daysCompleted} يوم</span>
+        <div style="display:flex; flex-direction:column; gap: 1rem; max-width: 600px;">
+          ${state.reviews.map(rev => `
+            <div class="checklist-item" style="justify-content: space-between;">
+              <div>
+                <strong>${rev.lessonTitle}</strong>
+                <p style="font-size:0.8rem; color: var(--text-muted);">Level: ${rev.level}</p>
+              </div>
+              <span style="color: var(--accent-gold); font-size: 0.85rem; font-weight:600;"><i class="fa-solid fa-rotate"></i> Due in ${rev.dueIn}</span>
             </div>
-          </div>`;
-      });
-
-      mainContainer.innerHTML = mainHtml;
-      const pct = activeTasksCount > 0 ? Math.round((doneCount / activeTasksCount) * 100) : 0;
-      document.getElementById('tasks-progress').style.width = pct + '%';
-      document.getElementById('tasks-progress-text').innerText = pct + '%';
+          `).join('')}
+        </div>
+      `;
     }
 
-    function toggleTask(id, isChecked) {
-      if (!localState.daily_tasks) localState.daily_tasks = {};
-      if (!localState.task_days_count) localState.task_days_count = {};
-
-      if (isChecked) {
-        playSoundEffect();
-        localState.daily_tasks[id] = true;
-        localState.task_days_count[id] = (localState.task_days_count[id] || 0) + 1;
-      } else {
-        localState.daily_tasks[id] = false;
-        localState.task_days_count[id] = Math.max(0, (localState.task_days_count[id] || 1) - 1);
-      }
-
-      saveStateLocally();
-      renderTasks();
+    function renderProgress() {
+      const workspace = document.getElementById('workspace');
+      workspace.innerHTML = `
+        <h2>Learning Statistics & Progress</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Automated real-time overview of your learning journey.</p>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span style="color:var(--text-muted); font-size:0.85rem;">Study Streak</span>
+            <div class="stat-value">🔥 ${state.userStats.streak} Days</div>
+          </div>
+          <div class="stat-card">
+            <span style="color:var(--text-muted); font-size:0.85rem;">Total Hours Studied</span>
+            <div class="stat-value">⚡ ${state.userStats.totalHours} hrs</div>
+          </div>
+          <div class="stat-card">
+            <span style="color:var(--text-muted); font-size:0.85rem;">Overall Completion</span>
+            <div class="stat-value">15%</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: 15%;"></div>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
-    function renderPrayers() {
-      const container = document.getElementById('prayers-container');
-      let html = '', doneCount = 0;
-
-      prayersList.forEach(prayer => {
-        const checked = localState.prayers_tasks?.[prayer.id] ? 'checked' : '';
-        if (checked) doneCount++;
-        html += `
-          <div class="task-item">
-            <label>
-              <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
-              <span>${prayer.title}</span>
-            </label>
-            <span class="prayer-badge">${prayer.time}</span>
-          </div>`;
-      });
-
-      container.innerHTML = html;
-      document.getElementById('prayers-progress').style.width = Math.round((doneCount / prayersList.length) * 100) + '%';
+    function renderVocab() {
+      const workspace = document.getElementById('workspace');
+      const pct = Math.round((state.vocab.learned / state.vocab.total) * 100);
+      workspace.innerHTML = `
+        <h2>Vocabulary Tracker</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Track vocabulary acquisition across all lessons.</p>
+        
+        <div class="stat-card" style="max-width: 400px; margin-bottom: 1.5rem;">
+          <h3>Vocabulary Progress</h3>
+          <div class="stat-value" style="margin-top: 0.5rem;">${state.vocab.learned} / ${state.vocab.total} Words</div>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">${pct}% Completed</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+          </div>
+        </div>
+      `;
     }
 
-    function togglePrayer(id, isChecked) {
-      if (isChecked) playSoundEffect();
-      if (!localState.prayers_tasks) localState.prayers_tasks = {};
-      localState.prayers_tasks[id] = isChecked;
-      saveStateLocally();
-      renderPrayers();
-    }
-
-    function updateQuran(val) {
-      playSoundEffect();
-      localState.quran_page = Math.max(2, Math.min(49, (localState.quran_page || 2) + val));
-      document.getElementById('quran-page-input').value = localState.quran_page;
-      saveStateLocally();
-      updateQuranUI();
-    }
-
-    function setQuranPage(val) {
-      localState.quran_page = Math.max(2, Math.min(49, parseInt(val) || 2));
-      document.getElementById('quran-page-input').value = localState.quran_page;
-      saveStateLocally();
-      updateQuranUI();
-    }
-
-    function handleQuranImgError() {
-      document.getElementById('quran-page-image').style.display = 'none';
-      document.getElementById('quran-fallback').style.display = 'block';
-      document.getElementById('fallback-page-num').innerText = localState.quran_page || 2;
-    }
-
-    function handleQuranImgSuccess() {
-      document.getElementById('quran-page-image').style.display = 'block';
-      document.getElementById('quran-fallback').style.display = 'none';
-    }
-
-    function updateQuranUI() {
-      const page = localState.quran_page || 2;
-      const imgEl = document.getElementById('quran-page-image');
-      if (imgEl) imgEl.src = `https://www.searchtruth.com/quran/images2/large/page-${page}.png`;
-
-      const audioPlayer = document.getElementById('quran-audio-player');
-      if (audioPlayer && pageAudioTimeMap[page] !== undefined) audioPlayer.currentTime = pageAudioTimeMap[page];
-
-      const pct = Math.round(((page - 1) / 48) * 100);
-      document.getElementById('quran-progress').style.width = pct + '%';
-      document.getElementById('quran-status').innerText = `الصفحة ${page} من 49 (سورة البقرة)`;
-    }
-
-    function renderOfficeGoals() {
-      const container = document.getElementById('office-goals-container');
-      let html = '';
-      localState.office_goals.forEach((goalText, index) => {
-        html += `
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <span style="font-weight:bold; width:20px;">${index + 1}.</span>
-            <input type="text" class="text-input-field" style="margin:0;" value="${goalText}" onchange="updateOfficeGoal(${index}, this.value)">
-            <button class="btn-delete" onclick="deleteOfficeGoalRow(${index})">🗑️</button>
-          </div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    function addOfficeGoalRow() {
-      playSoundEffect();
-      localState.office_goals.push("");
-      saveStateLocally();
-      renderOfficeGoals();
-    }
-
-    function updateOfficeGoal(index, val) { localState.office_goals[index] = val; saveStateLocally(); }
-    function deleteOfficeGoalRow(index) { playSoundEffect(); localState.office_goals.splice(index, 1); saveStateLocally(); renderOfficeGoals(); }
-
-    function adjustSavings(val) {
-      playSoundEffect();
-      localState.savings = Math.max(0, (localState.savings || 0) + val);
-      document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
-      saveStateLocally();
-      updateSavingsUI();
-    }
-
-    function updateSavingsUI() {
-      const pct = Math.min(100, Math.round(((localState.savings || 0) / 50000) * 100));
-      document.getElementById('savings-progress').style.width = pct + '%';
-    }
-
-    function updateFollowers() {
-      localState.followers = Math.max(0, parseInt(document.getElementById('followers-count').value) || 0);
-      saveStateLocally();
-      updateFollowersUI();
-    }
-
-    function updateFollowersUI() {
-      const pct = Math.min(100, Math.round(((localState.followers || 0) / 10000) * 100));
-      document.getElementById('followers-progress').style.width = pct + '%';
-      document.getElementById('followers-percent').innerText = `${pct}% مكتمل`;
-    }
-
-    function toggleTheme() { playSoundEffect(); document.body.classList.toggle('dark-mode'); }
-
-    function updateLiveClock() {
-      const now = new Date();
-      let hours = now.getHours();
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'م' : 'ص';
-      hours = hours % 12 || 12;
-
-      document.getElementById('live-clock-time').innerText = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}`;
-      document.getElementById('live-clock-ampm').innerText = ampm;
+    /* ===================================================
+       4. THEME & UTILITIES
+    =================================================== */
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
       
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', options);
+      const icon = document.querySelector('#theme-toggle i');
+      icon.className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
     }
 
-    window.onload = () => {
-      loadStateLocally();
-      updateLiveClock();
-      setInterval(updateLiveClock, 1000);
-    };
+    // App Initialization
+    renderCategories();
   </script>
 </body>
 </html>
