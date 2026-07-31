@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة التحكم الشخصية | Architect Dashboard</title>
   
-  <!-- إعدادات الأيقونة والتطبيق المحلي -->
+  <!-- إعدادات الأيقونة والتطبيق المحلي (PWA) -->
   <link rel="icon" type="image/png" href="logo.png">
-  <link rel="manifest" href="app-manifest.json">
+  <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#5C4333">
 
   <style>
     :root {
@@ -102,8 +104,6 @@
 </head>
 <body>
 
-  <!-- صوت كليك محلي أوفلاين باستعمال Web Audio API -->
-
   <div class="container">
 
     <header class="glass-card dashboard-header">
@@ -116,8 +116,8 @@
         <button class="icon-btn" id="sound-toggle-btn" onclick="toggleSoundMaster()" title="تشغيل/كتم الأصوات">🔊</button>
         <div class="badge-streak">🔥 <span id="streak-count">1 أيّام</span></div>
         <div id="live-clock" style="font-size: 1.1rem; font-weight: bold; color: var(--accent-brown);"></div>
-        <button class="icon-btn" id="theme-toggle" title="تغيير المظهر">🌙</button>
-        <button class="icon-btn btn-panic" id="distract-btn" title="أنا مشتت!">🧠</button>
+        <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">🌙</button>
+        <button class="icon-btn btn-panic" id="distract-btn" onclick="openDistractModal()" title="أنا مشتت!">🧠</button>
       </div>
     </header>
 
@@ -302,14 +302,26 @@
     <div class="modal-content" style="text-align: center;">
       <h2 style="color: var(--accent-brown); margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h2>
       <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">التشتت طبيعي! خذ 4 ثوان للشهيق، و4 ثوان للزفير، ثم عد لتركيزك في مهمتك الحالية.</p>
-      <button class="btn-action" onclick="closeModal()">أنا جاهز للعودة 💪</button>
+      <button class="btn-action" onclick="closeDistractModal()">أنا جاهز للعودة 💪</button>
     </div>
   </div>
 
   <script>
+    // --- PWA Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker Registered successfully!'))
+          .catch(err => console.log('Service Worker registration failed: ', err));
+      });
+    }
+
     let soundEnabled = true;
     let audioCtx = null;
     let activeEditDate = null;
+    let timerInterval = null;
+    let timerTime = 25 * 60;
+    let isTimerRunning = false;
 
     function toggleSoundMaster() {
       soundEnabled = !soundEnabled;
@@ -393,8 +405,8 @@
       daily_tasks: {},
       prayers_tasks: {},
       quran_page: 0,
-      courses_data: {},
-      eng_data: {},
+      courses_data: { decorLesson: 0, finishingLesson: 0, decorToday: false, finishingToday: false },
+      eng_data: { lessons: 0, hours: 0, lastLesson: '' },
       savings: 15000,
       followers: 1200,
       daily_notes: '',
@@ -671,13 +683,13 @@
 
       container.innerHTML = html;
       const pct = Math.round((doneCount / defaultTasks.length) * 100);
-      document.getElementById('tasks-progress').style.width = `${pct}%`;
+      document.getElementById('tasks-progress').style.width = pct + '%';
     }
 
-    function toggleTask(id, val) {
+    function toggleTask(id, isChecked) {
       playClickSound();
       if (!localState.daily_tasks) localState.daily_tasks = {};
-      localState.daily_tasks[id] = val;
+      localState.daily_tasks[id] = isChecked;
       saveStateLocally();
       renderTasks();
     }
@@ -687,15 +699,14 @@
       let html = '';
       let doneCount = 0;
 
-      prayersList.forEach(p => {
-        const checked = localState.prayers_tasks && localState.prayers_tasks[p.id] ? 'checked' : '';
+      prayersList.forEach(prayer => {
+        const checked = localState.prayers_tasks && localState.prayers_tasks[prayer.id] ? 'checked' : '';
         if (checked) doneCount++;
-
         html += `
           <div class="task-item">
             <label>
-              <input type="checkbox" onchange="togglePrayer('${p.id}', this.checked)" ${checked}>
-              <span>${p.title}</span>
+              <input type="checkbox" onchange="togglePrayer('${prayer.id}', this.checked)" ${checked}>
+              <span>${prayer.title}</span>
             </label>
           </div>
         `;
@@ -703,49 +714,54 @@
 
       container.innerHTML = html;
       const pct = Math.round((doneCount / prayersList.length) * 100);
-      document.getElementById('prayers-progress').style.width = `${pct}%`;
+      document.getElementById('prayers-progress').style.width = pct + '%';
     }
 
-    function togglePrayer(id, val) {
+    function togglePrayer(id, isChecked) {
       playClickSound();
       if (!localState.prayers_tasks) localState.prayers_tasks = {};
-      localState.prayers_tasks[id] = val;
+      localState.prayers_tasks[id] = isChecked;
       saveStateLocally();
       renderPrayers();
     }
 
-    function updateQuran(delta) {
+    function updateQuran(val) {
       playClickSound();
-      let val = (localState.quran_page || 0) + delta;
-      setQuranPage(val);
+      let current = parseInt(localState.quran_page || 0) + val;
+      if (current < 0) current = 0;
+      if (current > 48) current = 48;
+      localState.quran_page = current;
+      document.getElementById('quran-page-input').value = current;
+      saveStateLocally();
+      updateQuranUI();
     }
 
     function setQuranPage(val) {
-      val = parseInt(val, 10);
-      if (isNaN(val)) val = 0;
-      if (val < 0) val = 0;
-      if (val > 48) val = 48;
-      localState.quran_page = val;
-      document.getElementById('quran-page-input').value = val;
+      let page = parseInt(val) || 0;
+      if (page < 0) page = 0;
+      if (page > 48) page = 48;
+      localState.quran_page = page;
       saveStateLocally();
       updateQuranUI();
     }
 
     function updateQuranUI() {
-      const p = localState.quran_page || 0;
-      const pct = Math.round((p / 48) * 100);
-      document.getElementById('quran-progress').style.width = `${pct}%`;
-      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${p}`;
+      const page = localState.quran_page || 0;
+      const pct = Math.round((page / 48) * 100);
+      document.getElementById('quran-progress').style.width = pct + '%';
+      document.getElementById('quran-status').innerText = `آخر صفحة وصلت لها: ${page}`;
     }
 
-    function updateLesson(type, delta) {
+    function updateLesson(course, change) {
       playClickSound();
-      if (!localState.courses_data) localState.courses_data = {};
-      const key = `${type}Lesson`;
-      let val = (localState.courses_data[key] || 0) + delta;
-      if (val < 0) val = 0;
-      localState.courses_data[key] = val;
-      document.getElementById(`${type}-lesson-val`).innerText = val;
+      if (!localState.courses_data) localState.courses_data = { decorLesson: 0, finishingLesson: 0 };
+      if (course === 'decor') {
+        localState.courses_data.decorLesson = Math.max(0, (localState.courses_data.decorLesson || 0) + change);
+        document.getElementById('decor-lesson-val').innerText = localState.courses_data.decorLesson;
+      } else {
+        localState.courses_data.finishingLesson = Math.max(0, (localState.courses_data.finishingLesson || 0) + change);
+        document.getElementById('finishing-lesson-val').innerText = localState.courses_data.finishingLesson;
+      }
       saveCoursesData();
     }
 
@@ -757,50 +773,78 @@
     }
 
     function saveEngData() {
-      if (!localState.eng_data) localState.eng_data = {};
-      localState.eng_data.lessons = parseInt(document.getElementById('eng-lessons').value, 10) || 0;
-      localState.eng_data.hours = parseInt(document.getElementById('eng-hours').value, 10) || 0;
-      localState.eng_data.lastLesson = document.getElementById('eng-last').value || '';
+      localState.eng_data = {
+        lessons: document.getElementById('eng-lessons').value,
+        hours: document.getElementById('eng-hours').value,
+        lastLesson: document.getElementById('eng-last').value
+      };
       saveStateLocally();
     }
 
-    function adjustSavings(delta) {
+    function adjustSavings(val) {
       playClickSound();
-      localState.savings = (localState.savings || 0) + delta;
-      if (localState.savings < 0) localState.savings = 0;
+      localState.savings = Math.max(0, (localState.savings || 0) + val);
       document.getElementById('savings-current').innerText = localState.savings.toLocaleString();
       saveStateLocally();
       updateSavingsUI();
     }
 
     function updateSavingsUI() {
-      const cur = localState.savings || 0;
-      const target = 50000;
-      const pct = Math.min(100, Math.round((cur / target) * 100));
-      document.getElementById('savings-progress').style.width = `${pct}%`;
-      
-      const remain = target - cur;
-      if (remain <= 0) {
-        document.getElementById('savings-estimate').innerText = '🎉 تم تحقيق الهدف!';
-      } else {
-        document.getElementById('savings-estimate').innerText = `متبقي ${remain.toLocaleString()} ج.م`;
-      }
+      const curr = localState.savings || 0;
+      const pct = Math.min(100, Math.round((curr / 50000) * 100));
+      document.getElementById('savings-progress').style.width = pct + '%';
     }
 
     function updateFollowers() {
-      playClickSound();
-      const val = parseInt(document.getElementById('followers-count').value, 10) || 0;
-      localState.followers = val;
+      localState.followers = parseInt(document.getElementById('followers-count').value) || 0;
       saveStateLocally();
       updateFollowersUI();
     }
 
     function updateFollowersUI() {
-      const cur = localState.followers || 0;
-      const target = 10000;
-      const pct = Math.min(100, Math.round((cur / target) * 100));
-      document.getElementById('followers-progress').style.width = `${pct}%`;
-      document.getElementById('followers-percent').innerText = `${pct}% مكتمل (${cur} من 10,000)`;
+      const count = localState.followers || 0;
+      const pct = Math.min(100, Math.round((count / 10000) * 100));
+      document.getElementById('followers-progress').style.width = pct + '%';
+      document.getElementById('followers-percent').innerText = `${pct}% مكتمل`;
+    }
+
+    function toggleTimer() {
+      playClickSound();
+      const btn = document.getElementById('start-timer-btn');
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        btn.innerText = 'بدء';
+      } else {
+        isTimerRunning = true;
+        btn.innerText = 'إيقاف';
+        timerInterval = setInterval(() => {
+          if (timerTime > 0) {
+            timerTime--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            btn.innerText = 'بدء';
+            alert('انتهى وقت البومودورو! خذ استراحة قصيرة.');
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      playClickSound();
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerTime = 25 * 60;
+      document.getElementById('start-timer-btn').innerText = 'بدء';
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerTime / 60);
+      const s = timerTime % 60;
+      document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
     function saveNotes() {
@@ -811,18 +855,18 @@
     function renderHistory() {
       const container = document.getElementById('history-container');
       if (!localState.history || Object.keys(localState.history).length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">لا يوجد سجلات سابقة حتى الآن.</p>';
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:10px;">لا يوجد سجل أيام سابقة بعد.</p>';
         return;
       }
 
       let html = '';
-      const sortedKeys = Object.keys(localState.history).sort().reverse();
-      sortedKeys.forEach(dateKey => {
+      const sortedDates = Object.keys(localState.history).sort().reverse();
+      sortedDates.forEach(dateKey => {
         const pct = localState.history[dateKey];
         html += `
           <div class="history-item">
             <span>📅 ${dateKey} - نسبة الإنجاز: <strong>${pct}%</strong></span>
-            <div style="display:flex; gap:6px;">
+            <div>
               <button class="btn-edit" onclick="openEditDayModal('${dateKey}')">✏️ تعديل</button>
               <button class="btn-delete" onclick="deleteHistoryDate('${dateKey}')">🗑️ مسح</button>
             </div>
@@ -832,79 +876,31 @@
       container.innerHTML = html;
     }
 
-    // --- مؤقت البومودورو ---
-    let timerInterval = null;
-    let timerSeconds = 25 * 60;
-    let timerRunning = false;
-
-    function toggleTimer() {
-      playClickSound();
-      if (timerRunning) {
-        clearInterval(timerInterval);
-        timerRunning = false;
-        document.getElementById('start-timer-btn').innerText = 'استئناف';
-      } else {
-        timerRunning = true;
-        document.getElementById('start-timer-btn').innerText = 'إيقاف مؤقت';
-        timerInterval = setInterval(() => {
-          timerSeconds--;
-          if (timerSeconds <= 0) {
-            clearInterval(timerInterval);
-            timerRunning = false;
-            alert("⏰ انتهت جلسة البومودورو! خذ استراحة قصيرة.");
-            resetTimer();
-          } else {
-            updateTimerDisplay();
-          }
-        }, 1000);
-      }
-    }
-
-    function resetTimer() {
-      playClickSound();
-      clearInterval(timerInterval);
-      timerRunning = false;
-      timerSeconds = 25 * 60;
-      document.getElementById('start-timer-btn').innerText = 'بدء';
-      updateTimerDisplay();
-    }
-
-    function updateTimerDisplay() {
-      const m = Math.floor(timerSeconds / 60);
-      const s = timerSeconds % 60;
-      document.getElementById('timer-display').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    }
-
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    function toggleTheme() {
       playClickSound();
       document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      document.getElementById('theme-toggle').innerText = isDark ? '☀️' : '🌙';
-    });
+    }
 
-    document.getElementById('distract-btn').addEventListener('click', () => {
+    function openDistractModal() {
       playClickSound();
       document.getElementById('distract-modal').style.display = 'flex';
-    });
+    }
 
-    function closeModal() {
+    function closeDistractModal() {
       playClickSound();
       document.getElementById('distract-modal').style.display = 'none';
     }
 
-    function updateLiveClockAndCheck() {
+    function updateLiveClock() {
       const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', options);
       document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG');
+      document.getElementById('live-date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    window.onload = function() {
+    window.onload = () => {
       loadStateLocally();
-      setDailyQuote();
-
-      setInterval(updateLiveClockAndCheck, 1000);
-      setInterval(checkAndResetNewDay, 60000);
+      updateLiveClock();
+      setInterval(updateLiveClock, 1000);
     };
   </script>
 </body>
