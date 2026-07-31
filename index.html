@@ -1,328 +1,1414 @@
-"مصطلحات التعامل مع العملاء", "مصطلحات تسليم المشاريع", "مصطلحات العقود والأسعار"
-            ]
-          }
-        ]
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Eng - Mustafa Helmy | لوحة التحكم</title>
+
+  
+
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="apple-touch-icon" href="logo.png">
+
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="theme-color" content="#DCE5EE">
+
+
+
+  <style>
+
+    :root {
+
+      /* لوحة الألوان المستوحاة من الصورة: أزرق ثلجي، رمادي كحلي، ولمسات زجاجية */
+
+      --bg-main: #DCE5EE;
+
+      --bg-gradient: linear-gradient(135deg, #E6EEF4 0%, #CBD8E5 50%, #9EB7CE 100%);
+
+      
+
+      --card-bg: rgba(255, 255, 255, 0.45);
+
+      --card-stroke: rgba(255, 255, 255, 0.7);
+
+      
+
+      --accent-blue: #4B79A1;
+
+      --accent-blue-dark: #283E51;
+
+      --accent-blue-light: rgba(75, 121, 161, 0.15);
+
+      --accent-blue-border: rgba(75, 121, 161, 0.3);
+
+      
+
+      --text-dark: #1E293B;
+
+      --text-muted: #64748B;
+
+      
+
+      --card-radius: 24px;
+
+      --inner-radius: 16px;
+
+      --shadow-soft: 0 10px 30px rgba(40, 62, 81, 0.1);
+
+      --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+      --glass-blur: blur(16px);
+
+    }
+
+
+
+    body.dark-mode {
+
+      --bg-main: #0F172A;
+
+      --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #1E3A8A 100%);
+
+      
+
+      --card-bg: rgba(30, 41, 59, 0.5);
+
+      --card-stroke: rgba(255, 255, 255, 0.1);
+
+      
+
+      --accent-blue: #60A5FA;
+
+      --accent-blue-dark: #93C5FD;
+
+      --accent-blue-light: rgba(96, 165, 250, 0.15);
+
+      --accent-blue-border: rgba(96, 165, 250, 0.3);
+
+      
+
+      --text-dark: #F8FAFC;
+
+      --text-muted: #94A3B8;
+
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+    }
+
+
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+
+    
+
+    body {
+
+      background: var(--bg-gradient);
+
+      background-attachment: fixed;
+
+      color: var(--text-dark);
+
+      min-height: 100vh;
+
+      padding: 16px 12px 90px 12px;
+
+      transition: var(--transition);
+
+      text-align: right;
+
+    }
+
+
+
+    .app-container {
+
+      max-width: 480px;
+
+      margin: 0 auto;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 14px;
+
+    }
+
+
+
+    .header-card, .quote-card-bar { display: flex; }
+
+
+
+    .header-card {
+
+      background: var(--card-bg);
+
+      backdrop-filter: var(--glass-blur);
+
+      -webkit-backdrop-filter: var(--glass-blur);
+
+      border-radius: var(--card-radius);
+
+      border: 1px solid var(--card-stroke);
+
+      padding: 20px;
+
+      box-shadow: var(--shadow-soft);
+
+      flex-direction: column; gap: 18px;
+
+    }
+
+
+
+    .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+
+    .welcome-text h1 { font-size: 1.4rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; }
+
+    .welcome-text p { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+
+
+
+    .badge-offline-pill {
+
+      background: var(--accent-blue-light);
+
+      border: 1px solid var(--accent-blue-border);
+
+      color: var(--text-dark); padding: 8px 16px; border-radius: 50px;
+
+      font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
+
+    }
+
+
+
+    .header-widgets-row { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
+
+    .widgets-group { display: flex; align-items: center; gap: 10px; }
+
+    .time-widget { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+
+    .time-widget span.ampm { font-size: 0.75rem; color: var(--text-muted); }
+
+
+
+    .circle-btn {
+
+      width: 38px; height: 38px; border-radius: 50%;
+
+      background: rgba(255, 255, 255, 0.3); border: 1px solid var(--card-stroke);
+
+      display: flex; align-items: center; justify-content: center;
+
+      font-size: 1rem; cursor: pointer; color: var(--text-dark); transition: var(--transition);
+
+      backdrop-filter: blur(5px);
+
+    }
+
+    .circle-btn:active { transform: scale(0.9); }
+
+
+
+    .quote-card-bar {
+
+      background: var(--card-bg);
+
+      backdrop-filter: var(--glass-blur);
+
+      -webkit-backdrop-filter: var(--glass-blur);
+
+      border-radius: var(--inner-radius);
+
+      border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
+
+      box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
+
+      justify-content: center; align-items: center;
+
+    }
+
+    .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-blue); border-radius: 0 4px 4px 0; }
+
+    .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
+
+
+
+    .app-page { display: none; flex-direction: column; gap: 14px; }
+
+    .app-page.active { display: flex; animation: fadeIn 0.3s ease; }
+
+
+
+    @keyframes fadeIn {
+
+      from { opacity: 0; transform: translateY(6px); }
+
+      to { opacity: 1; transform: translateY(0); }
+
+    }
+
+
+
+    .section-card {
+
+      background: var(--card-bg);
+
+      backdrop-filter: var(--glass-blur);
+
+      -webkit-backdrop-filter: var(--glass-blur);
+
+      border-radius: var(--card-radius);
+
+      border: 1px solid var(--card-stroke); padding: 18px;
+
+      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 14px;
+
+    }
+
+
+
+    .section-header-row { display: flex; justify-content: space-between; align-items: center; }
+
+    .section-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
+
+    .section-title .sec-icon { font-size: 1.2rem; background: var(--accent-blue-light); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--accent-blue-border); }
+
+
+
+    .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--card-stroke), transparent); margin: 2px 0; position: relative; }
+
+    .divider-line::after { content: '◆'; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: var(--accent-blue); }
+
+
+
+    .progress-section { display: flex; flex-direction: column; gap: 6px; }
+
+    .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+
+    .progress-track { background: rgba(0, 0, 0, 0.05); border-radius: 50px; height: 10px; width: 100%; overflow: hidden; padding: 1px; }
+
+    .progress-fill { height: 100%; background: var(--accent-blue); border-radius: 50px; width: 0%; transition: width 0.4s ease; }
+
+
+
+    .task-item {
+
+      background: rgba(255, 255, 255, 0.3); border: 1px solid var(--card-stroke);
+
+      border-radius: var(--inner-radius); padding: 12px 14px;
+
+      display: flex; align-items: center; justify-content: space-between;
+
+      direction: rtl; transition: var(--transition); margin-bottom: 8px; gap: 8px;
+
+    }
+
+    .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
+
+    .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-blue); cursor: pointer; }
+
+
+
+    .days-badge {
+
+      background: var(--accent-blue-light); border: 1px solid var(--accent-blue-border);
+
+      color: var(--accent-blue); font-size: 0.75rem; font-weight: 800;
+
+      padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
+
+    }
+
+
+
+    .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-blue-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-blue-border); display: flex; align-items: center; gap: 6px; }
+
+
+
+    .btn-adhan { background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer; }
+
+
+
+    .quran-img-container {
+
+      width: 100%; border-radius: 16px; overflow: hidden;
+
+      border: 1px solid var(--card-stroke); background: #FFF;
+
+      display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 10px;
+
+      min-height: 400px; position: relative;
+
+    }
+
+    .quran-page-img { width: 100%; max-width: 450px; height: auto; display: block; }
+
+    
+
+    .quran-fallback-card {
+
+      display: none; padding: 40px 20px; text-align: center; background: var(--accent-blue-light);
+
+      border-radius: 16px; width: 100%; border: 2px dashed var(--accent-blue-border);
+
+    }
+
+
+
+    .counter-control { display: flex; align-items: center; gap: 8px; }
+
+    .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-blue); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+
+    .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
+
+    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
+
+    .btn-action { background: var(--accent-blue); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+
+    .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
+
+
+
+    /* --- تنسيقات كورس الإنجليزي الخاص --- */
+
+    .eng-level-card {
+
+      background: var(--card-bg);
+
+      border: 1px solid var(--card-stroke);
+
+      border-radius: var(--inner-radius);
+
+      margin-bottom: 12px;
+
+      overflow: hidden;
+
+      transition: var(--transition);
+
+    }
+
+    .eng-level-card.locked {
+
+      opacity: 0.6;
+
+      filter: grayscale(0.5);
+
+    }
+
+    .eng-level-header {
+
+      padding: 14px 16px;
+
+      background: rgba(255, 255, 255, 0.2);
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      cursor: pointer;
+
+      font-weight: 800;
+
+      font-size: 0.95rem;
+
+    }
+
+    .eng-level-content {
+
+      padding: 12px;
+
+      display: none;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+    }
+
+    .eng-level-card.open .eng-level-content {
+
+      display: flex;
+
+    }
+
+    .eng-unit-title {
+
+      font-weight: 700;
+
+      font-size: 0.85rem;
+
+      color: var(--accent-blue);
+
+      margin-top: 6px;
+
+      margin-bottom: 4px;
+
+      border-bottom: 1px dashed var(--card-stroke);
+
+      padding-bottom: 4px;
+
+    }
+
+    .eng-lesson-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      background: rgba(255, 255, 255, 0.2);
+
+      border: 1px solid var(--card-stroke);
+
+      border-radius: 10px;
+
+      padding: 8px 12px;
+
+      font-size: 0.82rem;
+
+      font-weight: 600;
+
+    }
+
+    .eng-status-btn {
+
+      border: none;
+
+      background: var(--card-bg);
+
+      border: 1px solid var(--card-stroke);
+
+      border-radius: 6px;
+
+      padding: 4px 8px;
+
+      font-size: 0.75rem;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+      color: var(--text-dark);
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 4px;
+
+    }
+
+
+
+    .bottom-nav {
+
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+
+      width: calc(100% - 24px); max-width: 450px; 
+
+      background: var(--card-bg);
+
+      backdrop-filter: var(--glass-blur);
+
+      -webkit-backdrop-filter: var(--glass-blur);
+
+      border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
+
+      display: flex; justify-content: space-around; align-items: center;
+
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
+
+    }
+
+
+
+    .nav-item {
+
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+
+      color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer;
+
+      padding: 6px 10px; border-radius: 14px; transition: var(--transition); flex-grow: 1;
+
+    }
+
+    .nav-item .nav-icon { font-size: 1.25rem; }
+
+    .nav-item.active { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue-border); }
+
+
+
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
+
+    .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); backdrop-filter: var(--glass-blur); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+  <!-- مشغل صوت الأذان المخفي -->
+
+  <audio id="adhan-audio-player">
+
+    <source src="https://cdn.islamicfinder.org/static/audio/athan/makkah.mp3" type="audio/mpeg">
+
+  </audio>
+
+
+
+  <div class="app-container">
+
+
+
+    <!-- 🎴 كارت الترحيب الرئيسي -->
+
+    <div class="header-card" id="top-welcome-card">
+
+      <div class="header-top-row">
+
+        <div class="welcome-text">
+
+          <h1>👋 Eng - Mustafa Helmy</h1>
+
+          <p id="live-date">الجمعة، 31 يوليو 2026</p>
+
+        </div>
+
+        <div class="badge-offline-pill">
+
+          ⚡ نظام محلي (أوفلاين)
+
+        </div>
+
+      </div>
+
+
+
+      <div class="header-widgets-row">
+
+        <div></div>
+
+
+
+        <div class="widgets-group">
+
+          <div class="time-widget">
+
+            <span id="live-clock-time">03:51:02</span>
+
+            <span class="ampm" id="live-clock-ampm">م</span>
+
+          </div>
+
+
+
+          <button class="circle-btn" id="theme-toggle" onclick="toggleTheme()" title="المظهر">🌙</button>
+
+          <button class="circle-btn" onclick="openDistractModal()" title="التشتت">🧠</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- 📜 كارت الحكمة -->
+
+    <div class="quote-card-bar" id="top-quote-card">
+
+      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
+
+    </div>
+
+
+
+    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
+
+    <div class="app-page active" id="page-home">
+
+      <!-- المهام اليومية -->
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">📋</span>
+
+            <span>المهام اليومية</span>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="divider-line"></div>
+
+
+
+        <div class="progress-section">
+
+          <div class="progress-info">
+
+            <span>نسبة الإنجاز اليومي:</span>
+
+            <span id="tasks-progress-text">0%</span>
+
+          </div>
+
+          <div class="progress-track">
+
+            <div class="progress-fill" id="tasks-progress"></div>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="tasks-container" style="margin-top: 10px;"></div>
+
+      </div>
+
+
+
+      <!-- الصلوات الخمس -->
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">🕌</span>
+
+            <span>مواقيت الصلوات الخمس</span>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="divider-line"></div>
+
+
+
+        <div class="progress-section">
+
+          <div class="progress-info">
+
+            <span>نسبة الالتزام بالصلوات:</span>
+
+          </div>
+
+          <div class="progress-track">
+
+            <div class="progress-fill" id="prayers-progress"></div>
+
+          </div>
+
+        </div>
+
+
+
+        <div id="prayers-container" style="margin-top: 10px;"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ==================== 🇬🇧 2. كورس الإنجليزي ==================== -->
+
+    <div class="app-page" id="page-english">
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">🇬🇧</span>
+
+            <span>أكاديمية اللغة الإنجليزية</span>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="divider-line"></div>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">رحلة التعلم المنظمة من الصفر وحتى الاحتراف والتخصص الهندسي.</p>
+
+        
+
+        <div id="english-levels-container" style="margin-top: 10px;"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ==================== 📐 3. الكورسات ==================== -->
+
+    <div class="app-page" id="page-courses">
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">📐</span>
+
+            <span>كورسات الهندسة والتشطيبات</span>
+
+          </div>
+
+        </div>
+
+        <div class="divider-line"></div>
+
+
+
+        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
+
+          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+
+            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
+
+            <div class="counter-control">
+
+              <button class="btn-counter" onclick="updateCourseLessons('decor', -1)">-</button>
+
+              <input type="number" id="decor-lesson-count" class="number-input" value="0" min="0" onchange="setCourseLessons('decor', this.value)">
+
+              <button class="btn-counter" onclick="updateCourseLessons('decor', 1)">+</button>
+
+            </div>
+
+          </div>
+
+          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
+
+        </div>
+
+
+
+        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
+
+          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+
+            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
+
+            <div class="counter-control">
+
+              <button class="btn-counter" onclick="updateCourseLessons('finishing', -1)">-</button>
+
+              <input type="number" id="finishing-lesson-count" class="number-input" value="0" min="0" onchange="setCourseLessons('finishing', this.value)">
+
+              <button class="btn-counter" onclick="updateCourseLessons('finishing', 1)">+</button>
+
+            </div>
+
+          </div>
+
+          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ==================== 🎯 4. الأهداف ==================== -->
+
+    <div class="app-page" id="page-goals">
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">🎥</span>
+
+            <span>1. صناعة المحتوى (10K متابع)</span>
+
+          </div>
+
+        </div>
+
+        <div class="divider-line"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+
+          <span style="font-size: 0.85rem;">المتابعين الحاليين:</span>
+
+          <input type="number" id="followers-count" class="number-input" value="1200" min="0" style="width: 80px;" onchange="updateFollowers()">
+
+        </div>
+
+        <div class="progress-track" style="margin-top: 10px;">
+
+          <div class="progress-fill" id="followers-progress"></div>
+
+        </div>
+
+        <p style="font-size: 0.8rem; text-align: center; margin-top: 4px; color: var(--text-muted);" id="followers-percent">0% مكتمل</p>
+
+      </div>
+
+
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">🍎</span>
+
+            <span>2. الادخار للآيفون</span>
+
+          </div>
+
+        </div>
+
+        <div class="divider-line"></div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+
+          <span>الحالي: <strong id="savings-current">0</strong> ج.م</span>
+
+          <span>المستهدف: <strong>50,000</strong> ج.م</span>
+
+        </div>
+
+        <div class="progress-track" style="margin-top: 6px;">
+
+          <div class="progress-fill" id="savings-progress"></div>
+
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+
+          <button class="btn-action" onclick="adjustSavings(1000)">+ 1000</button>
+
+          <button class="btn-action" style="background: var(--text-muted);" onclick="adjustSavings(-1000)">- 1000</button>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">🏢</span>
+
+            <span>3. تأسيس مكتب التشطيبات</span>
+
+          </div>
+
+          <button class="btn-action" style="font-size: 0.7rem; padding: 3px 8px;" onclick="addOfficeGoalRow()">➕ إضافة خطوة</button>
+
+        </div>
+
+        <div class="divider-line"></div>
+
+        <div id="office-goals-container"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ==================== 📖 5. سورة البقرة ==================== -->
+
+    <div class="app-page" id="page-quran">
+
+      <div class="section-card">
+
+        <div class="section-header-row">
+
+          <div class="section-title">
+
+            <span class="sec-icon">📖</span>
+
+            <span>سورة البقرة (التلاوة المتزامنة)</span>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="divider-line"></div>
+
+
+
+        <div style="background: var(--accent-blue-light); border: 1px solid var(--accent-blue-border); border-radius: 14px; padding: 12px; text-align: center;">
+
+          <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري (مرتل)</p>
+
+          <audio id="quran-audio-player" controls style="width: 100%; height: 40px; border-radius: 8px;">
+
+            <source src="https://server13.mp3quran.net/husr/002.mp3" type="audio/mpeg">
+
+            متصفحك لا يدعم تشغيل الصوت.
+
+          </audio>
+
+          <p style="font-size: 0.75rem; color: var(--accent-blue); margin-top: 4px; font-weight: bold;">🎯 متزامن بدقة مع بداية كل صفحة وآياتها</p>
+
+        </div>
+
+
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+
+          <span style="font-size: 0.85rem; font-weight: bold;">الصفحة الحالية:</span>
+
+          <div class="counter-control">
+
+            <button class="btn-counter" onclick="updateQuran(-1)">السابقة</button>
+
+            <input type="number" id="quran-page-input" class="number-input" value="2" min="2" max="49" onchange="setQuranPage(this.value)">
+
+            <button class="btn-counter" onclick="updateQuran(1)">التالية</button>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="quran-img-container">
+
+          <img id="quran-page-image" class="quran-page-img" src="" alt="صفحة المصحف" onerror="handleQuranImgError()" onload="handleQuranImgSuccess()">
+
+          
+
+          <div id="quran-fallback" class="quran-fallback-card">
+
+            <h2 style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
+
+            <p style="font-weight: bold; color: var(--text-dark);">سورة البقرة</p>
+
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">أنت الآن في وضع الأوفلاين. الصوت متزامن بالكامل مع هذه الصفحة.</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="progress-track" style="margin-top: 10px;">
+
+          <div class="progress-fill" id="quran-progress"></div>
+
+        </div>
+
+        <p style="font-size: 0.85rem; font-weight: bold; text-align: center; color: var(--accent-blue); margin-top: 6px;" id="quran-status">الصفحة 2 من 49 (سورة البقرة)</p>
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <!-- 📱 شريط التنقل السفلي -->
+
+  <div class="bottom-nav">
+
+    <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home', this)">
+
+      <span class="nav-icon">🏠</span>
+
+      <span>الرئيسية</span>
+
+    </div>
+
+    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english', this)">
+
+      <span class="nav-icon">🇬🇧</span>
+
+      <span>الإنجليزي</span>
+
+    </div>
+
+    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses', this)">
+
+      <span class="nav-icon">📐</span>
+
+      <span>الكورسات</span>
+
+    </div>
+
+    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals', this)">
+
+      <span class="nav-icon">🎯</span>
+
+      <span>الأهداف</span>
+
+    </div>
+
+    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran', this)">
+
+      <span class="nav-icon">📖</span>
+
+      <span>البقرة</span>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="modal" id="distract-modal">
+
+    <div class="modal-content" style="text-align: center;">
+
+      <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
+
+      <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
+
+      <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+    function playAdhanSound() {
+
+      const adhanAudio = document.getElementById('adhan-audio-player');
+
+      if (adhanAudio) {
+
+        adhanAudio.play().catch(e => console.log("تنبيه الصوت محجوب حتى يتم التفاعل مع الصفحة"));
+
       }
+
+    }
+
+
+
+    function switchPage(pageId, navEl = null) {
+
+      localState.current_page = pageId;
+
+      saveStateLocally();
+
+
+
+      document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
+
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+
+
+      const targetPage = document.getElementById(pageId);
+
+      if (targetPage) targetPage.classList.add('active');
+
+
+
+      if (!navEl) {
+
+        navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+
+      }
+
+      if (navEl) navEl.classList.add('active');
+
+
+
+      const welcomeCard = document.getElementById('top-welcome-card');
+
+      const quoteCard = document.getElementById('top-quote-card');
+
+
+
+      if (pageId === 'page-home') {
+
+        welcomeCard.style.display = 'flex';
+
+        quoteCard.style.display = 'flex';
+
+      } else {
+
+        welcomeCard.style.display = 'none';
+
+        quoteCard.style.display = 'none';
+
+      }
+
+
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    }
+
+
+
+    function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+
+    function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+    function openDistractModal() { openModal('distract-modal'); }
+
+
+
+    function toggleTheme() {
+
+      document.body.classList.toggle('dark-mode');
+
+      const isDark = document.body.classList.contains('dark-mode');
+
+      document.getElementById('theme-toggle').innerText = isDark ? '☀️' : '🌙';
+
+      localStorage.setItem('dashboard_theme', isDark ? 'dark' : 'light');
+
+    }
+
+
+
+    const defaultTasks = [
+
+      { id: 'quran', title: 'حفظ سورة البقرة', icon: '📖' },
+
+      { id: 'english', title: 'تعلم الإنجليزية (الكورس)', icon: '🇬🇧' },
+
+      { id: 'sketchup', title: 'SketchUp', icon: '📐' },
+
+      { id: 'autocad', title: 'AutoCAD', icon: '🖥️' },
+
+      { id: 'd5', title: 'D5 Render', icon: '🎬' },
+
+      { id: 'gym', title: 'الجيم', icon: '💪' },
+
+      { id: 'content', title: 'صناعة المحتوى', icon: '🎥' }
+
     ];
 
-    // --- إدارة حالة التطبيق (State) والتخزين المحلي ---
-    const STORAGE_KEY = 'mustafa_dashboard_state';
 
-    let localState = {
-      current_page: 'page-home',
-      tasks: {},
-      prayers: {},
-      english: {},
-      courses: { decor: { count: 0, title: '' }, finishing: { count: 0, title: '' } },
-      followers: 1200,
-      savings: 0,
-      office_goals: [
-        { id: 'g1', title: 'تحديد الخدمات والباقات', done: false },
-        { id: 'g2', title: 'إنشاء الهوية البصرية واللوجو', done: false }
-      ],
-      quran_page: 2
-    };
 
-    function loadState() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          localState = { ...localState, ...JSON.parse(saved) };
-        } catch (e) {
-          console.error("Error loading state", e);
-        }
-      }
-      const savedTheme = localStorage.getItem('dashboard_theme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('theme-toggle').innerText = '☀️';
-      }
-    }
+    const prayersList = [
 
-    function saveStateLocally() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
-    }
+      { id: 'fajr', title: 'صلاة الفجر', time: '04:32 ص' },
 
-    // --- 1. المهام والصلوات ---
-    function renderTasks() {
-      const container = document.getElementById('tasks-container');
-      container.innerHTML = '';
-      let completed = 0;
+      { id: 'dhuhr', title: 'صلاة الظهر', time: '01:04 م' },
 
-      defaultTasks.forEach(task => {
-        const isChecked = !!localState.tasks[task.id];
-        if (isChecked) completed++;
+      { id: 'asr', title: 'صلاة العصر', time: '04:41 م' },
 
-        const div = document.createElement('div');
-        div.className = 'task-item';
-        div.innerHTML = `
-          <label>
-            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTask('${task.id}', this.checked)">
-            <span>${task.icon} ${task.title}</span>
-          </label>
-        `;
-        container.appendChild(div);
-      });
+      { id: 'maghrib', title: 'صلاة المغرب', time: '07:56 م' },
 
-      const percent = Math.round((completed / defaultTasks.length) * 100);
-      document.getElementById('tasks-progress').style.width = percent + '%';
-      document.getElementById('tasks-progress-text').innerText = percent + '%';
-    }
+      { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
 
-    function toggleTask(id, checked) {
-      localState.tasks[id] = checked;
-      saveStateLocally();
-      renderTasks();
-    }
+    ];
 
-    function renderPrayers() {
-      const container = document.getElementById('prayers-container');
-      container.innerHTML = '';
-      let completed = 0;
 
-      prayersList.forEach(p => {
-        const isChecked = !!localState.prayers[p.id];
-        if (isChecked) completed++;
 
-        const div = document.createElement('div');
-        div.className = 'task-item';
-        div.innerHTML = `
-          <label>
-            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePrayer('${p.id}', this.checked)">
-            <span>${p.title}</span>
-          </label>
-          <div class="prayer-badge">
-            🕒 ${p.time}
-            <button class="btn-adhan" onclick="playAdhanSound()">🔊</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
+    const englishCourseData = [
 
-      const percent = Math.round((completed / prayersList.length) * 100);
-      document.getElementById('prayers-progress').style.width = percent + '%';
-    }
+      {
 
-    function togglePrayer(id, checked) {
-      localState.prayers[id] = checked;
-      saveStateLocally();
-      renderPrayers();
-    }
+        id: "a0",
 
-    // --- 2. كورس الإنجليزي ---
-    function renderEnglishCourse() {
-      const container = document.getElementById('english-levels-container');
-      container.innerHTML = '';
+        title: "المستوى A0 - Beginner (من الصفر تمامًا)",
 
-      englishCourseData.forEach((level, lIndex) => {
-        const levelCard = document.createElement('div');
-        levelCard.className = 'eng-level-card';
-        
-        let unitsHTML = '';
-        level.units.forEach((unit, uIndex) => {
-          unitsHTML += `<div class="eng-unit-title">${unit.title}</div>`;
-          unit.lessons.forEach((lesson, lesIndex) => {
-            const key = `${level.id}_u${uIndex}_l${lesIndex}`;
-            const isDone = !!localState.english[key];
-            unitsHTML += `
-              <div class="eng-lesson-row">
-                <span>${lesson}</span>
-                <button class="eng-status-btn" onclick="toggleEngLesson('${key}')">
-                  ${isDone ? '✅ مكتمل' : '⏳ قيد الإنجاز'}
-                </button>
-              </div>
-            `;
-          });
-        });
+        units: [
 
-        levelCard.innerHTML = `
-          <div class="eng-level-header" onclick="this.parentElement.classList.toggle('open')">
-            <span>${level.title}</span>
-            <span>🔽</span>
-          </div>
-          <div class="eng-level-content">
-            ${unitsHTML}
-          </div>
-        `;
-        container.appendChild(levelCard);
-      });
-    }
+          {
 
-    function toggleEngLesson(key) {
-      localState.english[key] = !localState.english[key];
-      saveStateLocally();
-      renderEnglishCourse();
-    }
+            title: "الوحدة الأولى: الحروف والنطق",
 
-    // --- 3. الكورسات والتقدم ---
-    function updateCourseLessons(courseKey, delta) {
-      const current = localState.courses[courseKey]?.count || 0;
-      setCourseLessons(courseKey, Math.max(0, current + delta));
-    }
+            lessons: ["الأبجدية الإنجليزية (Alphabet)", "الحروف الكبيرة والصغيرة", "أصوات الحروف (Letter Sounds)", "الحروف المتحركة (Vowels)", "الحروف الساكنة (Consonants)", "الفرق بين اسم الحرف وصوته", "نطق الكلمات البسيطة", "مراجعة الوحدة", "اختبار الوحدة"]
 
-    function setCourseLessons(courseKey, value) {
-      if (!localState.courses[courseKey]) localState.courses[courseKey] = { count: 0, title: '' };
-      localState.courses[courseKey].count = parseInt(value) || 0;
-      saveCoursesData();
-    }
+          },
 
-    function saveCoursesData() {
-      localState.courses.decor.title = document.getElementById('decor-lesson-title').value;
-      localState.courses.finishing.title = document.getElementById('finishing-lesson-title').value;
-      saveStateLocally();
-      renderCourses();
-    }
+          {
 
-    function renderCourses() {
-      document.getElementById('decor-lesson-count').value = localState.courses.decor?.count || 0;
-      document.getElementById('decor-lesson-title').value = localState.courses.decor?.title || '';
-      document.getElementById('finishing-lesson-count').value = localState.courses.finishing?.count || 0;
-      document.getElementById('finishing-lesson-title').value = localState.courses.finishing?.title || '';
-    }
+            title: "الوحدة الثانية: أساسيات اللغة",
 
-    // --- 4. الأهداف ---
-    function updateFollowers() {
-      const val = parseInt(document.getElementById('followers-count').value) || 0;
-      localState.followers = val;
-      saveStateLocally();
-      renderGoals();
-    }
+            lessons: ["التحيات (Greetings)", "التعارف (Introducing Yourself)", "الضمائر (Pronouns)", "الأرقام (Numbers)", "الألوان (Colors)", "الأيام والشهور", "الوقت والتاريخ", "مراجعة", "اختبار"]
 
-    function adjustSavings(amount) {
-      localState.savings = Math.max(0, (localState.savings || 0) + amount);
-      saveStateLocally();
-      renderGoals();
-    }
+          },
 
-    function addOfficeGoalRow() {
-      const title = prompt("أدخل اسم الخطوة/الهدف الجديد:");
-      if (title) {
-        localState.office_goals.push({ id: 'g_' + Date.now(), title: title, done: false });
-        saveStateLocally();
-        renderGoals();
-      }
-    }
+          {
 
-    function toggleOfficeGoal(id) {
-      const goal = localState.office_goals.find(g => g.id === id);
-      if (goal) {
-        goal.done = !goal.done;
-        saveStateLocally();
-        renderGoals();
-      }
-    }
+            title: "الوحدة الثالثة: المفردات الأساسية",
 
-    function deleteOfficeGoal(id) {
-      localState.office_goals = localState.office_goals.filter(g => g.id !== id);
-      saveStateLocally();
-      renderGoals();
-    }
+            lessons: ["العائلة", "الوظائف", "الدول والجنسيات", "أجزاء الجسم", "الملابس", "الطعام", "المشروبات", "المنزل", "الأثاث", "مراجعة", "اختبار"]
 
-    function renderGoals() {
-      // المتابعين
-      const fCount = localState.followers || 0;
-      document.getElementById('followers-count').value = fCount;
-      const fPercent = Math.min(100, Math.round((fCount / 10000) * 100));
-      document.getElementById('followers-progress').style.width = fPercent + '%';
-      document.getElementById('followers-percent').innerText = fPercent + '% مكتمل';
+          },
 
-      // الادخار
-      const sav = localState.savings || 0;
-      document.getElementById('savings-current').innerText = sav.toLocaleString();
-      const sPercent = Math.min(100, Math.round((sav / 50000) * 100));
-      document.getElementById('savings-progress').style.width = sPercent + '%';
+          {
 
-      // أهداف المكتب
-      const container = document.getElementById('office-goals-container');
-      container.innerHTML = '';
-      (localState.office_goals || []).forEach(g => {
-        const div = document.createElement('div');
-        div.className = 'task-item';
-        div.innerHTML = `
-          <label>
-            <input type="checkbox" ${g.done ? 'checked' : ''} onchange="toggleOfficeGoal('${g.id}')">
-            <span style="${g.done ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${g.title}</span>
-          </label>
-          <button class="btn-delete" onclick="deleteOfficeGoal('${g.id}')">🗑️</button>
-        `;
-        container.appendChild(div);
-      });
-    }
+            title: "الوحدة الرابعة: أول قواعد",
 
-    // --- 5. القرآن الكريم (سورة البقرة) ---
-    function updateQuran(delta) {
-      setQuranPage((localState.quran_page || 2) + delta);
-    }
+            lessons: ["أجزاء الجملة", "Verb To Be", "أدوات التعريف", "الملكية", "الجمع", "الأسئلة البسيطة", "النفي", "مراجعة", "اختبار"]
 
-    function setQuranPage(page) {
-      let p = parseInt(page) || 2;
-      if (p < 2) p = 2;
-      if (p > 49) p = 49;
-      localState.quran_page = p;
-      saveStateLocally();
-      renderQuran();
-    }
+          }
 
-    function renderQuran() {
-      const page = localState.quran_page || 2;
-      document.getElementById('quran-page-input').value = page;
-      document.getElementById('fallback-page-num').innerText = page;
-      document.getElementById('quran-status').innerText = `الصفحة ${page} من 49 (سورة البقرة)`;
-      
-      const percent = Math.round(((page - 1) / 48) * 100);
-      document.getElementById('quran-progress').style.width = percent + '%';
+        ]
 
-      // رابط صور المصحف الرسمية (مجمع الملك فهد)
-      const paddedPage = String(page).padStart(3, '0');
-      const imgUrl = `https://mushaf.qurancomplex.gov.sa/wp-content/themes/qurancomplex/images/pages/page_${paddedPage}.jpg`;
-      const imgEl = document.getElementById('quran-page-image');
-      
-      document.getElementById('quran-fallback').style.display = 'none';
-      imgEl.style.display = 'block';
-      imgEl.src = imgUrl;
-    }
+      },
 
-    function handleQuranImgError() {
-      document.getElementById('quran-page-image').style.display = 'none';
-      document.getElementById('quran-fallback').style.display = 'block';
-    }
+      {
 
-    function handleQuranImgSuccess() {
-      document.getElementById('quran-fallback').style.display = 'none';
-      document.getElementById('quran-page-image').style.display = 'block';
-    }
+        id: "a1",
 
-    // --- السيرفر والوقت الحي ---
-    function initClock() {
-      setInterval(() => {
-        const now = new Date();
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'م' : 'ص';
-        hours = hours % 12 || 12;
-        const timeStr = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}`;
+        title: "🇺🇸 المستوى A1",
 
-        document.getElementById('live-clock-time').innerText = timeStr;
-        document.getElementById('live-clock-ampm').innerText = ampm;
-      }, 1000);
-    }
+        units: [
 
-    // --- التشغيل الأولي ---
-    window.addEventListener('DOMContentLoaded', () => {
-      loadState();
-      initClock();
-      renderTasks();
-      renderPrayers();
-      renderEnglishCourse();
-      renderCourses();
-      renderGoals();
-      renderQuran();
+          { title: "الوحدة الأولى", lessons: ["Present Simple", "استخدام Do و Does", "ظروف التكرار", "الروتين اليومي", "مراجعة", "اختبار"] },
 
-      if (localState.current_page) {
-        switchPage(localState.current_page);
-      }
-    });
-  </script>
-</body>
-</html>
+          { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] },
+
+          { title: "الوحدة الثالثة", lessons: ["الصفات", "المقارنة", "التفضيل", "مراجعة", "اختبار"] },
+
+          { title: "الوحدة الرابعة", lessons: ["الطلب في المطعم", "التسوق", "في الفندق", "في البنك", "في الصيدلية", "مراجعة", "اختبار"] }
+
+        ]
+
+      },
+
+      {
+
+        id: "a2",
+
+        title: "🇺🇸 المستوى A2",
+
+        units: [
+
+          { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] },
+
+          { title: "الوحدة الثانية", lessons: ["Future Simple", "Going To", "الخطط", "المواعيد", "مراجعة", "اختبار"] },
+
+          { title: "الوحدة الثالثة", lessons: ["Present Continuous", "Past Continuous", "Future Continuous", "مراجعة", "اختبار"] },
+
+          { title: "الوحدة الرابعة", lessons: ["كتابة رسالة", "كتابة Email", "وصف مكان", "وصف شخص", "وصف يوم", "مراجعة", "اختبار"] }
+
+        ]
+
+      },
+
+      {
+
+        id: "b1",
+
+        title: "🇺🇸 المستوى B1",
+
+        units: [
+
+          { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] },
+
+          { title: "الوحدة الثانية", lessons: ["Reading قصيرة", "استخراج المفردات", "فهم النصوص", "مراجعة"] },
+
+          { title: "الوحدة الثالثة", lessons: ["محادثات السفر", "المطار", "الفندق", "العمل", "المطعم", "المستشفى", "مراجعة"] },
+
+          { title: "الوحدة الرابعة", lessons: ["كتابة Paragraph", "كتابة Essay", "مراجعة", "اختبار"] }
+
+        ]
+
+      },
+
+      {
+
+        id: "b2",
+
+        title: "🇺🇸 المستوى B2",
+
+        units: [
+
+          { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] },
+
+          { title: "الوحدة الثانية", lessons: ["Business English", "Meetings", "Negotiation", "Emails"] },
+
+          { title: "الوحدة الثالثة", lessons: ["Speaking Fluently", "Pronunciation", "Accent"] },
+
+          { title: "الوحدة الرابعة", lessons: ["مشاهدة فيديوهات بدون ترجمة", "تلخيصها", "مناقشتها"] }
+
+        ]
+
+      },
+
+      {
+
+        id: "c1",
+
+        title: "🇺🇸 المستوى C1",
+
+        units: [
+
+          { title: "الوحدة الأولى", lessons: ["التفكير بالإنجليزية", "التحدث بطلاقة"] },
+
+          { title: "الوحدة الثانية", lessons: ["Presentation Skills", "Public Speaking"] },
+
+          { title: "الوحدة الثالثة", lessons: ["Academic English", "Professional Writing"] },
+
+          {
+
+            title: "الوحدة الرابعة: English for Interior Design",
+
+            lessons: [
+
+              "أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات",
+
+              "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أس 
+
