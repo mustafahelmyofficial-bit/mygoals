@@ -3,15 +3,22 @@
   "name": "Personal Dashboard",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041886.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#f5f2eb",
-  "theme_color": "#d4af37",
+  "scope": "./",
+  "background_color": "#F4EFEA",
+  "theme_color": "#5C4333",
   "display": "standalone",
   "orientation": "portrait"
 }
