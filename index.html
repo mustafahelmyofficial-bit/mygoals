@@ -384,7 +384,7 @@
       </div>
     </div>
 
-    <!-- ==================== 📖 5. سورة البقرة (مضبوطة ومزامنة بالثواني) ==================== -->
+    <!-- ==================== 📖 5. سورة البقرة ==================== -->
     <div class="app-page" id="page-quran">
       <div class="section-card">
         <div class="section-header-row">
@@ -396,7 +396,6 @@
 
         <div class="divider-line"></div>
 
-        <!-- مشغل الصوت الذكي -->
         <div style="background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); border-radius: 14px; padding: 12px; text-align: center;">
           <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 8px;">🎙️ القارئ: الشيخ محمود خليل الحصري (مرتل)</p>
           <audio id="quran-audio-player" controls style="width: 100%; height: 40px; border-radius: 8px;">
@@ -436,23 +435,23 @@
 
   <!-- 📱 شريط التنقل السفلي -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchPage('page-home', this)">
+    <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home', this)">
       <span class="nav-icon">🏠</span>
       <span>الرئيسية</span>
     </div>
-    <div class="nav-item" onclick="switchPage('page-english', this)">
+    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english', this)">
       <span class="nav-icon">🇬🇧</span>
       <span>الإنجليزي</span>
     </div>
-    <div class="nav-item" onclick="switchPage('page-courses', this)">
+    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses', this)">
       <span class="nav-icon">📐</span>
       <span>الكورسات</span>
     </div>
-    <div class="nav-item" onclick="switchPage('page-goals', this)">
+    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals', this)">
       <span class="nav-icon">🎯</span>
       <span>الأهداف</span>
     </div>
-    <div class="nav-item" onclick="switchPage('page-quran', this)">
+    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran', this)">
       <span class="nav-icon">📖</span>
       <span>البقرة</span>
     </div>
@@ -469,13 +468,23 @@
   <script>
     let soundEnabled = true;
 
-    function switchPage(pageId, navEl) {
+    function switchPage(pageId, navEl = null) {
       playSoundEffect();
+      
+      // حفظ الصفحة الحالية في الـ Storage
+      localState.current_page = pageId;
+      saveStateLocally();
+
       document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-      document.getElementById(pageId).classList.add('active');
-      navEl.classList.add('active');
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) targetPage.classList.add('active');
+
+      if (!navEl) {
+        navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+      }
+      if (navEl) navEl.classList.add('active');
 
       const welcomeCard = document.getElementById('top-welcome-card');
       const quoteCard = document.getElementById('top-quote-card');
@@ -536,59 +545,19 @@
       { id: 'isha', title: 'صلاة العشاء', time: '09:24 م' }
     ];
 
-    /* ⏱️ جدول التوقيتات المضبوط بالثواني لتلاوة الشيخ الحصري (تزامن دقيق لكل صفحة) */
     const pageAudioTimeMap = {
-      2: 0,        // البقرة آية 1
-      3: 132,      // آية 6
-      4: 260,      // آية 17
-      5: 395,      // آية 25
-      6: 540,      // آية 30
-      7: 685,      // آية 38
-      8: 835,      // آية 49
-      9: 1000,     // آية 58
-      10: 1173,    // آية 62 (إن الذين آمنوا والذين هادوا والنصارى...)
-      11: 1335,    // آية 70
-      12: 1510,    // آية 77
-      13: 1680,    // آية 84
-      14: 1855,    // آية 89
-      15: 2020,    // آية 94
-      16: 2190,    // آية 102
-      17: 2365,    // آية 106
-      18: 2540,    // آية 113
-      19: 2715,    // آية 120
-      20: 2890,    // آية 127
-      21: 3060,    // آية 135
-      22: 3235,    // آية 142
-      23: 3410,    // آية 146
-      24: 3585,    // آية 154
-      25: 3760,    // آية 164
-      26: 3940,    // آية 170
-      27: 4120,    // آية 177
-      28: 4300,    // آية 182
-      29: 4480,    // آية 187
-      30: 4660,    // آية 191
-      31: 4840,    // آية 197
-      32: 5020,    // آية 203
-      33: 5200,    // آية 211
-      34: 5380,    // آية 216
-      35: 5560,    // آية 220
-      36: 5740,    // آية 225
-      37: 5920,    // آية 231
-      38: 6100,    // آية 234
-      39: 6280,    // آية 238
-      40: 6460,    // آية 246
-      41: 6640,    // آية 249
-      42: 6820,    // آية 253
-      43: 7000,    // آية 257
-      44: 7180,    // آية 260
-      45: 7360,    // آية 265
-      46: 7540,    // آية 270
-      47: 7720,    // آية 275
-      48: 7900,    // آية 282
-      49: 8100     // آية 283
+      2: 0, 3: 132, 4: 260, 5: 395, 6: 540, 7: 685, 8: 835, 9: 1000, 
+      10: 1173, 11: 1335, 12: 1510, 13: 1680, 14: 1855, 15: 2020, 
+      16: 2190, 17: 2365, 18: 2540, 19: 2715, 20: 2890, 21: 3060, 
+      22: 3235, 23: 3410, 24: 3585, 25: 3760, 26: 3940, 27: 4120, 
+      28: 4300, 29: 4480, 30: 4660, 31: 4840, 32: 5020, 33: 5200, 
+      34: 5380, 35: 5560, 36: 5740, 37: 5920, 38: 6100, 39: 6280, 
+      40: 6460, 41: 6640, 42: 6820, 43: 7000, 44: 7180, 45: 7360, 
+      46: 7540, 47: 7720, 48: 7900, 49: 8100
     };
 
     let localState = {
+      current_page: 'page-home',
       daily_tasks: {}, 
       task_days_count: {},
       prayers_tasks: {}, 
@@ -607,6 +576,8 @@
       if (!localState.snoozed_tasks) localState.snoozed_tasks = {};
       if (!localState.task_days_count) localState.task_days_count = {};
       if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
+      if (!localState.current_page) localState.current_page = 'page-home';
+      
       applyStateToUI();
     }
 
@@ -630,6 +601,9 @@
 
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
+
+      // فتح آخر صفحة كانت مفتوحة قبل التحديث
+      switchPage(localState.current_page);
     }
 
     function renderTasks() {
@@ -743,7 +717,6 @@
         imgEl.src = `https://www.searchtruth.com/quran/images2/large/page-${page}.png`;
       }
 
-      /* الانتقال الفوري للتوقيت المحدد للصفحة الحالية */
       const audioPlayer = document.getElementById('quran-audio-player');
       if (audioPlayer && pageAudioTimeMap[page] !== undefined) {
         audioPlayer.currentTime = pageAudioTimeMap[page];
