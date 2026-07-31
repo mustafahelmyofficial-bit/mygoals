@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم الشخصية | المهندس مصطفى حلمي</title>
+  <title>Eng-Mustafa Helmy | لوحة التحكم والأكاديمية</title>
   
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="manifest" href="manifest.json">
@@ -26,8 +26,6 @@
       --text-muted: #8C827A;
       --success-green: #2E7D32;
       --danger-red: #D32F2F;
-      --status-review: #D97706;
-      --status-progress: #2563EB;
       
       --card-radius: 24px;
       --inner-radius: 16px;
@@ -67,15 +65,15 @@
       gap: 14px;
     }
 
+    .header-card, .quote-card-bar { display: flex; }
+
     .header-card {
       background: var(--card-bg);
       border-radius: var(--card-radius);
       border: 1px solid var(--card-stroke);
       padding: 20px;
       box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column; 
-      gap: 18px;
+      flex-direction: column; gap: 18px;
     }
 
     .header-top-row { display: flex; justify-content: space-between; align-items: flex-start; }
@@ -106,7 +104,7 @@
       background: var(--card-bg); border-radius: var(--inner-radius);
       border: 1px solid var(--card-stroke); padding: 14px 18px; text-align: center;
       box-shadow: var(--shadow-soft); position: relative; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      justify-content: center; align-items: center;
     }
     .quote-card-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px; background: var(--accent-gold); border-radius: 0 4px 4px 0; }
     .quote-card-bar p { font-weight: 700; font-size: 0.95rem; color: var(--text-dark); }
@@ -146,46 +144,80 @@
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
     .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-gold); cursor: pointer; }
 
-    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي المحدثة ==================== */
-    .eng-main-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
-    .eng-main-tab {
+    .days-badge {
+      background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border);
+      color: var(--accent-gold); font-size: 0.75rem; font-weight: 800;
+      padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ==================== 🇬🇧 إستايلات أكاديمية الإنجليزي الفاخرة ==================== */
+    .english-dashboard-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;
+    }
+    .eng-dash-card {
+      background: var(--bg-main); border: 1px solid var(--card-stroke);
+      border-radius: 14px; padding: 10px; text-align: center;
+    }
+    .eng-dash-card .val { font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); }
+    .eng-dash-card .lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
+
+    .level-selector-tabs {
+      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none;
+    }
+    .level-tab {
       padding: 8px 14px; border-radius: 12px; background: var(--bg-main); border: 1px solid var(--card-stroke);
       font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; color: var(--text-muted);
-      transition: var(--transition); flex-shrink: 0;
+      transition: var(--transition);
     }
-    .eng-main-tab.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
+    .level-tab.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
+    .level-tab.locked { opacity: 0.6; cursor: not-allowed; }
 
-    .level-selector-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; margin-top: 6px; }
-    .level-tab {
-      padding: 6px 12px; border-radius: 10px; background: var(--bg-main); border: 1px solid var(--card-stroke);
-      font-weight: 700; font-size: 0.75rem; cursor: pointer; white-space: nowrap; color: var(--text-muted);
-      transition: var(--transition); display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    .lesson-card-item {
+      background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 16px;
+      padding: 14px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;
+      position: relative; transition: var(--transition);
     }
-    .level-tab.active { background: var(--text-dark); color: #fff; border-color: var(--text-dark); }
-    .level-tab.locked { opacity: 0.5; cursor: not-allowed; }
-
-    .unit-accordion { background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 16px; overflow: hidden; margin-bottom: 10px; }
-    .unit-header { padding: 12px 14px; background: var(--card-bg); font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-stroke); }
-    .unit-content { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-
-    .lesson-item-row {
-      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 12px;
-      padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    .lesson-card-item.locked { opacity: 0.65; filter: grayscale(0.5); }
+    .lesson-top { display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
+    
+    .vocab-card {
+      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 18px;
+      overflow: hidden; box-shadow: var(--shadow-soft); display: flex; flex-direction: column;
     }
-    .lesson-item-title { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); }
+    .vocab-img { width: 100%; height: 180px; object-fit: cover; background: #e0e0e0; }
+    .vocab-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .vocab-header { display: flex; justify-content: space-between; align-items: center; }
+    .vocab-word { font-size: 1.4rem; font-weight: 900; color: var(--accent-gold); letter-spacing: 0.5px; }
+    .vocab-type { font-size: 0.75rem; background: var(--accent-gold-light); border: 1px solid var(--accent-gold-border); padding: 2px 8px; border-radius: 6px; color: var(--text-dark); font-weight: 700; }
 
-    .status-badge {
-      font-size: 0.72rem; font-weight: bold; padding: 4px 8px; border-radius: 8px; cursor: pointer; border: none; transition: var(--transition);
-    }
-    .status-0 { background: rgba(140, 130, 122, 0.15); color: var(--text-muted); }
-    .status-1 { background: rgba(37, 99, 235, 0.15); color: var(--status-progress); }
-    .status-2 { background: rgba(46, 125, 50, 0.15); color: var(--success-green); }
-    .status-3 { background: rgba(217, 119, 6, 0.15); color: var(--status-review); }
+    .speed-controls { display: flex; gap: 4px; justify-content: center; align-items: center; margin-top: 4px; }
+    .btn-speed { padding: 3px 8px; border-radius: 6px; border: 1px solid var(--card-stroke); background: var(--bg-main); font-size: 0.7rem; font-weight: bold; cursor: pointer; color: var(--text-dark); }
+    .btn-speed.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); }
 
-    .vocab-grid-card {
-      background: var(--bg-main); border: 1px solid var(--card-stroke); border-radius: 12px;
-      padding: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+    /* فقاعات المحادثة Chat Bubbles */
+    .chat-container { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+    .chat-bubble { display: flex; gap: 10px; max-width: 90%; align-items: flex-start; }
+    .chat-bubble.left { align-self: flex-start; flex-direction: row; }
+    .chat-bubble.right { align-self: flex-end; flex-direction: row-reverse; }
+    
+    .chat-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent-gold); background: #fff; flex-shrink: 0; }
+    .chat-content {
+      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 16px; padding: 12px;
+      box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;
     }
+    .chat-bubble.right .chat-content { background: var(--accent-gold-light); border-color: var(--accent-gold-border); }
+    .chat-speaker-name { font-size: 0.75rem; font-weight: 800; color: var(--accent-gold); }
+    .chat-text-en { font-weight: 700; color: var(--text-dark); direction: ltr; text-align: left; }
+    .chat-text-ar { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+    .btn-mic-talk {
+      width: 60px; height: 60px; border-radius: 50%; background: var(--accent-gold); color: #fff;
+      border: none; font-size: 1.5rem; display: flex; justify-content: center; align-items: center;
+      margin: 10px auto; cursor: pointer; box-shadow: 0 4px 15px rgba(198, 154, 61, 0.4); transition: var(--transition);
+    }
+    .btn-mic-talk.recording { background: var(--danger-red); animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
 
     .counter-control { display: flex; align-items: center; gap: 8px; }
     .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-gold); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
@@ -213,6 +245,7 @@
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
     .modal-content { max-width: 420px; width: 92%; text-align: right; background: var(--card-bg); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); max-height: 85vh; overflow-y: auto; }
     
+    /* Quran styles */
     .quran-img-container { margin-top: 10px; text-align: center; }
     .quran-page-img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--card-stroke); }
     .quran-fallback-card { display: none; padding: 30px; background: var(--bg-main); border-radius: 16px; border: 1px solid var(--card-stroke); margin-top: 10px; }
@@ -222,11 +255,11 @@
 
   <div class="app-container">
 
-    <!-- 🎴 كارت الترحيب الرئيسي الأصلي -->
+    <!-- 🎴 كارت الترحيب الرئيسي -->
     <div class="header-card" id="top-welcome-card">
       <div class="header-top-row">
         <div class="welcome-text">
-          <h1>👋 مرحباً بك،<br>يا مهندس مصطفى!</h1>
+          <h1>👋 مرحباً بك،<br>يا مهندس!</h1>
           <p id="live-date">الجمعة، 31 يوليو 2026</p>
         </div>
         <div class="badge-offline-pill">
@@ -239,7 +272,7 @@
 
         <div class="widgets-group">
           <div class="time-widget">
-            <span id="live-clock-time">08:40:00</span>
+            <span id="live-clock-time">03:51:02</span>
             <span class="ampm" id="live-clock-ampm">م</span>
           </div>
 
@@ -249,29 +282,26 @@
       </div>
     </div>
 
-    <!-- 📜 كارت الحكمة الأصلي -->
+    <!-- 📜 كارت الحكمة -->
     <div class="quote-card-bar" id="top-quote-card">
-      <p id="daily-quote">"استخدام أثاث أكبر من حجم الغرفة يعطي إحساساً بالاتساع والارتقاء."</p>
+      <p id="daily-quote">"الاستمرارية في الخطوات الصغيرة تجلب الإنجازات الكبيرة."</p>
     </div>
 
-    <!-- ==================== 🏠 1. الصفحة الرئيسية (التصميم الأصلي بالكامل) ==================== -->
+    <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
     <div class="app-page active" id="page-home">
-      
-      <!-- 📋 المهام اليومية الشاملة -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📋</span>
-            <span>المهام اليومية والأهداف الشخصية</span>
+            <span>المهام اليومية</span>
           </div>
-          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="addNewTask()">➕ إضافة مهمة</button>
         </div>
 
         <div class="divider-line"></div>
 
         <div class="progress-section">
           <div class="progress-info">
-            <span>نسبة إنجاز المهام:</span>
+            <span>نسبة الإنجاز اليومي:</span>
             <span id="tasks-progress-text">0%</span>
           </div>
           <div class="progress-track">
@@ -282,51 +312,6 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- 🏋️‍♂️ متابعة اللياقة والجيم -->
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">🏋️‍♂️</span>
-            <span>التمارين والرياضة (الجيم)</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-        <div id="gym-tasks-container"></div>
-      </div>
-
-      <!-- 💻 تتبع البرامج الهندسية (SketchUp, AutoCAD, D5 Render) -->
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">💻</span>
-            <span>متابعة أدوات التصميم والهندسة</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-        
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <div class="task-item">
-            <label>
-              <input type="checkbox" id="tool-sketchup" onchange="saveStateLocally()">
-              <span>📐 SketchUp - التطبيق والتصميم المعماري</span>
-            </label>
-          </div>
-          <div class="task-item">
-            <label>
-              <input type="checkbox" id="tool-autocad" onchange="saveStateLocally()">
-              <span>📏 AutoCAD - اللوحات التنفيذية والشوب دروينج</span>
-            </label>
-          </div>
-          <div class="task-item">
-            <label>
-              <input type="checkbox" id="tool-d5" onchange="saveStateLocally()">
-              <span>🎬 D5 Render - الرندر الإظهار المباشر والحركة</span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🕌 مواقيت الصلوات الخمس -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -350,82 +335,61 @@
       </div>
     </div>
 
-    <!-- ==================== 🇬🇧 2. أكاديمية اللغة الإنجليزية المحدثة بالمنهج الجديد ==================== -->
+    <!-- ==================== 🇬🇧 2. منصة تعلم الإنجليزية الاحترافية ==================== -->
     <div class="app-page" id="page-english">
       
-      <!-- شريط التنقل العلوي لأقسام اللغة الإنجليزية -->
-      <div class="eng-main-tabs">
-        <div class="eng-main-tab active" onclick="switchEngTab('curriculum', this)">📚 المنهج التفاعلي</div>
-        <div class="eng-main-tab" onclick="switchEngTab('vocabulary', this)">📖 المفردات المستقلة</div>
-        <div class="eng-main-tab" onclick="switchEngTab('listening', this)">🎧 الاستماع</div>
-        <div class="eng-main-tab" onclick="switchEngTab('speaking', this)">🗣️ المحادثة</div>
-      </div>
-
-      <!-- TAB 1: المنهج التفاعلي (A0 حتى C1 + Interior Design) -->
-      <div id="eng-tab-curriculum">
-        <div class="section-card" style="margin-bottom: 10px;">
-          <div class="section-header-row">
-            <div class="section-title">
-              <span class="sec-icon">🎯</span>
-              <span>مستوى المنهج</span>
-            </div>
-            <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-gold);" id="level-percentage-label">0% مكتمل</span>
+      <!-- لوحة الإحصائيات والإنجازات -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🎓</span>
+            <span>أكاديمية الإنجليزية (A0 → C1)</span>
           </div>
-          <div class="progress-track" style="margin-top: 6px;">
-            <div class="progress-fill" id="level-progress-bar"></div>
-          </div>
+        </div>
+        <div class="divider-line"></div>
 
-          <div class="level-selector-tabs" id="english-level-tabs"></div>
+        <div class="english-dashboard-grid">
+          <div class="eng-dash-card">
+            <div class="val" id="eng-dash-streak">0 🔥</div>
+            <div class="lbl">أيام متتالية</div>
+          </div>
+          <div class="eng-dash-card">
+            <div class="val" id="eng-dash-words">0 📚</div>
+            <div class="lbl">كلمة محفوظة</div>
+          </div>
+          <div class="eng-dash-card">
+            <div class="val" id="eng-dash-level">A0 🎯</div>
+            <div class="lbl">المستوى الحالي</div>
+          </div>
         </div>
 
-        <div id="english-units-container"></div>
-      </div>
-
-      <!-- TAB 2: المفردات المستقلة -->
-      <div id="eng-tab-vocabulary" style="display: none;">
-        <div class="section-card">
-          <div class="section-header-row">
-            <div class="section-title">
-              <span class="sec-icon">📖</span>
-              <span>قواميس المفردات المستقلة</span>
-            </div>
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>تقدم المستويات الكلي:</span>
+            <span id="eng-overall-progress-text">0%</span>
           </div>
-          <div class="divider-line"></div>
-          <div id="vocab-levels-accordion"></div>
+          <div class="progress-track">
+            <div class="progress-fill" id="eng-overall-progress"></div>
+          </div>
         </div>
       </div>
 
-      <!-- TAB 3: قسم الاستماع -->
-      <div id="eng-tab-listening" style="display: none;">
-        <div class="section-card">
-          <div class="section-header-row">
-            <div class="section-title">
-              <span class="sec-icon">🎧</span>
-              <span>تطوير مهارة الاستماع</span>
-            </div>
-          </div>
-          <div class="divider-line"></div>
-          <div id="listening-container"></div>
-        </div>
+      <!-- تبويب المستويات -->
+      <div class="level-selector-tabs" id="english-level-tabs">
+        <div class="level-tab active" onclick="switchEngLevel('A0_A1', this)">A0 → A1 (التأسيس)</div>
+        <div class="level-tab" onclick="switchEngLevel('A1_A2', this)">A1 → A2 (المبتدئ)</div>
+        <div class="level-tab" onclick="switchEngLevel('A2_B1', this)">A2 → B1 (المتوسط)</div>
+        <div class="level-tab" onclick="switchEngLevel('B1_B2', this)">B1 → B2 (فوق المتوسط)</div>
+        <div class="level-tab" onclick="switchEngLevel('B2_C1', this)">B2 → C1 (الهندسة والاحتراف)</div>
       </div>
 
-      <!-- TAB 4: قسم المحادثة -->
-      <div id="eng-tab-speaking" style="display: none;">
-        <div class="section-card">
-          <div class="section-header-row">
-            <div class="section-title">
-              <span class="sec-icon">🗣️</span>
-              <span>سيناريوهات المحادثة اليومية والهندسية</span>
-            </div>
-          </div>
-          <div class="divider-line"></div>
-          <div id="speaking-container"></div>
-        </div>
+      <!-- قائمة دروس المستوى المختار -->
+      <div class="section-card" id="english-lessons-container">
+        <!-- يتم توليد الدروس تفاعلياً بواسطة JavaScript -->
       </div>
-
     </div>
 
-    <!-- ==================== 📐 3. الكورسات والتعلم ==================== -->
+    <!-- ==================== 📐 3. الكورسات ==================== -->
     <div class="app-page" id="page-courses">
       <div class="section-card">
         <div class="section-header-row">
@@ -464,13 +428,13 @@
       </div>
     </div>
 
-    <!-- ==================== 🎯 4. الأهداف وصناعة المحتوى ==================== -->
+    <!-- ==================== 🎯 4. الأهداف ==================== -->
     <div class="app-page" id="page-goals">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">🎥</span>
-            <span>1. صناعة المحتوى (هدف 10K متابع)</span>
+            <span>1. صناعة المحتوى (10K متابع)</span>
           </div>
         </div>
         <div class="divider-line"></div>
@@ -596,135 +560,186 @@
     </div>
   </div>
 
+  <!-- Modal عرض الدرس والتفاعل الكامل -->
+  <div class="modal" id="english-lesson-modal">
+    <div class="modal-content" id="english-lesson-modal-body">
+      <!-- يتم حقن محتوى الدرس تفاعلياً -->
+    </div>
+  </div>
+
   <script>
     let soundEnabled = true;
+    let currentTTSPlaybackRate = 1.0;
 
-    /* ==================== 📚 المنهج المخصص الكامل للغة الإنجليزية ==================== */
-    const fullEnglishCurriculum = {
-      "A0": {
-        name: "🇺🇸 A0 - Beginner",
-        units: [
+    /* ==================== 📚 قاعدة بيانات منهاج الإنجليزي (A0 → C1) ==================== */
+    const englishCurriculum = {
+      A0_A1: {
+        title: 'المرحلة الأولى (A0 → A1) - التأسيس',
+        lessons: [
           {
-            title: "الوحدة الأولى: الحروف والنطق",
-            lessons: [
-              "الأبجدية الإنجليزية (Alphabet)", "الحروف الكبيرة والصغيرة", "أصوات الحروف (Letter Sounds)",
-              "الحروف المتحركة (Vowels)", "الحروف الساكنة (Consonants)", "الفرق بين اسم الحرف وصوته",
-              "نطق الكلمات البسيطة", "مراجعة الوحدة", "اختبار الوحدة"
-            ]
+            id: 'l_a0_1', title: '1. الحروف الإنجليزية والنطق الصحيح', icon: '🔤',
+            desc_ar: 'التعرف على الأصوات والمخارج الصحيحة لكل حرف الإنجليزية.',
+            desc_en: 'Learn English letters and their exact pronunciation.',
+            words: [
+              { word: 'Apple', type: 'Noun', ar: 'تفاحة', img: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80', ex: 'She is eating a fresh apple.' },
+              { word: 'Car', type: 'Noun', ar: 'سيارة', img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80', ex: 'The red car is fast.' }
+            ],
+            conversation: {
+              location: 'المدرسة (School)',
+              speakers: { A: 'Teacher', B: 'Student' },
+              lines: [
+                { speaker: 'A', en: 'Good morning! Welcome to class.', ar: 'صباح الخير! مرحباً بكم في الفصل.' },
+                { speaker: 'B', en: 'Good morning, Teacher!', ar: 'صباح الخير يا معلمي!' }
+              ]
+            },
+            speaking_sentence: 'Good morning! Welcome to class.',
+            quiz: {
+              question: 'ما هو المعنى الصحيح لكلمة "Car"؟',
+              options: ['تفاحة', 'سيارة', 'طائرة', 'مدرسة'],
+              correct: 1
+            }
           },
           {
-            title: "الوحدة الثانية: أساسيات اللغة",
-            lessons: [
-              "التحيات (Greetings)", "التعارف (Introducing Yourself)", "الضمائر (Pronouns)",
-              "الأرقام (Numbers)", "الألوان (Colors)", "الأيام والشهور", "الوقت والتاريخ", "مراجعة", "اختبار"
-            ]
-          },
-          {
-            title: "الوحدة الثالثة: المفردات الأساسية",
-            lessons: [
-              "العائلة", "الوظائف", "الدول والجنسيات", "أجزاء الجسم", "الملابس",
-              "الطعام", "المشروبات", "المنزل", "الأثاث", "مراجعة", "اختبار"
-            ]
-          },
-          {
-            title: "الوحدة الرابعة: أول قواعد",
-            lessons: [
-              "أجزاء الجملة", "Verb To Be", "أدوات التعريف", "الملكية",
-              "الجمع", "الأسئلة البسيطة", "النفي", "مراجعة", "اختبار"
-            ]
+            id: 'l_a0_2', title: '2. أهم الضمائر والمفردات التأسيسية', icon: '👥',
+            desc_ar: 'شرح الضمائر (I, You, He, She, They) وتكوين الجملة.',
+            desc_en: 'Mastering personal pronouns and basic sentence structure.',
+            words: [
+              { word: 'Teacher', type: 'Noun', ar: 'مدرس / معلم', img: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80', ex: 'The teacher is explaining the lesson.' }
+            ],
+            conversation: {
+              location: 'الكافيه (Coffee Shop)',
+              speakers: { A: 'Alex', B: 'Sara' },
+              lines: [
+                { speaker: 'A', en: 'Hello, I am Alex. What is your name?', ar: 'أهلاً، أنا أليكس. ما اسمك؟' },
+                { speaker: 'B', en: 'Hi Alex, I am Sara.', ar: 'مرحباً أليكس، أنا سارة.' }
+              ]
+            },
+            speaking_sentence: 'Hello, I am Alex. What is your name?',
+            quiz: {
+              question: 'اختر الضمير المناسب لـ "هو":',
+              options: ['She', 'He', 'They', 'It'],
+              correct: 1
+            }
           }
         ]
       },
-      "A1": {
-        name: "🇺🇸 A1 - Elementary",
-        units: [
-          { title: "الوحدة الأولى", lessons: ["Present Simple", "استخدام Do و Does", "ظروف التكرار", "الروتين اليومي", "مراجعة", "اختبار"] },
-          { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] },
-          { title: "الوحدة الثالثة", lessons: ["الصفات", "المقارنة", "التفضيل", "مراجعة", "اختبار"] },
-          { title: "الوحدة الرابعة", lessons: ["الطلب في المطعم", "التسوق", "في الفندق", "في البنك", "في الصيدلية", "مراجعة", "اختبار"] }
-        ]
-      },
-      "A2": {
-        name: "🇺🇸 A2 - Pre-Intermediate",
-        units: [
-          { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] },
-          { title: "الوحدة الثانية", lessons: ["Future Simple", "Going To", "الخطط", "المواعيد", "مراجعة", "اختبار"] },
-          { title: "الوحدة الثالثة", lessons: ["Present Continuous", "Past Continuous", "Future Continuous", "مراجعة", "اختبار"] },
-          { title: "الوحدة الرابعة", lessons: ["كتابة رسالة", "كتابة Email", "وصف مكان", "وصف شخص", "وصف يوم", "مراجعة", "اختبار"] }
-        ]
-      },
-      "B1": {
-        name: "🇺🇸 B1 - Intermediate",
-        units: [
-          { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] },
-          { title: "الوحدة الثانية", lessons: ["Reading قصيرة", "استخراج المفردات", "فهم النصوص", "مراجعة"] },
-          { title: "الوحدة الثالثة", lessons: ["محادثات السفر", "المطار", "الفندق", "العمل", "المطعم", "المستشفى", "مراجعة"] },
-          { title: "الوحدة الرابعة", lessons: ["كتابة Paragraph", "كتابة Essay", "مراجعة", "اختبار"] }
-        ]
-      },
-      "B2": {
-        name: "🇺🇸 B2 - Upper-Intermediate",
-        units: [
-          { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] },
-          { title: "الوحدة الثانية", lessons: ["Business English", "Meetings", "Negotiation", "Emails"] },
-          { title: "الوحدة الثالثة", lessons: ["Speaking Fluently", "Pronunciation", "Accent"] },
-          { title: "الوحدة الرابعة", lessons: ["مشاهدة فيديوهات بدون ترجمة", "تلخيصها", "مناقشتها"] }
-        ]
-      },
-      "C1": {
-        name: "🇺🇸 C1 - Advanced & Interior Design",
-        units: [
-          { title: "الوحدة الأولى", lessons: ["التفكير بالإنجليزية", "التحدث بطلاقة"] },
-          { title: "الوحدة الثانية", lessons: ["Presentation Skills", "Public Speaking"] },
-          { title: "الوحدة الثالثة", lessons: ["Academic English", "Professional Writing"] },
+      A1_A2: {
+        title: 'المرحلة الثانية (A1 → A2) - الأزمنة والتوسع',
+        lessons: [
           {
-            title: "الوحدة الرابعة: English for Interior Design",
-            lessons: [
-              "أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات",
-              "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أسماء الحوائط",
-              "أسماء الأجهزة", "أسماء أدوات الموقع", "أسماء اللوحات التنفيذية",
-              "التعامل مع العميل", "كتابة عروض الأسعار", "كتابة الإيميلات الاحترافية", "تقديم المشروع بالإنجليزية"
-            ]
+            id: 'l_a1_1', title: '1. زمن المضارع البسيط وتأثيث الأفكار', icon: '⏱️',
+            desc_ar: 'الحديث عن الروتين واليوميات والوصف.',
+            desc_en: 'Talking about daily routines and facts.',
+            words: [
+              { word: 'Boat', type: 'Noun', ar: 'قارب / مركب', img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80', ex: 'The boat sails on the river.' }
+            ],
+            conversation: {
+              location: 'المطعم (Restaurant)',
+              speakers: { A: 'Waiter', B: 'Customer' },
+              lines: [
+                { speaker: 'A', en: 'Are you ready to order sir?', ar: 'هل أنت جاهز للطلب يا سيدي؟' },
+                { speaker: 'B', en: 'Yes, I would like coffee please.', ar: 'نعم، أرغب في قهوة من فضلك.' }
+              ]
+            },
+            speaking_sentence: 'Are you ready to order sir?',
+            quiz: {
+              question: 'نستخدم المضارع البسيط لـ:',
+              options: ['الروتين والحقائق', 'أحداث وانتهت في الماضي', 'التخطيط البعيد'],
+              correct: 0
+            }
+          }
+        ]
+      },
+      A2_B1: {
+        title: 'المرحلة الثالثة (A2 → B1) - التواصل والمحادثات',
+        lessons: [
+          {
+            id: 'l_a2_1', title: '1. كتابة الإيميلات وتنسيق الحوارات', icon: '✉️',
+            desc_ar: 'طريقة كتابة إيميل رسمي وغير رسمي بكفاءة.',
+            desc_en: 'Writing formal and informal emails effectively.',
+            words: [
+              { word: 'Hospital', type: 'Noun', ar: 'مستشفى', img: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&w=600&q=80', ex: 'The hospital is clean and big.' }
+            ],
+            conversation: {
+              location: 'المكتب (Office)',
+              speakers: { A: 'Manager', B: 'Employee' },
+              lines: [
+                { speaker: 'A', en: 'Did you send the email to the client?', ar: 'هل أرسلت البريد الإلكتروني للعميل؟' },
+                { speaker: 'B', en: 'Yes, I sent it this morning.', ar: 'نعم، أرسلته هذا الصباح.' }
+              ]
+            },
+            speaking_sentence: 'Did you send the email to the client?',
+            quiz: {
+              question: 'ما معنى كلمة "Hospital"؟',
+              options: ['مدرسة', 'مستشفى', 'حديقة', 'شركة'],
+              correct: 1
+            }
+          }
+        ]
+      },
+      B1_B2: {
+        title: 'المرحلة الرابعة (B1 → B2) - الطلاقة المتقدمة',
+        lessons: [
+          {
+            id: 'l_b1_1', title: '1. مناقشة المشاريع وإدارة فرق العمل', icon: '💼',
+            desc_ar: 'كيف تعبر عن آرائك وتدير الاجتماعات بالإنجليزية.',
+            desc_en: 'Expressing opinions and leading business meetings.',
+            words: [
+              { word: 'Project', type: 'Noun', ar: 'مشروع', img: 'https://images.unsplash.com/photo-1507208773393-40d9fc670acf?auto=format&fit=crop&w=600&q=80', ex: 'We are working on a new architecture project.' }
+            ],
+            conversation: {
+              location: 'غرفة الاجتماعات (Meeting Room)',
+              speakers: { A: 'Lead Engineer', B: 'Architect' },
+              lines: [
+                { speaker: 'A', en: 'What is the progress on the design plan?', ar: 'ما هو التقدم في مخطط التصميم؟' },
+                { speaker: 'B', en: 'It is almost finished, sir.', ar: 'لقد قارب على الانتهاء يا سيدي.' }
+              ]
+            },
+            speaking_sentence: 'What is the progress on the design plan?',
+            quiz: {
+              question: 'معنى كلمة "Project" هو:',
+              options: ['تقرير', 'مشروع', 'مخطط', 'عقد'],
+              correct: 1
+            }
+          }
+        ]
+      },
+      B2_C1: {
+        title: 'المرحلة الخامسة (B2 → C1) - الهندسة والاحتراف',
+        lessons: [
+          {
+            id: 'l_b2_1', title: '1. المصطلحات الهندسة المعمارية والتشطيبات', icon: '🏛️',
+            desc_ar: 'المصطلحات الفنية الهندسية وتفاصيل التنفيذ.',
+            desc_en: 'Advanced architectural terms and site engineering.',
+            words: [
+              { word: 'Blueprint', type: 'Noun', ar: 'مخطط هندسي', img: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80', ex: 'Check the blueprint before site execution.' }
+            ],
+            conversation: {
+              location: 'موقع البناء (Construction Site)',
+              speakers: { A: 'Site Engineer', B: 'Consultant' },
+              lines: [
+                { speaker: 'A', en: 'The architectural measurements match the blueprints.', ar: 'القياسات المعمارية تتطابق مع المخططات.' },
+                { speaker: 'B', en: 'Great job, approve the next phase.', ar: 'عمل ممتاز، وافق على المرحلة التالية.' }
+              ]
+            },
+            speaking_sentence: 'The architectural measurements match the blueprints.',
+            quiz: {
+              question: 'كلمة "Blueprint" تعني:',
+              options: ['موقع بناء', 'مخطط هندسي', 'قياسات', 'أساسات'],
+              correct: 1
+            }
           }
         ]
       }
     };
 
-    const standaloneVocabData = {
-      "أهم 500 كلمة (A0)": ["Apple - تفاحة", "Sun - شمس", "Book - كتاب", "House - منزل", "Water - ماء"],
-      "أهم 1000 كلمة (A1)": ["Routine - روتين", "Weather - طقس", "Market - سوق", "Travel - سفر", "Doctor - طبيب"],
-      "أهم 1500 كلمة (A2)": ["Journey - رحلة", "Schedule - جدول", "Improve - تحسين", "Describe - وصف", "Future - مستقبل"],
-      "أهم 2000 كلمة (B1)": ["Fluency - طلاقة", "Experience - خبرة", "Paragraph - فقرة", "Hospitality - ضيافة", "Essay - مقال"],
-      "أهم 2500 كلمة (B2)": ["Negotiation - تفاوض", "Expression - تعبير", "Corporate - شركات", "Strategy - استراتيجية", "Confidence - ثقة"],
-      "أهم 3000 كلمة (C1)": ["Comprehensive - شامل", "Articulate - يتحدث بوضوح", "Exquisite - فاخر/دقيق", "Substantial - جوهري", "Perspective - منظور"],
-      "Vocabulary for Interior Design": ["Architectural Blueprint - مخطط معمارى", "False Ceiling - سقف معلق", "Moodboard - لوحة الأفكار", "BoQ (Bill of Quantities) - مقايسة أسعار", "Interior Elevation - قطاع داخلي", "Finishing Materials - خامات التشطيب"]
-    };
-
-    const listeningCategories = [
-      { title: "🎧 Beginner Listening", desc: "نصوص استماع بطيئة وواضحة جداً للمبتدئين." },
-      { title: "🎧 Elementary Listening", desc: "محادثات يومية بسيطة مع أسئلة استيعاب." },
-      { title: "🎧 Intermediate Listening", desc: "بودكاست ومواضيع متنوّعة بسرعة متوسطة." },
-      { title: "🎧 Advanced Listening", desc: "محاضرات ونقاشات هادفة باللغة الإنجليزية." },
-      { title: "🎧 Native Listening", desc: "مقاطع حقيقية لأصحاب اللغة الأصليين بسرعة طبيعية." }
-    ];
-
-    const speakingTopics = [
-      "التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار",
-      "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"
-    ];
-
-    const statusMap = [
-      { label: "⭕ لم يبدأ", css: "status-0" },
-      { label: "🟡 قيد الدراسة", css: "status-1" },
-      { label: "✅ مكتمل", css: "status-2" },
-      { label: "🔁 يحتاج مراجعة", css: "status-3" }
-    ];
-
-    /* ==================== ⚙️ State Management ==================== */
+    /* ==================== ⚙️ State Management & Initialization ==================== */
     let appState = {
       theme: 'light',
-      selectedLevelKey: 'A0',
-      lessonStatus: {},
+      selectedLevel: 'A0_A1',
+      savedWords: [],
+      completedLessons: [],
+      streak: 1,
       quranPage: 2,
       followers: 1200,
       savings: 0,
@@ -732,18 +747,13 @@
       decorTitle: '',
       finishingLessons: 0,
       finishingTitle: '',
-      toolsState: { sketchup: false, autocad: false, d5: false },
       officeGoals: [
         { text: 'اختيار اسم الماركة واللوجو', done: false },
         { text: 'تجهيز بورتفوليو الأعمال', done: false }
       ],
-      gymTasks: [
-        { text: 'تمارين الكارديو والإحماء', done: false },
-        { text: 'تمارين المقاومة والحديد', done: false }
-      ],
       tasks: [
-        { text: 'مراجعة التصاميم الهندسية', done: false },
-        { text: 'مذاكرة 45 دقيقة إنجليزي', done: false }
+        { text: 'العمل على تصميم الكورس', done: false },
+        { text: 'التدريب في الجيم', done: false }
       ],
       prayers: [
         { name: 'الفجر', done: false },
@@ -755,22 +765,20 @@
     };
 
     function loadStateLocally() {
-      const data = localStorage.getItem('eng_mustafa_full_dashboard');
+      const data = localStorage.getItem('eng_mustafa_app_data');
       if (data) {
-        try { appState = { ...appState, ...JSON.parse(data) }; } catch(e) { console.error(e); }
+        try {
+          appState = { ...appState, ...JSON.parse(data) };
+        } catch(e) { console.error("Error loading state", e); }
       }
       applyStateToUI();
     }
 
     function saveStateLocally() {
+      // capture input fields
       appState.decorTitle = document.getElementById('decor-lesson-title')?.value || '';
       appState.finishingTitle = document.getElementById('finishing-lesson-title')?.value || '';
-      appState.toolsState = {
-        sketchup: document.getElementById('tool-sketchup')?.checked || false,
-        autocad: document.getElementById('tool-autocad')?.checked || false,
-        d5: document.getElementById('tool-d5')?.checked || false
-      };
-      localStorage.setItem('eng_mustafa_full_dashboard', JSON.stringify(appState));
+      localStorage.setItem('eng_mustafa_app_data', JSON.stringify(appState));
       updateProgressBars();
     }
 
@@ -787,27 +795,19 @@
       document.getElementById('followers-count').value = appState.followers;
       document.getElementById('savings-current').innerText = appState.savings.toLocaleString();
 
-      if(appState.toolsState) {
-        document.getElementById('tool-sketchup').checked = !!appState.toolsState.sketchup;
-        document.getElementById('tool-autocad').checked = !!appState.toolsState.autocad;
-        document.getElementById('tool-d5').checked = !!appState.toolsState.d5;
-      }
-
       renderTasks();
-      renderGymTasks();
       renderPrayers();
       renderOfficeGoals();
       renderEnglishAcademy();
-      renderStandaloneVocab();
-      renderListeningSection();
-      renderSpeakingSection();
       setQuranPage(appState.quranPage, false);
       updateProgressBars();
     }
 
+    /* ==================== 🔄 Page Navigation & Modals ==================== */
     function switchPage(pageId, element) {
       document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      
       document.getElementById(pageId).classList.add('active');
       if(element) element.classList.add('active');
     }
@@ -828,7 +828,7 @@
     function openDistractModal() { document.getElementById('distract-modal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    /* ==================== 📋 Tasks & Gym ==================== */
+    /* ==================== 📋 Tasks & Prayers ==================== */
     function renderTasks() {
       const container = document.getElementById('tasks-container');
       container.innerHTML = appState.tasks.map((task, idx) => `
@@ -837,7 +837,6 @@
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${idx})">
             <span style="${task.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${task.text}</span>
           </label>
-          <button class="btn-delete" onclick="deleteTask(${idx})">✕</button>
         </div>
       `).join('');
     }
@@ -846,39 +845,6 @@
       appState.tasks[idx].done = !appState.tasks[idx].done;
       saveStateLocally();
       renderTasks();
-    }
-
-    function addNewTask() {
-      const t = prompt('أدخل المهمة الجديدة:');
-      if(t) {
-        appState.tasks.push({ text: t, done: false });
-        saveStateLocally();
-        renderTasks();
-      }
-    }
-
-    function deleteTask(idx) {
-      appState.tasks.splice(idx, 1);
-      saveStateLocally();
-      renderTasks();
-    }
-
-    function renderGymTasks() {
-      const container = document.getElementById('gym-tasks-container');
-      container.innerHTML = appState.gymTasks.map((gt, idx) => `
-        <div class="task-item">
-          <label>
-            <input type="checkbox" ${gt.done ? 'checked' : ''} onchange="toggleGymTask(${idx})">
-            <span style="${gt.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${gt.text}</span>
-          </label>
-        </div>
-      `).join('');
-    }
-
-    function toggleGymTask(idx) {
-      appState.gymTasks[idx].done = !appState.gymTasks[idx].done;
-      saveStateLocally();
-      renderGymTasks();
     }
 
     function renderPrayers() {
@@ -957,7 +923,9 @@
     }
 
     /* ==================== 📖 Quran System ==================== */
-    function updateQuran(delta) { setQuranPage(appState.quranPage + delta); }
+    function updateQuran(delta) {
+      setQuranPage(appState.quranPage + delta);
+    }
 
     function setQuranPage(pg, save = true) {
       let pageNum = parseInt(pg);
@@ -969,6 +937,7 @@
       document.getElementById('quran-status').innerText = `الصفحة ${pageNum} من 49`;
       document.getElementById('fallback-page-num').innerText = pageNum;
 
+      // Image URL formatting for Quran pages
       const formattedNum = String(pageNum).padStart(3, '0');
       const img = document.getElementById('quran-page-image');
       img.style.display = 'block';
@@ -989,158 +958,128 @@
     }
 
     /* ==================== 🇬🇧 English Academy System ==================== */
-    function switchEngTab(tab, el) {
-      document.querySelectorAll('.eng-main-tab').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-
-      document.getElementById('eng-tab-curriculum').style.display = tab === 'curriculum' ? 'block' : 'none';
-      document.getElementById('eng-tab-vocabulary').style.display = tab === 'vocabulary' ? 'block' : 'none';
-      document.getElementById('eng-tab-listening').style.display = tab === 'listening' ? 'block' : 'none';
-      document.getElementById('eng-tab-speaking').style.display = tab === 'speaking' ? 'block' : 'none';
-    }
-
-    function isLevelUnlocked(lvlKey) {
-      const keys = Object.keys(fullEnglishCurriculum);
-      const index = keys.indexOf(lvlKey);
-      if(index <= 0) return true;
-
-      const prevLvlKey = keys[index - 1];
-      const prevLvlData = fullEnglishCurriculum[prevLvlKey];
-      
-      let total = 0, doneCount = 0;
-      prevLvlData.units.forEach((u, uIdx) => {
-        u.lessons.forEach((l, lIdx) => {
-          total++;
-          const id = `${prevLvlKey}_U${uIdx}_L${lIdx}`;
-          if(appState.lessonStatus[id] === 2) doneCount++;
-        });
-      });
-
-      return (total > 0 && doneCount === total);
-    }
-
-    function getLevelProgress(lvlKey) {
-      const lvlData = fullEnglishCurriculum[lvlKey];
-      let total = 0, doneCount = 0;
-      lvlData.units.forEach((u, uIdx) => {
-        u.lessons.forEach((l, lIdx) => {
-          total++;
-          const id = `${lvlKey}_U${uIdx}_L${lIdx}`;
-          if(appState.lessonStatus[id] === 2) doneCount++;
-        });
-      });
-      return total === 0 ? 0 : Math.round((doneCount / total) * 100);
-    }
-
     function renderEnglishAcademy() {
-      renderLevelTabs();
-      renderCurriculumUnits();
+      document.getElementById('eng-dash-streak').innerText = `${appState.streak} 🔥`;
+      document.getElementById('eng-dash-words').innerText = `${appState.savedWords.length} 📚`;
+      document.getElementById('eng-dash-level').innerText = `${appState.selectedLevel.replace('_', ' → ')}`;
+
+      renderEnglishLessons();
     }
 
-    function renderLevelTabs() {
-      const container = document.getElementById('english-level-tabs');
-      const keys = Object.keys(fullEnglishCurriculum);
-
-      container.innerHTML = keys.map(k => {
-        const unlocked = isLevelUnlocked(k);
-        const isActive = appState.selectedLevelKey === k;
-        return `
-          <div class="level-tab ${isActive ? 'active' : ''} ${!unlocked ? 'locked' : ''}" 
-               onclick="${unlocked ? `selectEngLevel('${k}')` : "alert('أكمل المستوى السابق 100% لفتح هذا المستوى!')"}">
-            <span>${unlocked ? '🔓' : '🔒'}</span>
-            <span>${k}</span>
-          </div>
-        `;
-      }).join('');
-
-      const pct = getLevelProgress(appState.selectedLevelKey);
-      document.getElementById('level-progress-bar').style.width = pct + '%';
-      document.getElementById('level-percentage-label').innerText = `${pct}% مكتمل`;
-    }
-
-    function selectEngLevel(key) {
-      appState.selectedLevelKey = key;
+    function switchEngLevel(levelKey, tabElement) {
+      appState.selectedLevel = levelKey;
+      document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+      if(tabElement) tabElement.classList.add('active');
       renderEnglishAcademy();
-    }
-
-    function renderCurriculumUnits() {
-      const container = document.getElementById('english-units-container');
-      const lvlData = fullEnglishCurriculum[appState.selectedLevelKey];
-
-      container.innerHTML = lvlData.units.map((unit, uIdx) => `
-        <div class="unit-accordion">
-          <div class="unit-header">
-            <span>${unit.title}</span>
-            <span style="font-size:0.8rem; opacity:0.7;">${unit.lessons.length} دروس</span>
-          </div>
-          <div class="unit-content">
-            ${unit.lessons.map((lessonName, lIdx) => {
-              const lessonId = `${appState.selectedLevelKey}_U${uIdx}_L${lIdx}`;
-              const currentStatus = appState.lessonStatus[lessonId] || 0;
-              const statusInfo = statusMap[currentStatus];
-
-              return `
-                <div class="lesson-item-row">
-                  <span class="lesson-item-title">${lessonName}</span>
-                  <button class="status-badge ${statusInfo.css}" onclick="cycleLessonStatus('${lessonId}')">
-                    ${statusInfo.label}
-                  </button>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function cycleLessonStatus(lessonId) {
-      let current = appState.lessonStatus[lessonId] || 0;
-      current = (current + 1) % 4;
-      appState.lessonStatus[lessonId] = current;
       saveStateLocally();
-      renderEnglishAcademy();
     }
 
-    function renderStandaloneVocab() {
-      const container = document.getElementById('vocab-levels-accordion');
-      container.innerHTML = Object.keys(standaloneVocabData).map(lvl => `
-        <div class="unit-accordion">
-          <div class="unit-header">
-            <span>📚 ${lvl}</span>
-          </div>
-          <div class="unit-content">
-            ${standaloneVocabData[lvl].map(w => `
-              <div class="vocab-grid-card">
-                <span style="font-weight:bold; font-size:0.88rem;">${w}</span>
-                <button class="btn-action" style="padding:3px 8px; font-size:0.75rem;" onclick="speakText('${w.split('-')[0].trim()}')">🔊 نطق</button>
+    function renderEnglishLessons() {
+      const container = document.getElementById('english-lessons-container');
+      const levelData = englishCurriculum[appState.selectedLevel];
+      
+      if(!levelData) {
+        container.innerHTML = '<p>لا توجد دروس حالياً لهذا المستوى.</p>';
+        return;
+      }
+
+      container.innerHTML = `
+        <h3 style="font-size:1rem; color:var(--accent-gold); margin-bottom:10px;">${levelData.title}</h3>
+        ` + levelData.lessons.map(lesson => {
+          const isDone = appState.completedLessons.includes(lesson.id);
+          return `
+            <div class="lesson-card-item">
+              <div class="lesson-top">
+                <div class="lesson-title">
+                  <span>${lesson.icon}</span>
+                  <span>${lesson.title}</span>
+                </div>
+                ${isDone ? '<span style="color:var(--success-green); font-weight:bold; font-size:0.8rem;">✓ مكتمل</span>' : ''}
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">${lesson.desc_ar}</p>
+              <button class="btn-action" style="align-self:flex-start; margin-top:4px;" onclick="openLessonModal('${lesson.id}')">
+                ${isDone ? 'مراجعة الدرس' : 'ابدأ الدرس الآن 🚀'}
+              </button>
+            </div>
+          `;
+        }).join('');
+    }
+
+    function openLessonModal(lessonId) {
+      let lesson = null;
+      for (const lvl in englishCurriculum) {
+        const found = englishCurriculum[lvl].lessons.find(l => l.id === lessonId);
+        if(found) { lesson = found; break; }
+      }
+      if(!lesson) return;
+
+      const modalBody = document.getElementById('english-lesson-modal-body');
+      modalBody.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h2 style="font-size:1.2rem; color:var(--text-dark);">${lesson.icon} ${lesson.title}</h2>
+          <button class="circle-btn" onclick="closeModal('english-lesson-modal')">✕</button>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <h4 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:6px;">📚 المفردات الجديدة:</h4>
+          ${lesson.words.map(w => `
+            <div class="vocab-card" style="margin-bottom:10px;">
+              <img src="${w.img}" class="vocab-img" alt="${w.word}">
+              <div class="vocab-body">
+                <div class="vocab-header">
+                  <span class="vocab-word">${w.word}</span>
+                  <span class="vocab-type">${w.type}</span>
+                </div>
+                <p style="font-weight:bold; font-size:0.9rem;">${w.ar}</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); direction:ltr; text-align:left;">"${w.ex}"</p>
+                <button class="btn-action" style="font-size:0.75rem; padding:4px 8px; align-self:flex-start;" onclick="speakText('${w.word}')">🔊 استمع</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <h4 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:6px;">💬 المحادثة (${lesson.conversation.location}):</h4>
+          <div class="chat-container">
+            ${lesson.conversation.lines.map((line, i) => `
+              <div class="chat-bubble ${i % 2 === 0 ? 'left' : 'right'}">
+                <div class="chat-content">
+                  <span class="chat-speaker-name">${line.speaker === 'A' ? lesson.conversation.speakers.A : lesson.conversation.speakers.B}</span>
+                  <span class="chat-text-en">${line.en}</span>
+                  <span class="chat-text-ar">${line.ar}</span>
+                  <button style="background:none; border:none; cursor:pointer; text-align:left; font-size:0.8rem; margin-top:2px;" onclick="speakText('${line.en.replace(/'/g, "\\'")}')">🔊</button>
+                </div>
               </div>
             `).join('')}
           </div>
         </div>
-      `).join('');
-    }
 
-    function renderListeningSection() {
-      const container = document.getElementById('listening-container');
-      container.innerHTML = listeningCategories.map(item => `
-        <div style="background:var(--bg-main); border:1px solid var(--card-stroke); border-radius:14px; padding:12px; margin-bottom:8px;">
-          <h4 style="font-size:0.92rem; color:var(--text-dark); margin-bottom:4px;">${item.title}</h4>
-          <p style="font-size:0.8rem; color:var(--text-muted);">${item.desc}</p>
+        <div style="margin-bottom:14px; background:var(--bg-main); padding:12px; border-radius:14px; text-align:center;">
+          <h4 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:6px;">🎙️ ممارسة النطق:</h4>
+          <p style="font-size:0.85rem; font-weight:bold; margin-bottom:6px; direction:ltr;">"${lesson.speaking_sentence}"</p>
+          <button class="btn-mic-talk" id="mic-btn" onclick="toggleSpeechRecognition('${lesson.speaking_sentence.replace(/'/g, "\\'")}')">🎤</button>
+          <p id="speech-feedback" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted); margin-top:4px;">اضغط للمحادث والنطق</p>
         </div>
-      `).join('');
-    }
 
-    function renderSpeakingSection() {
-      const container = document.getElementById('speaking-container');
-      container.innerHTML = `
-        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
-          ${speakingTopics.map(topic => `
-            <div style="background:var(--bg-main); border:1px solid var(--card-stroke); border-radius:12px; padding:10px; text-align:center; font-weight:bold; font-size:0.82rem; color:var(--text-dark);">
-              🗣️ ${topic}
-            </div>
-          `).join('')}
+        <div style="margin-bottom:14px; background:var(--bg-main); padding:12px; border-radius:14px;">
+          <h4 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:6px;">🧩 اختبار سريع:</h4>
+          <p style="font-size:0.85rem; font-weight:bold; margin-bottom:8px;">${lesson.quiz.question}</p>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${lesson.quiz.options.map((opt, optIdx) => `
+              <button class="btn-action" style="background:var(--card-bg); color:var(--text-dark); border:1px solid var(--card-stroke); text-align:right;" onclick="checkQuizAnswer(${optIdx}, ${lesson.quiz.correct}, this)">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <p id="quiz-feedback" style="font-size:0.8rem; font-weight:bold; margin-top:6px;"></p>
         </div>
+
+        <button class="btn-action" style="width:100%; padding:10px; font-size:1rem;" onclick="markLessonComplete('${lesson.id}')">
+          ✓ إكمال الدرس وحفظ التقدم
+        </button>
       `;
+
+      document.getElementById('english-lesson-modal').style.display = 'flex';
     }
 
     function speakText(text) {
@@ -1149,33 +1088,122 @@
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
+        utterance.rate = currentTTSPlaybackRate;
         window.speechSynthesis.speak(utterance);
       }
     }
 
+    let isRecording = false;
+    function toggleSpeechRecognition(targetText) {
+      const btn = document.getElementById('mic-btn');
+      const feedback = document.getElementById('speech-feedback');
+
+      if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        feedback.innerText = "عذراً، متصفحك لا يدعم التعرف على الصوت.";
+        return;
+      }
+
+      if(isRecording) {
+        isRecording = false;
+        btn.classList.remove('recording');
+        feedback.innerText = "تم إيقاف التسجيل.";
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      recognition.onstart = function() {
+        isRecording = true;
+        btn.classList.add('recording');
+        feedback.innerText = "جاري الاستماع... تحدث الآن!";
+      };
+
+      recognition.onresult = function(event) {
+        isRecording = false;
+        btn.classList.remove('recording');
+        const transcript = event.results[0][0].transcript;
+        feedback.innerText = `قلت: "${transcript}"`;
+        
+        if(transcript.toLowerCase().includes(targetText.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, ""))) {
+          feedback.innerText += " - ممتاز! نطق صحيح 🎉";
+          feedback.style.color = "var(--success-green)";
+        } else {
+          feedback.innerText += " - حاول مرة أخرى للوصول للنطق الأمثل 👍";
+          feedback.style.color = "var(--accent-gold)";
+        }
+      };
+
+      recognition.onerror = function() {
+        isRecording = false;
+        btn.classList.remove('recording');
+        feedback.innerText = "حدث خطأ أثناء الاستماع. حاول مجدداً.";
+      };
+
+      recognition.start();
+    }
+
+    function checkQuizAnswer(selected, correct, btn) {
+      const feedback = document.getElementById('quiz-feedback');
+      if(selected === correct) {
+        btn.style.background = "var(--success-green)";
+        btn.style.color = "#fff";
+        feedback.innerText = "إجابة صحيحة! أحسنت 👏";
+        feedback.style.color = "var(--success-green)";
+      } else {
+        btn.style.background = "var(--danger-red)";
+        btn.style.color = "#fff";
+        feedback.innerText = "إجابة خاطئة، حاول مجدداً!";
+        feedback.style.color = "var(--danger-red)";
+      }
+    }
+
+    function markLessonComplete(lessonId) {
+      if(!appState.completedLessons.includes(lessonId)) {
+        appState.completedLessons.push(lessonId);
+        saveStateLocally();
+      }
+      closeModal('english-lesson-modal');
+      renderEnglishAcademy();
+    }
+
     /* ==================== 📊 Progress Bars Updating ==================== */
     function updateProgressBars() {
+      // Daily Tasks
       const doneTasks = appState.tasks.filter(t => t.done).length;
       const taskPct = appState.tasks.length ? Math.round((doneTasks / appState.tasks.length) * 100) : 0;
       document.getElementById('tasks-progress').style.width = taskPct + '%';
       document.getElementById('tasks-progress-text').innerText = taskPct + '%';
 
+      // Prayers
       const donePrayers = appState.prayers.filter(p => p.done).length;
       const prayerPct = Math.round((donePrayers / 5) * 100);
       document.getElementById('prayers-progress').style.width = prayerPct + '%';
 
+      // Followers
       const followPct = Math.min(100, Math.round((appState.followers / 10000) * 100));
       document.getElementById('followers-progress').style.width = followPct + '%';
       document.getElementById('followers-percent').innerText = `${followPct}% مكتمل (الهدف 10,000)`;
 
+      // Savings
       const savePct = Math.min(100, Math.round((appState.savings / 50000) * 100));
       document.getElementById('savings-progress').style.width = savePct + '%';
 
+      // Quran
       const quranPct = Math.round(((appState.quranPage - 1) / 48) * 100);
       document.getElementById('quran-progress').style.width = quranPct + '%';
+
+      // Overall English Progress
+      let totalLessons = 0;
+      for(let key in englishCurriculum) { totalLessons += englishCurriculum[key].lessons.length; }
+      const engPct = totalLessons ? Math.round((appState.completedLessons.length / totalLessons) * 100) : 0;
+      document.getElementById('eng-overall-progress').style.width = engPct + '%';
+      document.getElementById('eng-overall-progress-text').innerText = engPct + '%';
     }
 
-    /* ==================== ⏰ Clock ==================== */
+    /* ==================== ⏰ Clock & Live Updates ==================== */
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -1194,6 +1222,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Init
     window.onload = function() {
       loadStateLocally();
     };
