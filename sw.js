@@ -1,4 +1,4 @@
-const CACHE_NAME = 'architect-dashboard-v10';
+const CACHE_NAME = 'eng-mustafa-dashboard-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,7 +6,7 @@ const ASSETS_TO_CACHE = [
   './logo.png'
 ];
 
-// 1. التثبيت وحفظ الملفات الرئيسية فوراً
+// 1. التثبيت وحفظ الملفات في الكاش
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. تفعيل وتنظيف أي كاش قديم
+// 2. التفعيل وتنظيف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -31,14 +31,13 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. استراتيجية Cache First مع الرد أوفلاين فوراً
+// 3. معالجة الطلبات للعمل أوفلاين
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // إرجاع النسخة المخزنة فوراً للعمل أوفلاين
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
@@ -54,7 +53,6 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // لو مفيش نت والطلب فشل، رجّع صفحة index.html المخزنة
         return caches.match('./index.html') || caches.match('./');
       });
     })
