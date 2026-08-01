@@ -3,53 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Dashboard & History</title>
-  
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
+  <title>لوحة التحكم الشخصية</title>
   <style>
+    /* =========================================
+       التنسيقات الأساسية وتصميم Glassmorphism
+       ========================================= */
     :root {
-      --bg-gradient: linear-gradient(135deg, #2b2621 0%, #1a1614 100%);
-      --glass-bg: rgba(245, 237, 224, 0.07);
-      --glass-border: rgba(212, 175, 55, 0.25);
-      --text-color: #f5ede0;
-      --gold: #d4af37;
-      --beige: #f5ede0;
-      --brown-accent: #3d3229;
-      --success-bg: rgba(46, 204, 113, 0.12);
-      --success-border: #2ecc71;
-      --danger-bg: rgba(231, 76, 60, 0.12);
-      --danger-border: #e74c3c;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --bg-color: #f5efe6; /* بيج فاتح */
+      --text-main: #3e2723; /* بني غامق */
+      --gold-accent: #d4af37; /* ذهبي */
+      --glass-bg: rgba(245, 239, 230, 0.45);
+      --glass-border: rgba(212, 175, 55, 0.3);
     }
 
     body {
-      background: var(--bg-gradient);
-      color: var(--text-color);
-      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e8dcb9, #f5efe6);
+      color: var(--text-main);
+      margin: 0;
       padding: 20px;
+      min-height: 100vh;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
     h1, h2 {
-      color: var(--gold);
-      margin-bottom: 15px;
       text-align: center;
+      color: #4a3525;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
-    /* Glassmorphism Panel */
+    /* لوحة زجاجية */
     .glass-panel {
       background: var(--glass-bg);
       backdrop-filter: blur(12px);
@@ -57,154 +44,250 @@
       border: 1px solid var(--glass-border);
       border-radius: 16px;
       padding: 20px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px 0 rgba(60, 42, 30, 0.08);
     }
 
-    /* History Cards */
-    .history-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 15px;
-    }
-
-    .day-card {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .day-header {
+    /* قائمة مهام اليوم */
+    .task-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--glass-border);
-      padding-bottom: 8px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(189, 154, 88, 0.2);
     }
-
-    .day-date {
-      font-weight: bold;
-      color: var(--gold);
+    .task-item:last-child {
+      border-bottom: none;
     }
-
-    /* Section for Done vs Missed */
-    .summary-box {
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.88rem;
-    }
-
-    .summary-box.done {
-      background: var(--success-bg);
-      border-right: 4px solid var(--success-border);
-    }
-
-    .summary-box.missed {
-      background: var(--danger-bg);
-      border-right: 4px solid var(--danger-border);
-    }
-
-    .summary-title {
-      font-weight: bold;
-      margin-bottom: 5px;
+    .task-label {
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
+    }
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--gold-accent);
+      cursor: pointer;
     }
 
-    .summary-list {
-      list-style: none;
-      padding-right: 5px;
+    /* زر الحفظ */
+    .btn-save {
+      width: 100%;
+      padding: 12px;
+      background: rgba(212, 175, 55, 0.8);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .btn-save:hover {
+      background: rgba(212, 175, 55, 1);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
     }
 
-    .summary-list li {
-      margin-bottom: 3px;
-      opacity: 0.9;
+    /* =========================================
+       تنسيقات سجل الأيام (الملخص الجديد)
+       ========================================= */
+    .history-card {
+      padding: 18px;
     }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(189, 154, 88, 0.2);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .card-header h3 { margin: 0; font-size: 1.1rem; }
+    .day-score {
+      font-size: 0.85rem;
+      background: rgba(212, 175, 55, 0.2);
+      color: #8c6d1f;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .summary-box {
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      backdrop-filter: blur(6px);
+    }
+    .summary-box h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .summary-box ul { list-style: none; padding: 0; margin: 0; }
+    .summary-box li { font-size: 0.88rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .empty-msg { opacity: 0.75; font-style: italic; font-size: 0.82rem !important; }
 
-    .empty-text {
-      font-style: italic;
-      opacity: 0.6;
-      font-size: 0.8rem;
+    .done-box {
+      background: rgba(46, 125, 50, 0.08);
+      border-right: 4px solid #2e7d32;
     }
+    .done-box h4 { color: #1b5e20; }
+
+    .missed-box {
+      background: rgba(198, 40, 40, 0.08);
+      border-right: 4px solid #c62828;
+    }
+    .missed-box h4 { color: #b71c1c; }
+    .text-gold { color: #b8860b !important; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>سجل الأيام والإنجازات</h1>
-    
-    <!-- السجل اليومي -->
-    <div id="historyContainer" class="history-grid">
-      <!-- الكروت هتنزل هنا ديناميكياً -->
+    <h1>لوحة المتابعة اليومية</h1>
+
+    <!-- قسم مهام اليوم -->
+    <div class="glass-panel">
+      <h2>📝 مهام اليوم</h2>
+      <div id="tasksContainer">
+        <!-- سيتم رسم المهام هنا عبر الجافاسكريبت -->
+      </div>
+      <button class="btn-save" onclick="saveTodayProgress()">حفظ إنجاز اليوم</button>
+    </div>
+
+    <!-- قسم سجل الأيام (التعديل الجديد) -->
+    <h2>🕰️ السجل والملخص</h2>
+    <div id="historyContainer">
+      <!-- سيتم رسم سجل الأيام هنا -->
     </div>
   </div>
 
   <script>
-    // 1. إعدادات Firebase
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    /* =========================================
+       المنطق البرمجي (JavaScript)
+       ========================================= */
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // المهام الثابتة الخاصة بك
+    const myTasks = [
+      { id: 't1', name: 'SketchUp' },
+      { id: 't2', name: 'AutoCAD' },
+      { id: 't3', name: 'D5 Render' },
+      { id: 't4', name: 'صناعة المحتوى (هدف 10K)' },
+      { id: 't5', name: 'الجيم' },
+      { id: 't6', name: 'الإنجليزية' }
+    ];
 
-    // 2. قراءة البيانات وعرض السجل مباشرة
-    const historyContainer = document.getElementById('historyContainer');
+    // دالة تهيئة وبناء المهام في الشاشة الرئيسية
+    function renderTodayTasks() {
+      const container = document.getElementById('tasksContainer');
+      container.innerHTML = '';
 
-    db.ref('daily_history').on('value', (snapshot) => {
-      const data = snapshot.val();
-      historyContainer.innerHTML = '';
+      myTasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = 'task-item';
+        div.innerHTML = `
+          <label class="task-label" for="${task.id}">
+            <input type="checkbox" id="${task.id}" class="task-checkbox" value="${task.name}">
+            ${task.name}
+          </label>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-      if (!data) {
-        historyContainer.innerHTML = '<p style="text-align:center; width:100%;">لا توجد بيانات مسجلة بعد.</p>';
+    // دالة حفظ إنجاز اليوم في الـ Local Storage
+    function saveTodayProgress() {
+      // تجميع حالة المهام الحالية
+      const checkboxes = document.querySelectorAll('.task-checkbox');
+      const dayTasks = [];
+      
+      checkboxes.forEach(cb => {
+        dayTasks.push({
+          name: cb.value,
+          completed: cb.checked, // true إذا تم الإنجاز، false إذا لم يتم
+          progress: cb.checked ? 100 : 0
+        });
+      });
+
+      // جلب التاريخ الحالي
+      const today = new Date().toLocaleDateString('ar-EG');
+      
+      // جلب السجل القديم من الذاكرة أو إنشاء مصفوفة جديدة
+      let historyData = JSON.parse(localStorage.getItem('myDashboardHistory')) || [];
+
+      // التحقق إذا كان اليوم موجود مسبقاً ليتم تحديثه بدل التكرار
+      const existingDayIndex = historyData.findIndex(d => d.date === today);
+      if (existingDayIndex > -1) {
+        historyData[existingDayIndex].tasks = dayTasks;
+      } else {
+        // إضافة يوم جديد في بداية السجل
+        historyData.unshift({
+          date: today,
+          tasks: dayTasks
+        });
+      }
+
+      // حفظ في الذاكرة
+      localStorage.setItem('myDashboardHistory', JSON.stringify(historyData));
+      
+      alert('تم حفظ إنجاز اليوم بنجاح!');
+      
+      // إعادة رسم السجل ليعرض التحديث الجديد فوراً
+      renderHistoryCards();
+    }
+
+    // =========================================
+    // التعديل المطلوب: دالة رسم سجل الأيام مع الملخص
+    // =========================================
+    function renderHistoryCards() {
+      const historyContainer = document.getElementById('historyContainer');
+      let historyData = JSON.parse(localStorage.getItem('myDashboardHistory')) || [];
+
+      historyContainer.innerHTML = ''; // تفريغ الحاوي
+
+      if(historyData.length === 0) {
+        historyContainer.innerHTML = '<div class="glass-panel" style="text-align:center;">لا يوجد سجل حتى الآن. احفظ مهام اليوم للبدء!</div>';
         return;
       }
 
-      // تحويل البيانات لمصفوفة وعرضها بترتيب أحدث الأيام
-      Object.keys(data).reverse().forEach(dateKey => {
-        const day = data[dateKey];
-        const tasks = day.tasks || [];
+      historyData.forEach(day => {
+        // فلترة المهام (إنجاز / تقصير)
+        const completedTasks = day.tasks.filter(t => t.completed || t.progress === 100);
+        const missedTasks = day.tasks.filter(t => !t.completed && t.progress === 0);
 
-        // فلترة المهام المنجزة والتي لم يتم لمسها/المقصر فيها
-        const completedTasks = tasks.filter(t => t.completed || t.progress === 100);
-        const missedTasks = tasks.filter(t => !t.completed && (t.progress === 0 || t.status === 'skipped'));
-
-        // بناء كارت اليوم
         const dayCard = document.createElement('div');
-        dayCard.className = 'glass-panel day-card';
+        dayCard.className = 'history-card glass-panel';
 
         dayCard.innerHTML = `
-          <div class="day-header">
-            <span class="day-date">📅 ${day.date || dateKey}</span>
+          <div class="card-header">
+            <h3>📅 ${day.date}</h3>
+            <span class="day-score">${completedTasks.length}/${day.tasks.length} مكتمل</span>
           </div>
 
-          <!-- قسم تم إنجازه -->
-          <div class="summary-box done">
-            <div class="summary-title" style="color: #2ecc71;">🎯 تم إنجازه:</div>
-            <ul class="summary-list">
-              ${completedTasks.length > 0 
-                ? completedTasks.map(t => `<li>✅ ${t.name} ${t.detail ? `(${t.detail})` : ''}</li>`).join('')
-                : '<li class="empty-text">لا توجد إنجازات مسجلة</li>'
+          <!-- قسم الإنجازات -->
+          <div class="summary-box done-box">
+            <h4>🎯 تم إنجازه:</h4>
+            <ul>
+              ${
+                completedTasks.length > 0 
+                  ? completedTasks.map(t => `<li><span>✅</span> <span>${t.name}</span></li>`).join('') 
+                  : '<li class="empty-msg">لم يتم إنجاز مهام في هذا اليوم</li>'
               }
             </ul>
           </div>
 
-          <!-- قسم لم يتم لمسه / تقصير -->
-          <div class="summary-box missed">
-            <div class="summary-title" style="color: #e74c3c;">⚠️ لم يتم لمسه / تقصير:</div>
-            <ul class="summary-list">
-              ${missedTasks.length > 0 
-                ? missedTasks.map(t => `<li>❌ ${t.name}</li>`).join('')
-                : '<li class="empty-text">لا يوجد تقصير، يوم ممتاز! 🎉</li>'
+          <!-- قسم التقصير -->
+          <div class="summary-box missed-box">
+            <h4>⚠️ لم يتم لمسه / تقصير:</h4>
+            <ul>
+              ${
+                missedTasks.length > 0 
+                  ? missedTasks.map(t => `<li><span>❌</span> <span>${t.name}</span></li>`).join('') 
+                  : '<li class="empty-msg text-gold">🎉 ممتازة! لا يوجد أي تقصير في هذا اليوم</li>'
               }
             </ul>
           </div>
@@ -212,7 +295,13 @@
 
         historyContainer.appendChild(dayCard);
       });
-    });
+    }
+
+    // تشغيل الدوال عند فتح الصفحة
+    window.onload = () => {
+      renderTodayTasks();
+      renderHistoryCards();
+    };
   </script>
 </body>
 </html>
