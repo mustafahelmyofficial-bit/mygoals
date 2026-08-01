@@ -178,6 +178,22 @@
     }
     .btn-snooze:hover { background: rgba(245, 158, 11, 0.3); }
 
+    .btn-nav-arrow {
+      background: var(--accent-blue-light);
+      border: 1px solid var(--accent-blue-border);
+      color: var(--accent-blue);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+    .btn-nav-arrow:hover { background: var(--accent-blue); color: #fff; }
+
     .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-blue-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-blue-border); display: flex; align-items: center; gap: 6px; }
 
     .btn-adhan { background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer; }
@@ -205,8 +221,8 @@
 
     .history-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 12px; background: rgba(255, 255, 255, 0.2);
-      border: 1px solid var(--card-stroke); border-radius: 10px; font-size: 0.85rem; margin-bottom: 6px;
+      padding: 10px 14px; background: rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--card-stroke); border-radius: 12px; font-size: 0.88rem; margin-bottom: 8px;
     }
 
     /* --- تنسيقات كورس الإنجليزي الخاص --- */
@@ -371,16 +387,27 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- قسم المهام المؤجلة -->
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">⏳</span>
-            <span>المهام المؤجلة</span>
+      <!-- أزرار الانقال السريع للمؤجلة والسجل -->
+      <div style="display: flex; gap: 10px;">
+        <div class="section-card" style="flex: 1; cursor: pointer;" onclick="switchPage('page-snoozed')">
+          <div class="section-header-row" style="margin: 0;">
+            <div class="section-title" style="font-size: 1rem;">
+              <span class="sec-icon">⏳</span>
+              <span>المهام المؤجلة</span>
+            </div>
+            <button class="btn-nav-arrow">←</button>
           </div>
         </div>
-        <div class="divider-line"></div>
-        <div id="snoozed-tasks-container" style="margin-top: 6px;"></div>
+
+        <div class="section-card" style="flex: 1; cursor: pointer;" onclick="switchPage('page-history')">
+          <div class="section-header-row" style="margin: 0;">
+            <div class="section-title" style="font-size: 1rem;">
+              <span class="sec-icon">📜</span>
+              <span>سجل الإنجاز</span>
+            </div>
+            <button class="btn-nav-arrow">←</button>
+          </div>
+        </div>
       </div>
 
       <!-- الصلوات الخمس -->
@@ -398,18 +425,38 @@
         <div id="prayers-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- سجل النسب المئوية السابقة -->
+    </div>
+
+    <!-- ==================== ⏳ صفحة المهام المؤجلة المستقلة ==================== -->
+    <div class="app-page" id="page-snoozed">
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">⏳</span>
+            <span>المهام المؤجلة</span>
+          </div>
+          <button class="btn-nav-arrow" onclick="switchPage('page-home')">الرجوع →</button>
+        </div>
+        <div class="divider-line"></div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">قائمة المهام التي تم تأجيلها مؤقتاً، يمكنك استعادتها لليوم بضغطة زر:</p>
+        <div id="snoozed-tasks-container" style="margin-top: 10px;"></div>
+      </div>
+    </div>
+
+    <!-- ==================== 📜 صفحة سجل الإنجاز اليومي المستقلة ==================== -->
+    <div class="app-page" id="page-history">
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📜</span>
             <span>سجل نسبة الإنجاز اليومية</span>
           </div>
+          <button class="btn-nav-arrow" onclick="switchPage('page-home')">الرجوع →</button>
         </div>
         <div class="divider-line"></div>
-        <div id="history-log-container" style="max-height: 220px; overflow-y: auto;"></div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">استعرض نسب الإنجاز السابقة لكل الأيام، واضغط على "تعديل" لتعديل أي يوم:</p>
+        <div id="history-log-container" style="margin-top: 10px;"></div>
       </div>
-
     </div>
 
     <!-- ==================== 🇬🇧 2. كورس الإنجليزي ==================== -->
@@ -927,14 +974,13 @@
       renderTasks();
       renderPrayers();
       
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      switchPage('page-home');
     }
 
     function resetToToday() {
       changeSelectedDate(getTodayString());
     }
 
-    /* لحساب النسبة المئوية الشاملة (مهام + صلوات) */
     function calculateDayOverallPercentage(d) {
       const dayTasks = localState.daily_history[d] || {};
       const dayPrayers = localState.prayers_history[d] || {};
@@ -1043,15 +1089,15 @@
         if (localState.snoozed_tasks?.[task.id]) {
           hasSnoozed = true;
           html += `
-            <div class="task-item" style="opacity: 0.85; background: rgba(0,0,0,0.03);">
+            <div class="task-item" style="opacity: 0.95;">
               <span>${task.title} ${task.icon}</span>
-              <button class="btn-action" style="padding: 4px 10px; font-size: 0.75rem;" onclick="unsnoozeTask('${task.id}')">↩️ استعادة لليوم</button>
+              <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;" onclick="unsnoozeTask('${task.id}')">↩️ استعادة للرئيسية</button>
             </div>`;
         }
       });
 
       if (!hasSnoozed) {
-        html = `<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; padding:6px;">لا توجد مهام مؤجلة.</p>`;
+        html = `<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:20px;">لا توجد مهام مؤجلة حالياً ✨</p>`;
       }
 
       container.innerHTML = html;
@@ -1112,16 +1158,16 @@
       let html = '';
 
       if (dates.length === 0) {
-        html = `<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; padding:8px;">سيتم عرض سجل النسب هنا بمجرد تحديد الإنجاز.</p>`;
+        html = `<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:20px;">سيتم عرض سجل النسب هنا بمجرد تحديد الإنجاز لأي يوم.</p>`;
       } else {
         dates.forEach(d => {
           const pct = calculateDayOverallPercentage(d);
           html += `
             <div class="history-item">
               <span style="font-weight: bold;">📅 ${d}</span>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="days-badge" style="background:var(--accent-blue-light); color:var(--accent-blue);">${pct}% إنجاز</span>
-                <button class="btn-snooze" style="font-size:0.75rem; padding:4px 8px; cursor:pointer;" onclick="changeSelectedDate('${d}')">✏️ تعديل</button>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="days-badge" style="background:var(--accent-blue-light); color:var(--accent-blue); font-size:0.85rem;">${pct}% إنجاز</span>
+                <button class="btn-snooze" style="font-size:0.8rem; padding:6px 12px; cursor:pointer;" onclick="changeSelectedDate('${d}')">✏️ تعديل هذا اليوم</button>
               </div>
             </div>`;
         });
