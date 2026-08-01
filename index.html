@@ -15,7 +15,6 @@
 
   <style>
     :root {
-      /* لوحة الألوان المستوحاة من الصورة: أزرق ثلجي، رمادي كحلي، ولمسات زجاجية */
       --bg-main: #DCE5EE;
       --bg-gradient: linear-gradient(135deg, #E6EEF4 0%, #CBD8E5 50%, #9EB7CE 100%);
       
@@ -225,79 +224,23 @@
       border: 1px solid var(--card-stroke); border-radius: 12px; font-size: 0.88rem; margin-bottom: 8px;
     }
 
-    /* --- تنسيقات كورس الإنجليزي الخاص --- */
+    /* كورس الإنجليزي */
     .eng-level-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-stroke);
-      border-radius: var(--inner-radius);
-      margin-bottom: 12px;
-      overflow: hidden;
-      transition: var(--transition);
+      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: var(--inner-radius); margin-bottom: 12px; overflow: hidden; transition: var(--transition);
     }
-    .eng-level-card.locked {
-      opacity: 0.6;
-      filter: grayscale(0.5);
-    }
-    .eng-level-header {
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 0.95rem;
-    }
-    .eng-level-content {
-      padding: 12px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .eng-level-card.open .eng-level-content {
-      display: flex;
-    }
-    .eng-unit-title {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--accent-blue);
-      margin-top: 6px;
-      margin-bottom: 4px;
-      border-bottom: 1px dashed var(--card-stroke);
-      padding-bottom: 4px;
-    }
-    .eng-lesson-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid var(--card-stroke);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.82rem;
-      font-weight: 600;
-    }
-    .eng-status-btn {
-      border: none;
-      background: var(--card-bg);
-      border: 1px solid var(--card-stroke);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: bold;
-      color: var(--text-dark);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .eng-level-card.locked { opacity: 0.6; filter: grayscale(0.5); }
+    .eng-level-header { padding: 14px 16px; background: rgba(255, 255, 255, 0.2); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 800; font-size: 0.95rem; }
+    .eng-level-content { padding: 12px; display: none; flex-direction: column; gap: 10px; }
+    .eng-level-card.open .eng-level-content { display: flex; }
+    .eng-unit-title { font-weight: 700; font-size: 0.85rem; color: var(--accent-blue); margin-top: 6px; margin-bottom: 4px; border-bottom: 1px dashed var(--card-stroke); padding-bottom: 4px; }
+    .eng-lesson-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.2); border: 1px solid var(--card-stroke); border-radius: 10px; padding: 8px 12px; font-size: 0.82rem; font-weight: 600; }
+    .eng-status-btn { border: none; background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; color: var(--text-dark); display: flex; align-items: center; gap: 4px; }
 
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; 
       background: var(--card-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
       display: flex; justify-content: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
@@ -317,7 +260,6 @@
 </head>
 <body>
 
-  <!-- مشغل صوت الأذان المخفي -->
   <audio id="adhan-audio-player">
     <source src="https://cdn.islamicfinder.org/static/audio/athan/makkah.mp3" type="audio/mpeg">
   </audio>
@@ -338,13 +280,11 @@
 
       <div class="header-widgets-row">
         <div></div>
-
         <div class="widgets-group">
           <div class="time-widget">
             <span id="live-clock-time">03:51:02</span>
             <span class="ampm" id="live-clock-ampm">م</span>
           </div>
-
           <button class="circle-btn" id="theme-toggle" onclick="toggleTheme()" title="المظهر">🌙</button>
           <button class="circle-btn" onclick="openDistractModal()" title="التشتت">🧠</button>
         </div>
@@ -358,8 +298,6 @@
 
     <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
     <div class="app-page active" id="page-home">
-      
-      <!-- المهام اليومية -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
@@ -376,7 +314,7 @@
 
         <div class="progress-section">
           <div class="progress-info">
-            <span>نسبة الإنجاز الشاملة (المهام + الصلوات):</span>
+            <span>نسبة الإنجاز الشاملة:</span>
             <span id="tasks-progress-text">0%</span>
           </div>
           <div class="progress-track">
@@ -387,7 +325,7 @@
         <div id="tasks-container" style="margin-top: 10px;"></div>
       </div>
 
-      <!-- أزرار الانقال السريع للمؤجلة والسجل -->
+      <!-- أزرار الانتقال المؤجلة والسجل -->
       <div style="display: flex; gap: 10px;">
         <div class="section-card" style="flex: 1; cursor: pointer;" onclick="switchPage('page-snoozed')">
           <div class="section-header-row" style="margin: 0;">
@@ -419,12 +357,9 @@
           </div>
           <button class="btn-snooze" id="adhan-toggle-btn" onclick="toggleAdhanSetting()" style="font-size: 0.75rem; padding: 4px 10px;">🔊 الأذان: مفعل</button>
         </div>
-
         <div class="divider-line"></div>
-
         <div id="prayers-container" style="margin-top: 10px;"></div>
       </div>
-
     </div>
 
     <!-- ==================== ⏳ صفحة المهام المؤجلة المستقلة ==================== -->
@@ -435,7 +370,7 @@
             <span class="sec-icon">⏳</span>
             <span>المهام المؤجلة</span>
           </div>
-          <button class="btn-nav-arrow" onclick="switchPage('page-home')">الرجوع →</button>
+          <button class="btn-nav-arrow" onclick="goBackMobile()">الرجوع →</button>
         </div>
         <div class="divider-line"></div>
         <p style="font-size: 0.85rem; color: var(--text-muted);">قائمة المهام التي تم تأجيلها مؤقتاً، يمكنك استعادتها لليوم بضغطة زر:</p>
@@ -451,7 +386,7 @@
             <span class="sec-icon">📜</span>
             <span>سجل نسبة الإنجاز اليومية</span>
           </div>
-          <button class="btn-nav-arrow" onclick="switchPage('page-home')">الرجوع →</button>
+          <button class="btn-nav-arrow" onclick="goBackMobile()">الرجوع →</button>
         </div>
         <div class="divider-line"></div>
         <p style="font-size: 0.85rem; color: var(--text-muted);">استعرض نسب الإنجاز السابقة لكل الأيام، واضغط على "تعديل" لتعديل أي يوم:</p>
@@ -468,10 +403,8 @@
             <span>أكاديمية اللغة الإنجليزية</span>
           </div>
         </div>
-
         <div class="divider-line"></div>
         <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">رحلة التعلم المنظمة من الصفر وحتى الاحتراف والتخصص الهندسي.</p>
-        
         <div id="english-levels-container" style="margin-top: 10px;"></div>
       </div>
     </div>
@@ -601,7 +534,6 @@
 
         <div class="quran-img-container">
           <img id="quran-page-image" class="quran-page-img" src="" alt="صفحة المصحف" onerror="handleQuranImgError()" onload="handleQuranImgSuccess()">
-          
           <div id="quran-fallback" class="quran-fallback-card">
             <h2 style="font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 8px;">📖 الصفحة <span id="fallback-page-num">2</span></h2>
             <p style="font-weight: bold; color: var(--text-dark);">سورة البقرة</p>
@@ -679,12 +611,15 @@
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + 1.5);
-      } catch(e) {
-        console.log("صوت تنبيه الأوفلاين غير مدعوم");
-      }
+      } catch(e) { console.log("صوت تنبيه غير مدعوم"); }
     }
 
-    function switchPage(pageId, navEl = null) {
+    /* --- إدارة التنقل والتوافق مع زر رجوع الموبايل --- */
+    function switchPage(pageId, navEl = null, pushState = true) {
+      if (localState.current_page !== pageId && pushState) {
+        history.pushState({ pageId: pageId }, '', '#' + pageId);
+      }
+
       localState.current_page = pageId;
       saveStateLocally();
 
@@ -711,6 +646,23 @@
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // الاستماع لزر الرجوع الخاص بنظام الموبايل (Swipe or Back button)
+    window.onpopstate = function(event) {
+      if (event.state && event.state.pageId) {
+        switchPage(event.state.pageId, null, false);
+      } else {
+        switchPage('page-home', null, false);
+      }
+    };
+
+    function goBackMobile() {
+      if (history.length > 1) {
+        history.back();
+      } else {
+        switchPage('page-home');
+      }
     }
 
     function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
@@ -747,27 +699,14 @@
         id: "a0",
         title: "المستوى A0 - Beginner (من الصفر تمامًا)",
         units: [
-          {
-            title: "الوحدة الأولى: الحروف والنطق",
-            lessons: ["الأبجدية الإنجليزية (Alphabet)", "الحروف الكبيرة والصغيرة", "أصوات الحروف (Letter Sounds)", "الحروف المتحركة (Vowels)", "الحروف الساكنة (Consonants)", "الفرق بين اسم الحرف وصوته", "نطق الكلمات البسيطة", "مراجعة الوحدة", "اختبار الوحدة"]
-          },
-          {
-            title: "الوحدة الثانية: أساسيات اللغة",
-            lessons: ["التحيات (Greetings)", "التعارف (Introducing Yourself)", "الضمائر (Pronouns)", "الأرقام (Numbers)", "الألوان (Colors)", "الأيام والشهور", "الوقت والتاريخ", "مراجعة", "اختبار"]
-          },
-          {
-            title: "الوحدة الثالثة: المفردات الأساسية",
-            lessons: ["العائلة", "الوظائف", "الدول والجنسيات", "أجزاء الجسم", "الملابس", "الطعام", "المشروبات", "المنزل", "الأثاث", "مراجعة", "اختبار"]
-          },
-          {
-            title: "الوحدة الرابعة: أول قواعد",
-            lessons: ["أجزاء الجملة", "Verb To Be", "أدوات التعريف", "الملكية", "الجمع", "الأسئلة البسيطة", "النفي", "مراجعة", "اختبار"]
-          }
+          { title: "الوحدة الأولى: الحروف والنطق", lessons: ["الأبجدية الإنجليزية (Alphabet)", "الحروف الكبيرة والصغيرة", "أصوات الحروف (Letter Sounds)", "الحروف المتحركة (Vowels)", "الحروف الساكنة (Consonants)", "الفرق بين اسم الحرف وصوته", "نطق الكلمات البسيطة", "مراجعة الوحدة", "اختبار الوحدة"] },
+          { title: "الوحدة الثانية: أساسيات اللغة", lessons: ["التحيات (Greetings)", "التعارف (Introducing Yourself)", "الضمائر (Pronouns)", "الأرقام (Numbers)", "الألوان (Colors)", "الأيام والشهور", "الوقت والتاريخ", "مراجعة", "اختبار"] },
+          { title: "الوحدة الثالثة: المفردات الأساسية", lessons: ["العائلة", "الوظائف", "الدول والجنسيات", "أجزاء الجسم", "الملابس", "الطعام", "المشروبات", "المنزل", "الأثاث", "مراجعة", "اختبار"] },
+          { title: "الوحدة الرابعة: أول قواعد", lessons: ["أجزاء الجملة", "Verb To Be", "أدوات التعريف", "الملكية", "الجمع", "الأسئلة البسيطة", "النفي", "مراجعة", "اختبار"] }
         ]
       },
       {
-        id: "a1",
-        title: "🇺🇸 المستوى A1",
+        id: "a1", title: "🇺🇸 المستوى A1",
         units: [
           { title: "الوحدة الأولى", lessons: ["Present Simple", "استخدام Do و Does", "ظروف التكرار", "الروتين اليومي", "مراجعة", "اختبار"] },
           { title: "الوحدة الثانية", lessons: ["الأماكن", "الاتجاهات", "وسائل المواصلات", "الطقس", "مراجعة", "اختبار"] },
@@ -776,8 +715,7 @@
         ]
       },
       {
-        id: "a2",
-        title: "🇺🇸 المستوى A2",
+        id: "a2", title: "🇺🇸 المستوى A2",
         units: [
           { title: "الوحدة الأولى", lessons: ["Past Simple", "الأفعال المنتظمة", "الأفعال الشاذة", "النفي", "السؤال", "مراجعة", "اختبار"] },
           { title: "الوحدة الثانية", lessons: ["Future Simple", "Going To", "الخطط", "المواعيد", "مراجعة", "اختبار"] },
@@ -786,8 +724,7 @@
         ]
       },
       {
-        id: "b1",
-        title: "🇺🇸 المستوى B1",
+        id: "b1", title: "🇺🇸 المستوى B1",
         units: [
           { title: "الوحدة الأولى", lessons: ["Listening Level 1", "Shadowing", "النطق الصحيح", "مراجعة"] },
           { title: "الوحدة الثانية", lessons: ["Reading قصيرة", "استخراج المفردات", "فهم النصوص", "مراجعة"] },
@@ -796,8 +733,7 @@
         ]
       },
       {
-        id: "b2",
-        title: "🇺🇸 المستوى B2",
+        id: "b2", title: "🇺🇸 المستوى B2",
         units: [
           { title: "الوحدة الأولى", lessons: ["Phrasal Verbs", "Idioms", "Expressions"] },
           { title: "الوحدة الثانية", lessons: ["Business English", "Meetings", "Negotiation", "Emails"] },
@@ -806,56 +742,28 @@
         ]
       },
       {
-        id: "c1",
-        title: "🇺🇸 المستوى C1",
+        id: "c1", title: "🇺🇸 المستوى C1",
         units: [
           { title: "الوحدة الأولى", lessons: ["التفكير بالإنجليزية", "التحدث بطلاقة"] },
           { title: "الوحدة الثانية", lessons: ["Presentation Skills", "Public Speaking"] },
           { title: "الوحدة الثالثة", lessons: ["Academic English", "Professional Writing"] },
           {
             title: "الوحدة الرابعة: English for Interior Design",
-            lessons: [
-              "أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات",
-              "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أسماء الحوائط",
-              "أسماء الأجهزة", "أسماء أدوات الموقع", "أسماء اللوحات التنفيذية",
-              "التعامل مع العميل", "كتابة عروض الأسعار", "كتابة الإيميلات الاحترافية", "تقديم المشروع بالإنجليزية"
-            ]
+            lessons: ["أسماء جميع عناصر المنزل", "أسماء الأثاث", "أسماء الخامات", "أسماء التشطيبات", "أسماء الإضاءة", "أسماء الأسقف", "أسماء الأرضيات", "أسماء الحوائط", "أسماء الأجهزة", "أسماء أدوات الموقع", "أسماء اللوحات التنفيذية", "التعامل مع العميل", "كتابة عروض الأسعار", "كتابة الإيميلات الاحترافية", "تقديم المشروع بالإنجليزية"]
           }
         ]
       },
       {
-        id: "vocab",
-        title: "📖 قسم المفردات (مستقل)",
-        units: [
-          {
-            title: "قوائم الكلمات حسب المستوى",
-            lessons: [
-              "أهم 500 كلمة (A0)", "أهم 1000 كلمة (A1)", "أهم 1500 كلمة (A2)",
-              "أهم 2000 كلمة (B1)", "أهم 2500 كلمة (B2)", "أهم 3000 كلمة (C1)",
-              "Vocabulary for Interior Design"
-            ]
-          }
-        ]
+        id: "vocab", title: "📖 قسم المفردات (مستقل)",
+        units: [{ title: "قوائم الكلمات حسب المستوى", lessons: ["أهم 500 كلمة (A0)", "أهم 1000 كلمة (A1)", "أهم 1500 كلمة (A2)", "أهم 2000 كلمة (B1)", "أهم 2500 كلمة (B2)", "أهم 3000 كلمة (C1)", "Vocabulary for Interior Design"] }]
       },
       {
-        id: "listening",
-        title: "🎧 قسم الاستماع",
-        units: [
-          {
-            title: "مستويات الاستماع",
-            lessons: ["Beginner Listening", "Elementary Listening", "Intermediate Listening", "Advanced Listening", "Native Listening"]
-          }
-        ]
+        id: "listening", title: "🎧 قسم الاستماع",
+        units: [{ title: "مستويات الاستماع", lessons: ["Beginner Listening", "Elementary Listening", "Intermediate Listening", "Advanced Listening", "Native Listening"] }]
       },
       {
-        id: "speaking",
-        title: "🗣 قسم المحادثة",
-        units: [
-          {
-            title: "موضوعات المحادثة اليومية والمهنية",
-            lessons: ["التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار", "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"]
-          }
-        ]
+        id: "speaking", title: "🗣 قسم المحادثة",
+        units: [{ title: "موضوعات المحادثة اليومية والمهنية", lessons: ["التعارف", "العائلة", "المدرسة", "الجامعة", "المطعم", "الفندق", "المطار", "التسوق", "الطبيب", "المقابلات الشخصية", "العمل", "السفر", "العميل", "المكتب الهندسي"] }]
       }
     ];
 
@@ -878,8 +786,7 @@
     };
 
     function getTodayString() {
-      const today = new Date();
-      return today.toISOString().split('T')[0];
+      return new Date().toISOString().split('T')[0];
     }
 
     let selectedDate = getTodayString();
@@ -922,6 +829,7 @@
         document.getElementById('theme-toggle').innerText = '☀️';
       }
 
+      history.replaceState({ pageId: localState.current_page }, '', '#' + localState.current_page);
       applyStateToUI();
     }
 
@@ -949,7 +857,7 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      switchPage(localState.current_page);
+      switchPage(localState.current_page, null, false);
     }
 
     function changeSelectedDate(dateStr) {
@@ -973,13 +881,10 @@
 
       renderTasks();
       renderPrayers();
-      
       switchPage('page-home');
     }
 
-    function resetToToday() {
-      changeSelectedDate(getTodayString());
-    }
+    function resetToToday() { changeSelectedDate(getTodayString()); }
 
     function calculateDayOverallPercentage(d) {
       const dayTasks = localState.daily_history[d] || {};
@@ -1266,7 +1171,6 @@
       let currentIdx = localState.english_lessons_status[lessonKey] || 0;
       currentIdx = (currentIdx + 1) % statusMap.length;
       localState.english_lessons_status[lessonKey] = currentIdx;
-      
       saveStateLocally();
       renderEnglishAcademy();
     }
