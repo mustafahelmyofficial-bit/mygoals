@@ -161,18 +161,20 @@
     }
     .task-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; color: var(--text-dark); flex-grow: 1; }
     .task-item input[type="checkbox"] { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--accent-blue); cursor: pointer; }
-    .task-actions { display: flex; align-items: center; gap: 6px; }
+    .task-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .days-badge {
       background: var(--accent-blue-light); border: 1px solid var(--accent-blue-border);
       color: var(--accent-blue); font-size: 0.75rem; font-weight: 800;
       padding: 4px 8px; border-radius: 8px; white-space: nowrap; display: flex; align-items: center; gap: 4px;
+      flex-shrink: 0;
     }
 
     .btn-snooze {
       background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4);
       color: #D97706; font-size: 0.75rem; font-weight: 800; padding: 4px 8px;
       border-radius: 8px; cursor: pointer; transition: var(--transition);
+      white-space: nowrap; flex-shrink: 0;
     }
     .btn-snooze:hover { background: rgba(245, 158, 11, 0.3); }
 
@@ -316,7 +318,7 @@
       <div class="header-top-row">
         <div class="welcome-text">
           <h1>👋 Eng - Mustafa Helmy</h1>
-          <p id="live-date">الجمعة، 31 يوليو 2026</p>
+          <p id="live-date">السبت، 1 أغسطس 2026</p>
         </div>
         <div class="badge-offline-pill">
           ⚡ نظام محلي (أوفلاين)
@@ -428,6 +430,7 @@
             <span class="sec-icon">🕌</span>
             <span>مواقيت الصلوات الخمس</span>
           </div>
+          <button class="btn-snooze" id="adhan-toggle-btn" onclick="toggleAdhanSetting()" style="font-size: 0.75rem; padding: 4px 10px;">🔊 الأذان: مفعل</button>
         </div>
 
         <div class="divider-line"></div>
@@ -639,12 +642,19 @@
   <script>
     // تشغيل أذان تنبيهي يعمل 100% أوفلاين دون إنترنت
     function playAdhanSound() {
+      if (localState.adhan_enabled === false) return;
       const adhanAudio = document.getElementById('adhan-audio-player');
       if (adhanAudio && navigator.onLine) {
         adhanAudio.play().catch(() => generateOfflineBeep());
       } else {
         generateOfflineBeep();
       }
+    }
+
+    function toggleAdhanSetting() {
+      localState.adhan_enabled = !localState.adhan_enabled;
+      saveStateLocally();
+      renderPrayers();
     }
 
     function generateOfflineBeep() {
@@ -876,7 +886,8 @@
       quran_page: 2,
       courses_data: { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' },
       savings: 15000, followers: 1200,
-      english_lessons_status: {}
+      english_lessons_status: {},
+      adhan_enabled: true
     };
 
     function saveStateLocally() { localStorage.setItem('dashboard_local_state', JSON.stringify(localState)); }
@@ -891,7 +902,11 @@
       if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
       if (!localState.current_page) localState.current_page = 'page-home';
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
+      if (localState.adhan_enabled === undefined) localState.adhan_enabled = true;
       
+      // Always reset selectedDate to today on load so that checkmarks start fresh for the new day
+      selectedDate = getTodayString();
+
       document.getElementById('start-date-picker').value = localState.start_date;
       document.getElementById('selected-date-picker').value = selectedDate;
 
@@ -1113,6 +1128,13 @@
 
       container.innerHTML = html;
       document.getElementById('prayers-progress').style.width = Math.round((doneCount / prayersList.length) * 100) + '%';
+
+      const adhanBtn = document.getElementById('adhan-toggle-btn');
+      if (adhanBtn) {
+        adhanBtn.innerText = localState.adhan_enabled ? '🔊 الأذان: مفعل' : '🔇 الأذان: متوقف';
+        adhanBtn.style.background = localState.adhan_enabled ? 'rgba(245, 158, 11, 0.15)' : 'rgba(100, 116, 139, 0.15)';
+        adhanBtn.style.color = localState.adhan_enabled ? '#D97706' : 'var(--text-muted)';
+      }
     }
 
     function togglePrayer(id, isChecked) {
