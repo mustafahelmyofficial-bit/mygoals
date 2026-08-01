@@ -202,12 +202,6 @@
     .btn-action { background: var(--accent-blue); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-    /* تنسيق عناصر التقويم والسجل الجديدة */
-    .date-picker-input {
-      border-radius: 8px; border: 1px solid var(--accent-blue-border);
-      padding: 6px 10px; background: var(--card-bg); font-weight: bold;
-      color: var(--text-dark); outline: none; font-size: 0.85rem;
-    }
     .history-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 8px 12px; background: rgba(255, 255, 255, 0.2);
@@ -348,33 +342,6 @@
     <!-- ==================== 🏠 1. الصفحة الرئيسية ==================== -->
     <div class="app-page active" id="page-home">
       
-      <!-- قسم متابعة النسبة المئوية وتعديل الأيام -->
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📊</span>
-            <span>متابعة إنجاز الأيام والتعديل</span>
-          </div>
-        </div>
-        <div class="divider-line"></div>
-        
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--card-stroke);">
-            <span style="font-size: 0.85rem; font-weight: bold;">📅 تاريخ بداية التتبع:</span>
-            <input type="date" id="start-date-picker" class="date-picker-input" onchange="setStartDate(this.value)">
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--card-stroke);">
-            <span style="font-size: 0.85rem; font-weight: bold;">✏️ عرضه/تعديله:</span>
-            <input type="date" id="selected-date-picker" class="date-picker-input" onchange="changeSelectedDate(this.value)">
-          </div>
-
-          <div style="text-align: center; font-size: 0.8rem; color: var(--accent-blue); font-weight: bold;" id="viewing-date-status">
-            أنت تعرض وتعدل مهام: اليوم الحالي
-          </div>
-        </div>
-      </div>
-
       <!-- المهام اليومية -->
       <div class="section-card">
         <div class="section-header-row">
@@ -382,13 +349,14 @@
             <span class="sec-icon">📋</span>
             <span id="tasks-header-title">المهام اليومية</span>
           </div>
+          <button id="reset-today-btn" class="btn-snooze" style="display:none; font-size:0.75rem;" onclick="resetToToday()">↩️ العودة لليوم الحالي</button>
         </div>
 
         <div class="divider-line"></div>
 
         <div class="progress-section">
           <div class="progress-info">
-            <span>نسبة الإنجاز اليومي:</span>
+            <span>نسبة الإنجاز:</span>
             <span id="tasks-progress-text">0%</span>
           </div>
           <div class="progress-track">
@@ -420,7 +388,7 @@
           </div>
         </div>
         <div class="divider-line"></div>
-        <div id="history-log-container" style="max-height: 180px; overflow-y: auto;"></div>
+        <div id="history-log-container" style="max-height: 220px; overflow-y: auto;"></div>
       </div>
 
       <!-- الصلوات الخمس -->
@@ -640,7 +608,6 @@
   </div>
 
   <script>
-    // تشغيل أذان تنبيهي يعمل 100% أوفلاين دون إنترنت
     function playAdhanSound() {
       if (localState.adhan_enabled === false) return;
       const adhanAudio = document.getElementById('adhan-audio-player');
@@ -876,7 +843,6 @@
 
     let localState = {
       current_page: 'page-home',
-      start_date: getTodayString(),
       daily_history: {}, 
       daily_tasks: {}, 
       task_days_count: {},
@@ -898,17 +864,12 @@
       if (!localState.snoozed_tasks) localState.snoozed_tasks = {};
       if (!localState.task_days_count) localState.task_days_count = {};
       if (!localState.daily_history) localState.daily_history = {};
-      if (!localState.start_date) localState.start_date = getTodayString();
       if (!localState.quran_page || localState.quran_page < 2) localState.quran_page = 2;
       if (!localState.current_page) localState.current_page = 'page-home';
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
       if (localState.adhan_enabled === undefined) localState.adhan_enabled = true;
       
-      // Always reset selectedDate to today on load so that checkmarks start fresh for the new day
       selectedDate = getTodayString();
-
-      document.getElementById('start-date-picker').value = localState.start_date;
-      document.getElementById('selected-date-picker').value = selectedDate;
 
       const savedTheme = localStorage.getItem('dashboard_theme');
       if (savedTheme === 'dark') {
@@ -946,29 +907,30 @@
       switchPage(localState.current_page);
     }
 
-    function setStartDate(val) {
-      if (!val) return;
-      localState.start_date = val;
-      saveStateLocally();
-      renderHistoryLog();
-    }
-
-    function changeSelectedDate(val) {
-      if (!val) return;
-      selectedDate = val;
+    function changeSelectedDate(dateStr) {
+      if (!dateStr) return;
+      selectedDate = dateStr;
+      
       const today = getTodayString();
-      const statusEl = document.getElementById('viewing-date-status');
       const headerTitle = document.getElementById('tasks-header-title');
+      const resetBtn = document.getElementById('reset-today-btn');
 
       if (selectedDate === today) {
-        statusEl.innerText = "أنت تعرض وتعدل مهام: اليوم الحالي";
         headerTitle.innerText = "المهام اليومية";
+        if (resetBtn) resetBtn.style.display = 'none';
       } else {
-        statusEl.innerText = `أنت تعرض وتعدل مهام يوم سابق: (${selectedDate})`;
         headerTitle.innerText = `مهام يوم (${selectedDate})`;
+        if (resetBtn) resetBtn.style.display = 'inline-block';
       }
 
       renderTasks();
+      
+      // التمرير لأعلى حتى يظهر قسم المهام فور اختيار التعديل
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetToToday() {
+      changeSelectedDate(getTodayString());
     }
 
     function renderTasks() {
@@ -1095,7 +1057,7 @@
               <span style="font-weight: bold;">📅 ${d}</span>
               <div style="display:flex; align-items:center; gap:8px;">
                 <span class="days-badge" style="background:var(--accent-blue-light); color:var(--accent-blue);">${pct}% إنجاز</span>
-                <button class="btn-snooze" style="font-size:0.7rem; padding:2px 6px;" onclick="changeSelectedDate('${d}'); document.getElementById('selected-date-picker').value='${d}';">✏️ تعديل</button>
+                <button class="btn-snooze" style="font-size:0.75rem; padding:4px 8px; cursor:pointer;" onclick="changeSelectedDate('${d}')">✏️ تعديل</button>
               </div>
             </div>`;
         });
