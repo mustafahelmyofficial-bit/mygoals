@@ -194,7 +194,6 @@
     .btn-nav-arrow:hover { background: var(--accent-blue); color: #fff; }
 
     .prayer-badge { font-size: 0.8rem; font-weight: bold; background: var(--accent-blue-light); color: var(--text-dark); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--accent-blue-border); display: flex; align-items: center; gap: 6px; }
-
     .btn-adhan { background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer; }
 
     .quran-img-container {
@@ -214,64 +213,23 @@
     .btn-counter { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--accent-blue); color: #fff; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
     .number-input { width: 65px; text-align: center; padding: 5px; border-radius: 8px; border: 1px solid var(--card-stroke); background: var(--card-bg); font-weight: bold; color: var(--text-dark); }
     .date-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 5px 8px; background: var(--card-bg); font-weight: bold; color: var(--text-dark); font-size: 0.82rem; cursor: pointer; }
-    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; margin-top: 6px; text-align: right; }
+    .text-input-field { border-radius: 8px; border: 1px solid var(--card-stroke); padding: 8px 10px; background: var(--card-bg); font-weight: 600; color: var(--text-dark); width: 100%; text-align: right; }
     .btn-action { background: var(--accent-blue); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
     .btn-delete { background: rgba(217, 83, 79, 0.1); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer; }
 
-    /* تنسيق سجل الإنجاز المطور */
+    /* سجل الإنجاز المطور */
     .history-card-item {
-      background: rgba(255, 255, 255, 0.25);
-      border: 1px solid var(--card-stroke);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      background: rgba(255, 255, 255, 0.25); border: 1px solid var(--card-stroke);
+      border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px;
     }
-    .history-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .history-details-box {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.03);
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px dashed var(--card-stroke);
-    }
-    .history-tag-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-    .tag-completed {
-      background: rgba(46, 125, 50, 0.15);
-      color: #2e7d32;
-      border: 1px solid rgba(46, 125, 50, 0.3);
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
-    .tag-missed {
-      background: rgba(217, 83, 79, 0.15);
-      color: #d9534f;
-      border: 1px solid rgba(217, 83, 79, 0.3);
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
+    .history-card-header { display: flex; justify-content: space-between; align-items: center; }
+    .history-details-box { display: flex; flex-direction: column; gap: 6px; background: rgba(0, 0, 0, 0.03); padding: 10px; border-radius: 12px; border: 1px dashed var(--card-stroke); }
+    .history-tag-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .tag-completed { background: rgba(46, 125, 50, 0.15); color: #2e7d32; border: 1px solid rgba(46, 125, 50, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
+    .tag-missed { background: rgba(217, 83, 79, 0.15); color: #d9534f; border: 1px solid rgba(217, 83, 79, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
 
     /* كورس الإنجليزي */
-    .eng-level-card {
-      background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: var(--inner-radius); margin-bottom: 12px; overflow: hidden; transition: var(--transition);
-    }
+    .eng-level-card { background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: var(--inner-radius); margin-bottom: 12px; overflow: hidden; transition: var(--transition); }
     .eng-level-card.locked { opacity: 0.6; filter: grayscale(0.5); }
     .eng-level-header { padding: 14px 16px; background: rgba(255, 255, 255, 0.2); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 800; font-size: 0.95rem; }
     .eng-level-content { padding: 12px; display: none; flex-direction: column; gap: 10px; }
@@ -280,13 +238,24 @@
     .eng-lesson-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.2); border: 1px solid var(--card-stroke); border-radius: 10px; padding: 8px 12px; font-size: 0.82rem; font-weight: 600; }
     .eng-status-btn { border: none; background: var(--card-bg); border: 1px solid var(--card-stroke); border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; color: var(--text-dark); display: flex; align-items: center; gap: 4px; }
 
+    /* قائمة المحاضرات الديناميكية الجديدة */
+    .course-card-box {
+      background: rgba(255,255,255,0.25); padding: 14px; border-radius: 16px;
+      border: 1px solid var(--card-stroke); margin-bottom: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .lecture-row-item {
+      display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.35);
+      padding: 8px 10px; border-radius: 12px; border: 1px solid var(--card-stroke);
+    }
+
     .bottom-nav {
       position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 24px); max-width: 450px; 
       background: var(--card-bg);
       backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 10px;
-      display: flex; justify-content: space-around; align-items: center;
+      display: flex; justify-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
     }
 
@@ -453,42 +422,54 @@
       </div>
     </div>
 
-    <!-- ==================== 📐 3. الكورسات ==================== -->
+    <!-- ==================== 📐 3. الكورسات (قائمة المحاضرات المحدثة) ==================== -->
     <div class="app-page" id="page-courses">
+      <!-- كورس الديكور -->
       <div class="section-card">
         <div class="section-header-row">
           <div class="section-title">
-            <span class="sec-icon">📐</span>
-            <span>كورسات الهندسة والتشطيبات</span>
+            <span class="sec-icon">🎨</span>
+            <span>كورس الديكور والتصميم الداخلي</span>
           </div>
+          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="addLectureRow('decor')">➕ إضافة محاضرة</button>
         </div>
         <div class="divider-line"></div>
 
-        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke); margin-bottom: 10px;">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🎨 كورس الديكور والتصميم الداخلي</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
-            <div class="counter-control">
-              <button class="btn-counter" onclick="updateCourseLessons('decor', -1)">-</button>
-              <input type="number" id="decor-lesson-count" class="number-input" value="0" min="0" onchange="setCourseLessons('decor', this.value)">
-              <button class="btn-counter" onclick="updateCourseLessons('decor', 1)">+</button>
-            </div>
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>المحاضرات المكتملة: <strong id="decor-stats-text">0 / 0</strong></span>
+            <span id="decor-progress-text">0%</span>
           </div>
-          <input type="text" id="decor-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
+          <div class="progress-track">
+            <div class="progress-fill" id="decor-progress-bar"></div>
+          </div>
         </div>
 
-        <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:12px; border:1px solid var(--card-stroke);">
-          <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">🛠️ كورس التشطيبات والموقع</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 0.8rem;">المحاضرات المكتملة:</span>
-            <div class="counter-control">
-              <button class="btn-counter" onclick="updateCourseLessons('finishing', -1)">-</button>
-              <input type="number" id="finishing-lesson-count" class="number-input" value="0" min="0" onchange="setCourseLessons('finishing', this.value)">
-              <button class="btn-counter" onclick="updateCourseLessons('finishing', 1)">+</button>
-            </div>
+        <div id="decor-lectures-container" style="margin-top: 6px;"></div>
+      </div>
+
+      <!-- كورس التشطيبات -->
+      <div class="section-card">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="sec-icon">🛠️</span>
+            <span>كورس التشطيبات والموقع</span>
           </div>
-          <input type="text" id="finishing-lesson-title" class="text-input-field" placeholder="عنوان الدرس الحالي..." onchange="saveCoursesData()">
+          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="addLectureRow('finishing')">➕ إضافة محاضرة</button>
         </div>
+        <div class="divider-line"></div>
+
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>المحاضرات المكتملة: <strong id="finishing-stats-text">0 / 0</strong></span>
+            <span id="finishing-progress-text">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="finishing-progress-bar"></div>
+          </div>
+        </div>
+
+        <div id="finishing-lectures-container" style="margin-top: 6px;"></div>
       </div>
     </div>
 
@@ -842,7 +823,16 @@
       snoozed_tasks: {},
       office_goals: ["تجهيز Portfolio الأعمال", "تحديد تسعير الخدمات"], 
       quran_page: 2,
-      courses_data: { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' },
+      // هيكل الكورسات المطور (سجل المحاضرات المتتالية)
+      course_lectures: {
+        decor: [
+          { title: 'أساسيات توزيع الأثاث والممرات', done: true },
+          { title: 'تناسق الألوان والإضاءة', done: false }
+        ],
+        finishing: [
+          { title: 'استلام أعمال الكهرباء والمحارة', done: true }
+        ]
+      },
       savings: 15000, followers: 1200,
       english_lessons_status: {},
       adhan_enabled: true
@@ -862,6 +852,13 @@
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
       if (localState.adhan_enabled === undefined) localState.adhan_enabled = true;
       
+      // تهيئة قائمة المحاضرات إن لم تكن موجودة
+      if (!localState.course_lectures) {
+        localState.course_lectures = { decor: [], finishing: [] };
+      }
+      if (!localState.course_lectures.decor) localState.course_lectures.decor = [];
+      if (!localState.course_lectures.finishing) localState.course_lectures.finishing = [];
+
       selectedDate = getTodayString();
       const datePicker = document.getElementById('select-date-picker');
       if (datePicker) datePicker.value = selectedDate;
@@ -883,16 +880,11 @@
       renderHistoryLog();
       renderOfficeGoals();
       renderEnglishAcademy();
+      renderCourseLectures('decor');
+      renderCourseLectures('finishing');
       
       document.getElementById('quran-page-input').value = localState.quran_page || 2;
       updateQuranUI();
-
-      if (localState.courses_data) {
-        document.getElementById('decor-lesson-count').value = localState.courses_data.decorLessons || 0;
-        document.getElementById('decor-lesson-title').value = localState.courses_data.decorTitle || '';
-        document.getElementById('finishing-lesson-count').value = localState.courses_data.finishingLessons || 0;
-        document.getElementById('finishing-lesson-title').value = localState.courses_data.finishingTitle || '';
-      }
 
       document.getElementById('savings-current').innerText = (localState.savings || 0).toLocaleString();
       updateSavingsUI();
@@ -1097,7 +1089,6 @@
       renderTasks();
     }
 
-    /* --- تعديل دالة السجل المطور لترجم وعرض التفاصيل مباشرة --- */
     function renderHistoryLog() {
       const container = document.getElementById('history-log-container');
       if (!container) return;
@@ -1117,7 +1108,6 @@
           let completedList = [];
           let missedList = [];
 
-          // تجميع المهام الإيجابية والسلبية
           defaultTasks.forEach(task => {
             if (!localState.snoozed_tasks[task.id]) {
               if (dayTasks[task.id]) {
@@ -1128,7 +1118,6 @@
             }
           });
 
-          // تجميع الصلوات
           prayersList.forEach(prayer => {
             if (dayPrayers[prayer.id]) {
               completedList.push(prayer.title);
@@ -1137,12 +1126,10 @@
             }
           });
 
-          // بناء وسم الإنجازات
           let completedTagsHtml = completedList.length > 0
             ? completedList.map(item => `<span class="tag-completed">✓ ${item}</span>`).join('')
             : `<span style="font-size:0.75rem; color:var(--text-muted);">لا يوجد إنجازات</span>`;
 
-          // بناء وسم التقصير / عدم اللمس
           let missedTagsHtml = missedList.length > 0
             ? missedList.map(item => `<span class="tag-missed">✕ ${item}</span>`).join('')
             : `<span style="font-size:0.75rem; color:#2e7d32; font-weight:bold;">إنجاز ممتاز بدون تقصير! 🎉</span>`;
@@ -1157,12 +1144,10 @@
                 </div>
               </div>
 
-              <!-- شريط النسبة المرئي -->
               <div class="progress-track" style="height: 6px;">
                 <div class="progress-fill" style="width: ${pct}%;"></div>
               </div>
 
-              <!-- تفاصيل الإنجازات والتقصير المباشرة -->
               <div class="history-details-box">
                 <div>
                   <p style="font-size: 0.75rem; font-weight: 800; color: #2e7d32; margin-bottom: 4px;">🎯 ما تم إنجازه بالكامل:</p>
@@ -1179,6 +1164,71 @@
       }
 
       container.innerHTML = html;
+    }
+
+    /* --- إدارة المحاضرات الديناميكية الجديدة --- */
+    function renderCourseLectures(courseKey) {
+      const container = document.getElementById(`${courseKey}-lectures-container`);
+      if (!container) return;
+
+      const list = localState.course_lectures[courseKey] || [];
+      let html = '';
+      let completedCount = 0;
+
+      if (list.length === 0) {
+        html = `<p style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:12px;">لا توجد محاضرات مضافة حتى الآن. اضغط "➕ إضافة محاضرة" للبدء.</p>`;
+      } else {
+        list.forEach((lec, idx) => {
+          if (lec.done) completedCount++;
+          html += `
+            <div class="lecture-row-item">
+              <input type="checkbox" ${lec.done ? 'checked' : ''} onchange="toggleLectureDone('${courseKey}', ${idx}, this.checked)" style="width:18px; height:18px; accent-color:var(--accent-blue); cursor:pointer;">
+              <span style="font-weight:bold; font-size:0.8rem; color:var(--accent-blue); min-width:80px;">محاضرة ${idx + 1}:</span>
+              <input type="text" class="text-input-field" value="${lec.title}" placeholder="اسم المحاضرة..." onchange="updateLectureTitle('${courseKey}', ${idx}, this.value)">
+              <button class="btn-delete" title="حذف المحاضرة" onclick="removeLectureRow('${courseKey}', ${idx})">🗑️</button>
+            </div>`;
+        });
+      }
+
+      container.innerHTML = html;
+
+      // تحديث شريط الإنجاز والإحصائيات
+      const totalCount = list.length;
+      const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+      document.getElementById(`${courseKey}-stats-text`).innerText = `${completedCount} / ${totalCount}`;
+      document.getElementById(`${courseKey}-progress-text`).innerText = `${pct}%`;
+      document.getElementById(`${courseKey}-progress-bar`).style.width = `${pct}%`;
+    }
+
+    function addLectureRow(courseKey) {
+      if (!localState.course_lectures[courseKey]) localState.course_lectures[courseKey] = [];
+      localState.course_lectures[courseKey].push({ title: '', done: false });
+      saveStateLocally();
+      renderCourseLectures(courseKey);
+    }
+
+    function updateLectureTitle(courseKey, idx, newTitle) {
+      if (localState.course_lectures[courseKey]?.[idx]) {
+        localState.course_lectures[courseKey][idx].title = newTitle;
+        saveStateLocally();
+      }
+    }
+
+    function toggleLectureDone(courseKey, idx, isDone) {
+      if (localState.course_lectures[courseKey]?.[idx]) {
+        localState.course_lectures[courseKey][idx].done = isDone;
+        saveStateLocally();
+        renderCourseLectures(courseKey);
+      }
+    }
+
+    function removeLectureRow(courseKey, idx) {
+      if (localState.course_lectures[courseKey]) {
+        localState.course_lectures[courseKey].splice(idx, 1);
+        saveStateLocally();
+        renderCourseLectures(courseKey);
+      }
     }
 
     function renderEnglishAcademy() {
@@ -1273,33 +1323,6 @@
       localState.english_lessons_status[lessonKey] = currentIdx;
       saveStateLocally();
       renderEnglishAcademy();
-    }
-
-    function updateCourseLessons(type, val) {
-      if (!localState.courses_data) localState.courses_data = { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' };
-      if (type === 'decor') {
-        localState.courses_data.decorLessons = Math.max(0, (localState.courses_data.decorLessons || 0) + val);
-        document.getElementById('decor-lesson-count').value = localState.courses_data.decorLessons;
-      } else {
-        localState.courses_data.finishingLessons = Math.max(0, (localState.courses_data.finishingLessons || 0) + val);
-        document.getElementById('finishing-lesson-count').value = localState.courses_data.finishingLessons;
-      }
-      saveStateLocally();
-    }
-
-    function setCourseLessons(type, val) {
-      if (!localState.courses_data) localState.courses_data = { decorLessons: 0, decorTitle: '', finishingLessons: 0, finishingTitle: '' };
-      const num = Math.max(0, parseInt(val) || 0);
-      if (type === 'decor') localState.courses_data.decorLessons = num;
-      else localState.courses_data.finishingLessons = num;
-      saveStateLocally();
-    }
-
-    function saveCoursesData() {
-      if (!localState.courses_data) localState.courses_data = {};
-      localState.courses_data.decorTitle = document.getElementById('decor-lesson-title').value;
-      localState.courses_data.finishingTitle = document.getElementById('finishing-lesson-title').value;
-      saveStateLocally();
     }
 
     function adjustSavings(val) {
