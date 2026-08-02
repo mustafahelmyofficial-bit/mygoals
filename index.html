@@ -268,50 +268,41 @@
     .nav-item .nav-icon { font-size: 1.2rem; }
     .nav-item.active { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue-border); }
 
-    /* 📿 العداد الدائري مع شريط التقدم اللفّاف */
+    /* 📿 العداد الدائري للمسبحة الإلكترونية - إلغاء التظليل وإطار الضغط */
     .tasbeeh-container {
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; margin-top: 10px;
     }
-    .circular-counter-wrapper {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: conic-gradient(var(--accent-blue) 0deg, rgba(255,255,255,0.2) 0deg);
-      padding: 8px;
-      box-shadow: var(--shadow-soft);
-      transition: background 0.2s ease;
-    }
     .circular-counter {
-      width: 100%; height: 100%; border-radius: 50%;
+      width: 170px; height: 170px; border-radius: 50%;
       background: var(--card-bg);
-      backdrop-filter: var(--glass-blur);
+      border: 6px solid var(--accent-blue);
+      box-shadow: var(--shadow-soft), inset 0 0 15px rgba(0,0,0,0.05);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       cursor: pointer; transition: transform 0.1s ease; position: relative;
       outline: none;
       -webkit-tap-highlight-color: transparent;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+    }
+    .circular-counter:focus, .circular-counter:active {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
     }
     .circular-counter:active { transform: scale(0.95); }
-    .circular-counter .count-num { font-size: 3rem; font-weight: 900; color: var(--text-dark); pointer-events: none; line-height: 1; }
-    .circular-counter .count-label { font-size: 0.8rem; color: var(--text-muted); font-weight: bold; margin-top: 6px; pointer-events: none; }
+    .circular-counter .count-num { font-size: 2.5rem; font-weight: 900; color: var(--text-dark); pointer-events: none; }
+    .circular-counter .count-label { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; margin-top: -4px; pointer-events: none; }
 
-    .azkar-item-card {
-      background: rgba(255, 255, 255, 0.3);
-      border: 1px solid var(--card-stroke);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: var(--transition);
+    .side-drawer {
+      position: fixed; top: 0; right: -100%; width: 100%; max-width: 360px; height: 100%;
+      background: var(--bg-main); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+      transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); padding: 20px;
+      display: flex; flex-direction: column; gap: 16px; overflow-y: auto;
     }
-    .azkar-item-card:hover {
-      background: var(--accent-blue-light);
-      border-color: var(--accent-blue-border);
+    .side-drawer.open { right: 0; }
+    .drawer-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1999;
+      display: none;
     }
+    .drawer-overlay.open { display: block; }
 
     .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(8px); }
     .modal-content { max-width: 400px; width: 90%; text-align: right; background: var(--card-bg); backdrop-filter: var(--glass-blur); padding: 20px; border-radius: 20px; color: var(--text-dark); border: 1px solid var(--card-stroke); }
@@ -620,85 +611,38 @@
       </div>
     </div>
 
-    <!-- ==================== 📿 6. المسبحة والأذكار ==================== -->
-    <div class="app-page" id="page-tasbeeh">
-      
-      <!-- 1. قائمة الأذكار -->
-      <div class="section-card" id="azkar-list-view">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📿</span>
-            <span>قائمة الأذكار</span>
-          </div>
-          <button class="btn-nav-arrow" onclick="goHomeDirectly()">الرئيسية 🏠</button>
-        </div>
-        <div class="divider-line"></div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px;">اختر الذكر للبدء في التسبيح:</p>
-        
-        <div id="azkar-cards-container"></div>
-      </div>
-
-      <!-- 2. واجهة العداد والشاشة الحالية -->
-      <div class="section-card" id="tasbeeh-counter-view" style="display: none;">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📿</span>
-            <span>العداد</span>
-          </div>
-          <button class="btn-nav-arrow" onclick="backToAzkarList()">الأذكار ←</button>
-        </div>
-        
-        <div class="divider-line"></div>
-
-        <div style="background: rgba(255,255,255,0.2); border: 1px solid var(--card-stroke); border-radius: 16px; padding: 18px; text-align: center; margin-top: 4px;">
-          <p id="active-zekr-text" style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); line-height: 1.6;"></p>
-        </div>
-
-        <div style="display: flex; justify-content: space-around; font-size: 0.9rem; font-weight: bold; color: var(--text-muted); margin-top: 4px;">
-          <span>عدد الدورات: <strong id="tasbeeh-cycles" style="color: var(--accent-blue);">0</strong></span>
-          <span>العدد الكلي: <strong id="tasbeeh-total" style="color: var(--accent-green);">0</strong></span>
-        </div>
-
-        <div class="tasbeeh-container">
-          <div class="circular-counter-wrapper" id="progress-ring-wrapper">
-            <div class="circular-counter" onclick="incrementTasbeeh()" tabindex="-1">
-              <span class="count-num" id="tasbeeh-count-display">0</span>
-              <span class="count-label">اضغط للعداد</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
   </div>
 
-  <!-- 📱 شريط التنقل السفلي -->
-  <div class="bottom-nav">
-    <div class="nav-item active" data-page="page-home" onclick="goHomeDirectly()">
-      <span class="nav-icon">🏠</span>
-      <span>الرئيسية</span>
+  <!-- 📿 القائمة الجانبية (المزيد والمسبحة) -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawerUI()"></div>
+  <div class="side-drawer" id="side-drawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--card-stroke);">
+      <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">⚙️ المزيد والمسبحة</h3>
+      <button class="circle-btn" onclick="closeDrawerUI()">✕</button>
     </div>
-    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english', this)">
-      <span class="nav-icon">🇬🇧</span>
-      <span>الإنجليزي</span>
-    </div>
-    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses', this)">
-      <span class="nav-icon">📐</span>
-      <span>الكورسات</span>
-    </div>
-    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals', this)">
-      <span class="nav-icon">🎯</span>
-      <span>الأهداف</span>
-    </div>
-    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran', this)">
-      <span class="nav-icon">📖</span>
-      <span>البقرة</span>
-    </div>
-    <div class="nav-item" data-page="page-tasbeeh" onclick="switchPage('page-tasbeeh', this)">
-      <span class="nav-icon">📿</span>
-      <span>المسبحة</span>
+
+    <!-- المسبحة الإلكترونية -->
+    <div class="section-card">
+      <div class="section-header-row">
+        <div class="section-title" style="font-size: 1rem;">
+          <span class="sec-icon">📿</span>
+          <span>المسبحة الإلكترونية</span>
+        </div>
+      </div>
+      <div class="divider-line"></div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted);">الذكر / الدعاء الحالى:</label>
+        <input type="text" id="tasbeeh-text-input" class="text-input-field" value="سبحان الله وبحمده، سبحان الله العظيم" onchange="updateTasbeehText(this.value)">
+      </div>
+
+      <div class="tasbeeh-container">
+        <div class="circular-counter" onclick="incrementTasbeeh()" tabindex="-1">
+          <span class="count-num" id="tasbeeh-count-display">0</span>
+          <span class="count-label">اضغط للعداد</span>
+        </div>
+        <button class="btn-snooze" style="padding: 6px 14px; font-size: 0.8rem;" onclick="resetTasbeeh()">🔄 إعادة الضبط (تصفير)</button>
+      </div>
     </div>
   </div>
 
@@ -706,7 +650,7 @@
     <div class="modal-content" style="text-align: center;">
       <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
-      <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
+      <button class="btn-action" onclick="closeModalUI('distract-modal')">جاهز للعودة 💪</button>
     </div>
   </div>
 
@@ -720,14 +664,6 @@
       "اجعل صلاتك وطاعتك أولويتك، يبارك الله لك في وقتك وعملك.",
       "خطوة واحدة كل يوم تقربك 365 خطوة نحو هدفك كل عام.",
       "العقل المتركز يتجاوز كل العقبات، لا تدع التشتت يسرق حلمك."
-    ];
-
-    const azkarPresets = [
-      { id: 'zekr_1', text: 'اللهم أنت الأول فليس قبلك شيء وانت الآخر فليس بعدك شيء وانت الظاهر فليس فوقك شيء وانت الباطن فليس دونتك شيء اقضي عني الدين واغنني من الفقر ❤️', target: 33 },
-      { id: 'zekr_2', text: 'سبحان الله وبحمده ، سبحان الله العظيم 🌿', target: 33 },
-      { id: 'zekr_3', text: 'أستغفر الله العظيم وأتوب إليه 🤲', target: 33 },
-      { id: 'zekr_4', text: 'لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير 💫', target: 100 },
-      { id: 'zekr_5', text: 'اللهم صلِّ وسلم وبارك على نبينا محمد 🤍', target: 100 }
     ];
 
     function setRandomQuote() {
@@ -769,7 +705,8 @@
       } catch(e) { console.log("صوت تنبيه غير مدعوم"); }
     }
 
-    /* --- إدارة التنقل بزر الموبايل (History API) --- */
+    /* --- إدارة التنقل بزر الموبايل (History API المحدث) --- */
+
     function switchPage(pageId, navEl = null, pushHistory = true) {
       localState.current_page = pageId;
       saveStateLocally();
@@ -796,53 +733,75 @@
         quoteCard.style.display = 'none';
       }
 
-      if (pageId === 'page-tasbeeh') {
-        renderAzkarList();
-      }
-
       if (pushHistory) {
-        history.pushState({ page: pageId, view: 'main' }, '', '#' + pageId);
+        if (pageId === 'page-home') {
+          history.pushState({ page: 'page-home' }, '', '#home');
+        } else {
+          history.pushState({ page: pageId }, '', '#' + pageId);
+        }
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goHomeDirectly() {
-      switchPage('page-home');
+      if (history.state && history.state.page !== 'page-home') {
+        switchPage('page-home', null, true);
+      } else {
+        switchPage('page-home', null, false);
+      }
     }
 
+    /* إدارة الأحداث عند الضغط على زر الرجوع للموبايل */
     window.onpopstate = function(event) {
-      const distractModal = document.getElementById('distract-modal');
-      if (distractModal && distractModal.style.display === 'flex') {
-        closeModal('distract-modal', false);
+      const drawer = document.getElementById('side-drawer');
+      if (drawer && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        document.getElementById('drawer-overlay').classList.remove('open');
         return;
       }
 
-      if (event.state) {
-        if (event.state.page === 'page-tasbeeh' && event.state.view === 'counter') {
-          showCounterView(false);
-          return;
-        } else if (event.state.page === 'page-tasbeeh' && event.state.view === 'list') {
-          showAzkarListView(false);
-          return;
-        } else if (event.state.page) {
-          switchPage(event.state.page, null, false);
-          return;
-        }
+      const distractModal = document.getElementById('distract-modal');
+      if (distractModal && distractModal.style.display === 'flex') {
+        distractModal.style.display = 'none';
+        return;
       }
-      
-      switchPage('page-home', null, false);
+
+      // الرجوع إلى الصفحة الرئيسية دائماً عند العمل بزر الموبايل من باقي الأقسام
+      if (event.state && event.state.page && event.state.page !== 'page-home') {
+        switchPage(event.state.page, null, false);
+      } else {
+        switchPage('page-home', null, false);
+      }
     };
 
     function openModal(modalId) { 
       document.getElementById(modalId).style.display = 'flex'; 
-      history.pushState({ modal: modalId }, '', '#' + modalId);
+      history.pushState({ modal: modalId, page: localState.current_page }, '', '#' + modalId);
     }
-    function closeModal(modalId, popHistory = true) { 
+
+    function closeModalUI(modalId) { 
       document.getElementById(modalId).style.display = 'none'; 
-      if (popHistory && history.state && history.state.modal) { history.back(); }
+      if (history.state && history.state.modal) { 
+        history.back(); 
+      }
     }
+
     function openDistractModal() { openModal('distract-modal'); }
+
+    function openDrawer() {
+      document.getElementById('side-drawer').classList.add('open');
+      document.getElementById('drawer-overlay').classList.add('open');
+      history.pushState({ drawer: true, page: localState.current_page }, '', '#drawer');
+    }
+
+    function closeDrawerUI() {
+      document.getElementById('side-drawer').classList.remove('open');
+      document.getElementById('drawer-overlay').classList.remove('open');
+      if (history.state && history.state.drawer) { 
+        history.back(); 
+      }
+    }
 
     function toggleTheme() {
       document.body.classList.toggle('dark-mode');
@@ -986,12 +945,8 @@
       savings: 15000, followers: 1200,
       english_lessons_status: {},
       adhan_enabled: true,
-      
-      /* بيانات المسبحة المحدثة */
-      azkar_data: {
-        current_zekr_id: 'zekr_1',
-        counts: {} // تخزين { zekr_id: { count: 0, cycles: 0, total: 0 } }
-      }
+      tasbeeh_count: 0,
+      tasbeeh_text: "سبحان الله وبحمده، سبحان الله العظيم"
     };
 
     function saveStateLocally() { localStorage.setItem('dashboard_local_state', JSON.stringify(localState)); }
@@ -1007,9 +962,9 @@
       if (!localState.current_page) localState.current_page = 'page-home';
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
       if (localState.adhan_enabled === undefined) localState.adhan_enabled = true;
-      if (!localState.azkar_data) localState.azkar_data = { current_zekr_id: 'zekr_1', counts: {} };
-      if (!localState.azkar_data.counts) localState.azkar_data.counts = {};
-
+      if (localState.tasbeeh_count === undefined) localState.tasbeeh_count = 0;
+      if (!localState.tasbeeh_text) localState.tasbeeh_text = "سبحان الله وبحمده، سبحان الله العظيم";
+      
       if (!localState.course_lectures) {
         localState.course_lectures = { decor: [], finishing: [] };
       }
@@ -1037,6 +992,7 @@
       renderEnglishAcademy();
       renderCourseLectures('decor');
       renderCourseLectures('finishing');
+      renderTasbeeh();
       
       document.getElementById('quran-page-input').value = localState.quran_page || 2;
       updateQuranUI();
@@ -1047,7 +1003,7 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      history.replaceState({ page: 'page-home', view: 'main' }, '', '#page-home');
+      history.replaceState({ page: 'page-home' }, '', '#home');
       switchPage('page-home', null, false);
     }
 
@@ -1322,98 +1278,28 @@
       container.innerHTML = html;
     }
 
-    /* ==================== 📿 وظائف المسبحة المعدلة ==================== */
-    function renderAzkarList() {
-      const container = document.getElementById('azkar-cards-container');
-      if (!container) return;
-      
-      let html = '';
-      azkarPresets.forEach((zekr) => {
-        const stats = localState.azkar_data.counts[zekr.id] || { total: 0, cycles: 0 };
-        html += `
-          <div class="azkar-item-card" onclick="selectZekr('${zekr.id}')">
-            <p style="font-weight: 800; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 8px;">${zekr.text}</p>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); font-weight: bold;">
-              <span>العدد المطلوب للدورة: ${zekr.target}</span>
-              <span>الإجمالي: ${stats.total || 0}</span>
-            </div>
-          </div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    function selectZekr(zekrId) {
-      localState.azkar_data.current_zekr_id = zekrId;
-      saveStateLocally();
-      showCounterView(true);
-    }
-
-    function showCounterView(pushHistory = true) {
-      document.getElementById('azkar-list-view').style.display = 'none';
-      document.getElementById('tasbeeh-counter-view').style.display = 'flex';
-
-      const zekrId = localState.azkar_data.current_zekr_id;
-      const zekrObj = azkarPresets.find(z => z.id === zekrId) || azkarPresets[0];
-
-      document.getElementById('active-zekr-text').innerText = zekrObj.text;
-      
-      if (pushHistory) {
-        history.pushState({ page: 'page-tasbeeh', view: 'counter' }, '', '#tasbeeh-counter');
-      }
-
-      updateTasbeehDisplay();
-    }
-
-    function showAzkarListView(pushHistory = true) {
-      document.getElementById('azkar-list-view').style.display = 'flex';
-      document.getElementById('tasbeeh-counter-view').style.display = 'none';
-      renderAzkarList();
-
-      if (pushHistory) {
-        history.pushState({ page: 'page-tasbeeh', view: 'list' }, '', '#page-tasbeeh');
-      }
-    }
-
-    function backToAzkarList() {
-      showAzkarListView(true);
+    function renderTasbeeh() {
+      const display = document.getElementById('tasbeeh-count-display');
+      const input = document.getElementById('tasbeeh-text-input');
+      if (display) display.innerText = localState.tasbeeh_count || 0;
+      if (input) input.value = localState.tasbeeh_text || '';
     }
 
     function incrementTasbeeh() {
-      const zekrId = localState.azkar_data.current_zekr_id || 'zekr_1';
-      const zekrObj = azkarPresets.find(z => z.id === zekrId) || azkarPresets[0];
-
-      if (!localState.azkar_data.counts[zekrId]) {
-        localState.azkar_data.counts[zekrId] = { count: 0, cycles: 0, total: 0 };
-      }
-
-      let zData = localState.azkar_data.counts[zekrId];
-      zData.count += 1;
-      zData.total += 1;
-
-      if (zData.count >= zekrObj.target) {
-        zData.count = 0;
-        zData.cycles += 1;
-      }
-
+      localState.tasbeeh_count = (localState.tasbeeh_count || 0) + 1;
       saveStateLocally();
-      updateTasbeehDisplay();
+      renderTasbeeh();
     }
 
-    function updateTasbeehDisplay() {
-      const zekrId = localState.azkar_data.current_zekr_id || 'zekr_1';
-      const zekrObj = azkarPresets.find(z => z.id === zekrId) || azkarPresets[0];
-      const zData = localState.azkar_data.counts[zekrId] || { count: 0, cycles: 0, total: 0 };
+    function resetTasbeeh() {
+      localState.tasbeeh_count = 0;
+      saveStateLocally();
+      renderTasbeeh();
+    }
 
-      document.getElementById('tasbeeh-count-display').innerText = zData.count;
-      document.getElementById('tasbeeh-cycles').innerText = zData.cycles;
-      document.getElementById('tasbeeh-total').innerText = zData.total;
-
-      // تحديث شريط التقدم الدائري (Conic Gradient)
-      const progressDegrees = (zData.count / zekrObj.target) * 360;
-      const ringWrapper = document.getElementById('progress-ring-wrapper');
-      if (ringWrapper) {
-        ringWrapper.style.background = `conic-gradient(var(--accent-blue) ${progressDegrees}deg, rgba(255,255,255,0.2) ${progressDegrees}deg)`;
-      }
+    function updateTasbeehText(val) {
+      localState.tasbeeh_text = val;
+      saveStateLocally();
     }
 
     function renderCourseLectures(courseKey) {
