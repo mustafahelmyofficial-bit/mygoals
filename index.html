@@ -730,7 +730,7 @@
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📜</span>
-            <span>قائمة الأذكار والمسبحة</span>
+            <span>قائمة الأذكار</span>
           </div>
           <button class="btn-nav-arrow" onclick="goHomeDirectly()">الرئيسية 🏠</button>
         </div>
@@ -754,16 +754,7 @@
       <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">⚙️ الإعدادات والمزيد</h3>
       <button class="circle-btn" onclick="closeDrawer()">✕</button>
     </div>
-
-    <div class="section-card" style="cursor: pointer;" onclick="closeDrawer(); switchPage('page-dhikr-list');">
-      <div class="section-header-row">
-        <div class="section-title" style="font-size: 1rem;">
-          <span class="sec-icon">📿</span>
-          <span>الأذكار والمسبحة</span>
-        </div>
-        <button class="btn-nav-arrow">الانتقال ←</button>
-      </div>
-    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); padding-top: 10px;">تم خيار النقل لإدارة تطبيقك بسهولة.</p>
   </div>
 
   <!-- 📱 شريط التنقل السفلي -->
@@ -887,7 +878,9 @@
       if (targetPage) targetPage.classList.add('active');
 
       if (!navEl) {
-        navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+        let navPageId = pageId;
+        if (pageId === 'page-tasbeeh-main') navPageId = 'page-dhikr-list';
+        navEl = document.querySelector(`.nav-item[data-page="${navPageId}"]`);
       }
       if (navEl) navEl.classList.add('active');
 
@@ -913,7 +906,7 @@
       switchPage('page-home');
     }
 
-    // ⭐ ضبط قواعد الرجوع زر الموبايل (الانتقال المباشر للجهات المحددة)
+    // ⭐ ضبط قواعد الرجوع زر الموبايل (صفحة المسبحة توديك لقائمة الأذكار، وقائمة الأذكار توديك للرئيسية)
     window.onpopstate = function(event) {
       const drawer = document.getElementById('side-drawer');
       if (drawer && drawer.classList.contains('open')) {
@@ -1180,7 +1173,7 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      // ⭐ التحقق من الرابط أو الصفحة المخزنة للبقاء على نفس الصفحة بعد التحديث
+      // ⭐ التحقق من الرابط أو الصفحة المخزنة للبقاء على نفس الصفحة عند التحديث
       const hashPage = location.hash ? location.hash.replace('#', '') : null;
       const initialPage = (hashPage && document.getElementById(hashPage)) ? hashPage : (localState.current_page || 'page-home');
 
