@@ -730,7 +730,7 @@
         <div class="section-header-row">
           <div class="section-title">
             <span class="sec-icon">📜</span>
-            <span>قائمة الأذكار</span>
+            <span>قائمة الأذكار والمسبحة</span>
           </div>
           <button class="btn-nav-arrow" onclick="goHomeDirectly()">الرئيسية 🏠</button>
         </div>
@@ -758,18 +758,8 @@
     <div class="section-card" style="cursor: pointer;" onclick="closeDrawer(); switchPage('page-dhikr-list');">
       <div class="section-header-row">
         <div class="section-title" style="font-size: 1rem;">
-          <span class="sec-icon">📜</span>
-          <span>قائمة الأذكار</span>
-        </div>
-        <button class="btn-nav-arrow">الانتقال ←</button>
-      </div>
-    </div>
-
-    <div class="section-card" style="cursor: pointer;" onclick="closeDrawer(); switchPage('page-tasbeeh-main');">
-      <div class="section-header-row">
-        <div class="section-title" style="font-size: 1rem;">
           <span class="sec-icon">📿</span>
-          <span>المسبحة الإلكترونية</span>
+          <span>الأذكار والمسبحة</span>
         </div>
         <button class="btn-nav-arrow">الانتقال ←</button>
       </div>
@@ -923,7 +913,7 @@
       switchPage('page-home');
     }
 
-    // ⭐ ضبط قواعد الرجوع زر الموبايل
+    // ⭐ ضبط قواعد الرجوع زر الموبايل (الانتقال المباشر للجهات المحددة)
     window.onpopstate = function(event) {
       const drawer = document.getElementById('side-drawer');
       if (drawer && drawer.classList.contains('open')) {
