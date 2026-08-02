@@ -256,7 +256,7 @@
       background: var(--card-bg);
       backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 8px;
-      display: flex; justify-content: space-around; align-items: center;
+      display: flex; justify-around: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
     }
 
@@ -268,7 +268,6 @@
     .nav-item .nav-icon { font-size: 1.2rem; }
     .nav-item.active { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue-border); }
 
-    /* 📿 العداد الدائري للمسبحة الإلكترونية - إلغاء التظليل وإطار الضغط */
     .tasbeeh-container {
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; margin-top: 10px;
     }
@@ -614,11 +613,11 @@
   </div>
 
   <!-- 📿 القائمة الجانبية (المزيد والمسبحة) -->
-  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawerUI()"></div>
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
   <div class="side-drawer" id="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--card-stroke);">
       <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">⚙️ المزيد والمسبحة</h3>
-      <button class="circle-btn" onclick="closeDrawerUI()">✕</button>
+      <button class="circle-btn" onclick="closeDrawer()">✕</button>
     </div>
 
     <!-- المسبحة الإلكترونية -->
@@ -646,11 +645,38 @@
     </div>
   </div>
 
+  <div class="bottom-nav">
+    <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home')">
+      <span class="nav-icon">🏠</span>
+      <span>الرئيسية</span>
+    </div>
+    <div class="nav-item" data-page="page-english" onclick="switchPage('page-english')">
+      <span class="nav-icon">🇬🇧</span>
+      <span>الإنجليزي</span>
+    </div>
+    <div class="nav-item" data-page="page-courses" onclick="switchPage('page-courses')">
+      <span class="nav-icon">📐</span>
+      <span>الكورسات</span>
+    </div>
+    <div class="nav-item" data-page="page-goals" onclick="switchPage('page-goals')">
+      <span class="nav-icon">🎯</span>
+      <span>الأهداف</span>
+    </div>
+    <div class="nav-item" data-page="page-quran" onclick="switchPage('page-quran')">
+      <span class="nav-icon">📖</span>
+      <span>البقرة</span>
+    </div>
+    <div class="nav-item" onclick="openDrawer()">
+      <span class="nav-icon">☰</span>
+      <span>المزيد</span>
+    </div>
+  </div>
+
   <div class="modal" id="distract-modal">
     <div class="modal-content" style="text-align: center;">
       <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
-      <button class="btn-action" onclick="closeModalUI('distract-modal')">جاهز للعودة 💪</button>
+      <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
     </div>
   </div>
 
@@ -705,21 +731,24 @@
       } catch(e) { console.log("صوت تنبيه غير مدعوم"); }
     }
 
-    /* --- إدارة التنقل بزر الموبايل (History API المحدث) --- */
+    /* --- 📱 إدارة التنقل بزر رجوع الموبايل (History API) --- */
+    let currentPageId = 'page-home';
 
-    function switchPage(pageId, navEl = null, pushHistory = true) {
+    function switchPage(pageId, pushHistory = true) {
+      if (currentPageId === pageId && !pushHistory) return;
+
       localState.current_page = pageId;
+      currentPageId = pageId;
       saveStateLocally();
 
+      // إخفاء كافة الصفحات وإزالة التنشيط من الشريط السفلي
       document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
       const targetPage = document.getElementById(pageId);
       if (targetPage) targetPage.classList.add('active');
 
-      if (!navEl) {
-        navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-      }
+      const navEl = document.querySelector(`.nav-item[data-page="${pageId}"]`);
       if (navEl) navEl.classList.add('active');
 
       const welcomeCard = document.getElementById('top-welcome-card');
@@ -733,9 +762,10 @@
         quoteCard.style.display = 'none';
       }
 
+      // إضافة حالة للسجل عند التنقل بين الأقسام
       if (pushHistory) {
         if (pageId === 'page-home') {
-          history.pushState({ page: 'page-home' }, '', '#home');
+          history.pushState({ page: 'page-home' }, '', window.location.pathname);
         } else {
           history.pushState({ page: pageId }, '', '#' + pageId);
         }
@@ -745,60 +775,60 @@
     }
 
     function goHomeDirectly() {
-      if (history.state && history.state.page !== 'page-home') {
-        switchPage('page-home', null, true);
-      } else {
-        switchPage('page-home', null, false);
+      if (currentPageId !== 'page-home') {
+        history.back(); // يرجع للصفحة الرئيسية بالسجل
       }
     }
 
-    /* إدارة الأحداث عند الضغط على زر الرجوع للموبايل */
+    // المعالج الخاص بزر رجوع الموبايل
     window.onpopstate = function(event) {
       const drawer = document.getElementById('side-drawer');
-      if (drawer && drawer.classList.contains('open')) {
-        drawer.classList.remove('open');
-        document.getElementById('drawer-overlay').classList.remove('open');
-        return;
-      }
-
       const distractModal = document.getElementById('distract-modal');
-      if (distractModal && distractModal.style.display === 'flex') {
-        distractModal.style.display = 'none';
+
+      // 1. إذا كانت نافذة المسبحة / القائمة الجانبية مفتوحة، يتم إغلاقها أولاً والرجوع للصفحة
+      if (drawer && drawer.classList.contains('open')) {
+        closeDrawer(false);
         return;
       }
 
-      // الرجوع إلى الصفحة الرئيسية دائماً عند العمل بزر الموبايل من باقي الأقسام
-      if (event.state && event.state.page && event.state.page !== 'page-home') {
-        switchPage(event.state.page, null, false);
+      // 2. إذا كانت نافذة التشتت مفتوحة يتم إغلاقها
+      if (distractModal && distractModal.style.display === 'flex') {
+        closeModal('distract-modal', false);
+        return;
+      }
+
+      // 3. التنقل بين الصفحات والأقسام (يرجع دائماً للرئيسية)
+      if (event.state && event.state.page) {
+        switchPage(event.state.page, false);
       } else {
-        switchPage('page-home', null, false);
+        switchPage('page-home', false);
       }
     };
 
     function openModal(modalId) { 
       document.getElementById(modalId).style.display = 'flex'; 
-      history.pushState({ modal: modalId, page: localState.current_page }, '', '#' + modalId);
+      history.pushState({ modal: modalId }, '', '#' + modalId);
     }
-
-    function closeModalUI(modalId) { 
+    
+    function closeModal(modalId, popHistory = true) { 
       document.getElementById(modalId).style.display = 'none'; 
-      if (history.state && history.state.modal) { 
+      if (popHistory && history.state && history.state.modal) { 
         history.back(); 
       }
     }
-
+    
     function openDistractModal() { openModal('distract-modal'); }
 
     function openDrawer() {
       document.getElementById('side-drawer').classList.add('open');
       document.getElementById('drawer-overlay').classList.add('open');
-      history.pushState({ drawer: true, page: localState.current_page }, '', '#drawer');
+      history.pushState({ drawer: true }, '', '#drawer');
     }
 
-    function closeDrawerUI() {
+    function closeDrawer(popHistory = true) {
       document.getElementById('side-drawer').classList.remove('open');
       document.getElementById('drawer-overlay').classList.remove('open');
-      if (history.state && history.state.drawer) { 
+      if (popHistory && history.state && history.state.drawer) { 
         history.back(); 
       }
     }
@@ -1003,8 +1033,9 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      history.replaceState({ page: 'page-home' }, '', '#home');
-      switchPage('page-home', null, false);
+      // ضبط حالة السجل البادئة
+      history.replaceState({ page: 'page-home' }, '', window.location.pathname);
+      switchPage('page-home', false);
     }
 
     function changeSelectedDate(dateStr) {
