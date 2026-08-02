@@ -694,7 +694,7 @@
       </div>
     </div>
 
-    <!-- ==================== 📿 6. صفحة المسبحة الإلكترونية المستقلة ==================== -->
+    <!-- ==================== 📿 6. صفحة المسبحة الإلكترونية المستقلة (الخاصة بـ قسم الأذكار والمسبحة فقط) ==================== -->
     <div class="app-page" id="page-tasbeeh-main">
       <div class="section-card">
         <div class="section-header-row">
@@ -724,7 +724,7 @@
       </div>
     </div>
 
-    <!-- ==================== 📜 7. صفحة قائمة الأذكار المستقلة ==================== -->
+    <!-- ==================== 📜 7. صفحة قائمة الأذكار والمسبحة المستقلة ==================== -->
     <div class="app-page" id="page-dhikr-list">
       <div class="section-card">
         <div class="section-header-row">
@@ -737,7 +737,7 @@
         <div class="divider-line"></div>
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <p style="font-size: 0.85rem; color: var(--text-muted);">اختر ذكراً للبدء أو قم بإضافة وتعديل الأذكار:</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">اختر ذكراً للبدء بالعداد أو قم بإضافة وتعديل الأذكار:</p>
           <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="openAddDhikrModal()">➕ إضافة ذكر</button>
         </div>
 
@@ -906,7 +906,7 @@
       switchPage('page-home');
     }
 
-    // ⭐ ضبط قواعد الرجوع زر الموبايل (صفحة المسبحة توديك لقائمة الأذكار، وقائمة الأذكار توديك للرئيسية)
+    // ضبط قواعد الرجوع زر الموبايل (صفحة المسبحة توديك لقائمة الأذكار، وقائمة الأذكار توديك للرئيسية)
     window.onpopstate = function(event) {
       const drawer = document.getElementById('side-drawer');
       if (drawer && drawer.classList.contains('open')) {
@@ -964,6 +964,7 @@
       localStorage.setItem('dashboard_theme', isDark ? 'dark' : 'light');
     }
 
+    // 💡 المهام اليومية (تم إزالة المسبحة منها تماماً لتكون حصرية فقط في قسم الأذكار)
     const defaultTasks = [
       { id: 'quran', title: 'حفظ سورة البقرة', icon: '📖' },
       { id: 'english', title: 'تعلم الإنجليزية (الكورس)', icon: '🇬🇧' },
