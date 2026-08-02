@@ -256,7 +256,7 @@
       background: var(--card-bg);
       backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-stroke); border-radius: 20px; padding: 6px 8px;
-      display: flex; justify-content: space-around; align-items: center;
+      display: flex; justify-around: space-around; align-items: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1000;
     }
 
@@ -268,68 +268,26 @@
     .nav-item .nav-icon { font-size: 1.2rem; }
     .nav-item.active { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue-border); }
 
-    /* 📿 العداد الدائري المتقدم المطور عبر Conic-Gradient */
     .tasbeeh-container {
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; margin-top: 10px;
     }
-    
-    .circular-progress-outer {
-      width: 190px; height: 190px; border-radius: 50%;
-      background: conic-gradient(var(--accent-blue) 0deg, rgba(0,0,0,0.06) 0deg);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-soft); transition: background 0.2s ease;
-      padding: 8px;
-    }
-
     .circular-counter {
-      width: 100%; height: 100%; border-radius: 50%;
+      width: 170px; height: 170px; border-radius: 50%;
       background: var(--card-bg);
-      backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--card-stroke);
+      border: 6px solid var(--accent-blue);
+      box-shadow: var(--shadow-soft), inset 0 0 15px rgba(0,0,0,0.05);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       cursor: pointer; transition: transform 0.1s ease; position: relative;
-      outline: none; -webkit-tap-highlight-color: transparent;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .circular-counter:focus, .circular-counter:active { outline: none !important; -webkit-tap-highlight-color: transparent !important; }
-    .circular-counter:active { transform: scale(0.94); }
-    .circular-counter .count-num { font-size: 2.8rem; font-weight: 900; color: var(--text-dark); pointer-events: none; line-height: 1; }
-    .circular-counter .count-label { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; margin-top: 4px; pointer-events: none; }
-    .circular-counter .target-label { font-size: 0.7rem; color: var(--accent-blue); font-weight: 800; margin-top: 2px; }
-
-    /* 📜 قائمة الأذكار المعززة */
-    .dhikr-card {
-      background: rgba(255, 255, 255, 0.3); border: 1px solid var(--card-stroke);
-      border-radius: var(--inner-radius); padding: 12px 14px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: relative; margin-bottom: 8px; transition: var(--transition);
-      cursor: pointer;
+    .circular-counter:focus, .circular-counter:active {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
     }
-    .dhikr-card.active { border: 1px solid var(--accent-blue); background: var(--accent-blue-light); }
-    .dhikr-info { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; padding-left: 10px; }
-    .dhikr-text { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
-    .dhikr-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: flex; gap: 10px; }
-    
-    .dots-menu-btn {
-      background: transparent; border: none; font-size: 1.2rem; cursor: pointer;
-      color: var(--text-dark); padding: 4px 8px; border-radius: 8px; opacity: 0.7;
-    }
-    .dots-menu-btn:hover { opacity: 1; background: rgba(0,0,0,0.05); }
-
-    .dropdown-menu {
-      position: absolute; left: 10px; top: 40px; background: var(--card-bg);
-      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--card-stroke); border-radius: 12px;
-      box-shadow: var(--shadow-soft); display: none; flex-direction: column;
-      z-index: 100; min-width: 140px; overflow: hidden;
-    }
-    .dropdown-menu.show { display: flex; }
-    .dropdown-item {
-      padding: 10px 14px; font-size: 0.8rem; font-weight: bold; color: var(--text-dark);
-      cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;
-    }
-    .dropdown-item:hover { background: var(--accent-blue-light); }
-    .dropdown-item.danger { color: #d9534f; }
-    .dropdown-item.danger:hover { background: rgba(217, 83, 79, 0.1); }
+    .circular-counter:active { transform: scale(0.95); }
+    .circular-counter .count-num { font-size: 2.5rem; font-weight: 900; color: var(--text-dark); pointer-events: none; }
+    .circular-counter .count-label { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; margin-top: -4px; pointer-events: none; }
 
     .side-drawer {
       position: fixed; top: 0; right: -100%; width: 100%; max-width: 360px; height: 100%;
@@ -652,74 +610,37 @@
       </div>
     </div>
 
-    <!-- ==================== 📿 6. صفحة المسبحة والأذكار المستقلة ==================== -->
-    <div class="app-page" id="page-tasbeeh-main">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📿</span>
-            <span>المسبحة الإلكترونية</span>
-          </div>
-          <button class="btn-nav-arrow" onclick="switchPage('page-dhikr-list')">قائمة الأذكار 📜</button>
-        </div>
-        <div class="divider-line"></div>
-
-        <div style="text-align: center; margin: 10px 0;">
-          <p id="active-dhikr-display-text" style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark); line-height: 1.4;">سبحان الله وبحمده، سبحان الله العظيم</p>
-        </div>
-
-        <div class="tasbeeh-container">
-          <!-- الإطار الدائري المعزز بشريط التقدم conic-gradient -->
-          <div class="circular-progress-outer" id="tasbeeh-circle-progress">
-            <div class="circular-counter" onclick="incrementTasbeeh()" tabindex="-1">
-              <span class="count-num" id="tasbeeh-count-display">0</span>
-              <span class="count-label">اضغط للعداد</span>
-              <span class="target-label" id="tasbeeh-target-display">الدورة: 0 / 33</span>
-            </div>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: bold;" id="tasbeeh-total-display">المجموع الكلي: 0</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== 📜 7. صفحة قائمة الأذكار المستقلة ==================== -->
-    <div class="app-page" id="page-dhikr-list">
-      <div class="section-card">
-        <div class="section-header-row">
-          <div class="section-title">
-            <span class="sec-icon">📜</span>
-            <span>قائمة الأذكار</span>
-          </div>
-          <button class="btn-nav-arrow" onclick="goHomeDirectly()">الرئيسية 🏠</button>
-        </div>
-        <div class="divider-line"></div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <p style="font-size: 0.85rem; color: var(--text-muted);">اختر ذكراً للبدء أو قم بإضافة وتعديل الأذكار:</p>
-          <button class="btn-action" style="font-size: 0.75rem; padding: 4px 10px;" onclick="openAddDhikrModal()">➕ إضافة ذكر</button>
-        </div>
-
-        <div id="dhikr-list-container" style="margin-top: 10px;"></div>
-      </div>
-    </div>
-
   </div>
 
   <!-- 📿 القائمة الجانبية (المزيد) -->
   <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
   <div class="side-drawer" id="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--card-stroke);">
-      <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">⚙️ الإعدادات والمزيد</h3>
+      <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-dark);">⚙️ المزيد والمسبحة</h3>
       <button class="circle-btn" onclick="closeDrawer()">✕</button>
     </div>
 
-    <div class="section-card" style="cursor: pointer;" onclick="closeDrawer(); switchPage('page-dhikr-list');">
+    <!-- المسبحة الإلكترونية -->
+    <div class="section-card">
       <div class="section-header-row">
         <div class="section-title" style="font-size: 1rem;">
           <span class="sec-icon">📿</span>
-          <span>المسبحة والأذكار</span>
+          <span>المسبحة الإلكترونية</span>
         </div>
-        <button class="btn-nav-arrow">الانتقال ←</button>
+      </div>
+      <div class="divider-line"></div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted);">الذكر / الدعاء الحالى:</label>
+        <input type="text" id="tasbeeh-text-input" class="text-input-field" value="سبحان الله وبحمده، سبحان الله العظيم" onchange="updateTasbeehText(this.value)">
+      </div>
+
+      <div class="tasbeeh-container">
+        <div class="circular-counter" onclick="incrementTasbeeh()" tabindex="-1">
+          <span class="count-num" id="tasbeeh-count-display">0</span>
+          <span class="count-label">اضغط للعداد</span>
+        </div>
+        <button class="btn-snooze" style="padding: 6px 14px; font-size: 0.8rem;" onclick="resetTasbeeh()">🔄 إعادة الضبط (تصفير)</button>
       </div>
     </div>
   </div>
@@ -746,39 +667,17 @@
       <span class="nav-icon">📖</span>
       <span>البقرة</span>
     </div>
-    <div class="nav-item" data-page="page-dhikr-list" onclick="switchPage('page-dhikr-list', this)">
-      <span class="nav-icon">📿</span>
-      <span>المسبحة</span>
+    <div class="nav-item" onclick="openDrawer()">
+      <span class="nav-icon">☰</span>
+      <span>المزيد</span>
     </div>
   </div>
 
-  <!-- مودال للتشتت -->
   <div class="modal" id="distract-modal">
     <div class="modal-content" style="text-align: center;">
       <h3 style="margin-bottom: 10px;">خذ نفساً عميقاً 🌿</h3>
       <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem;">التشتت طبيعي! شهيق 4 ثوانٍ.. زفير 4 ثوانٍ.. ثم عد لتركيزك.</p>
       <button class="btn-action" onclick="closeModal('distract-modal')">جاهز للعودة 💪</button>
-    </div>
-  </div>
-
-  <!-- مودال تعديل / إضافة الذكر -->
-  <div class="modal" id="dhikr-modal">
-    <div class="modal-content">
-      <h3 id="dhikr-modal-title" style="margin-bottom: 12px; font-weight: 800;">تعديل الذكر</h3>
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div>
-          <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 4px;">نص الذكر بالكامل:</label>
-          <textarea id="dhikr-text-edit" class="text-input-field" rows="3" style="resize: vertical;" placeholder="أدخل نص الذكر..."></textarea>
-        </div>
-        <div>
-          <label style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 4px;">عدد التسبيحات للدورة الواحدة:</label>
-          <input type="number" id="dhikr-target-edit" class="number-input" style="width: 100%; text-align: right;" value="33" min="1">
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-action" style="flex: 1;" onclick="saveDhikrModal()">حفظ التعديلات</button>
-          <button class="btn-snooze" style="flex: 1;" onclick="closeModal('dhikr-modal')">إلغاء</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -834,6 +733,8 @@
     }
 
     /* --- إدارة التنقل بزر الموبايل (History API) --- */
+    let isInternalNav = false;
+
     function switchPage(pageId, navEl = null, pushHistory = true) {
       localState.current_page = pageId;
       saveStateLocally();
@@ -861,6 +762,7 @@
       }
 
       if (pushHistory) {
+        isInternalNav = true;
         history.pushState({ page: pageId }, '', '#' + pageId);
       }
 
@@ -871,34 +773,27 @@
       switchPage('page-home');
     }
 
-    // ⭐ ضبط قواعد الرجوع بزر الموبايل بدقة بحسب المتطلبات
     window.onpopstate = function(event) {
       const drawer = document.getElementById('side-drawer');
       if (drawer && drawer.classList.contains('open')) {
         closeDrawer(false);
         return;
       }
-      const modals = document.querySelectorAll('.modal');
-      let modalOpen = false;
-      modals.forEach(m => {
-        if (m.style.display === 'flex') {
-          closeModal(m.id, false);
-          modalOpen = true;
+      const distractModal = document.getElementById('distract-modal');
+      if (distractModal && distractModal.style.display === 'flex') {
+        closeModal('distract-modal', false);
+        return;
+      }
+
+      if (event.state && event.state.page) {
+        switchPage(event.state.page, null, false);
+      } else {
+        const hashPage = location.hash.replace('#', '');
+        if (hashPage && document.getElementById(hashPage)) {
+          switchPage(hashPage, null, false);
+        } else {
+          switchPage('page-home', null, false);
         }
-      });
-      if (modalOpen) return;
-
-      const currentPage = localState.current_page;
-
-      if (currentPage === 'page-tasbeeh-main') {
-        // عند الضغط على زر الرجوع من صفحة الذكر -> يعود لصفحة الأذكار
-        switchPage('page-dhikr-list', null, false);
-      } else if (currentPage === 'page-dhikr-list') {
-        // عند الضغط على زر الرجوع من صفحة الأذكار -> يعود للرئيسية
-        switchPage('page-home', null, false);
-      } else if (currentPage !== 'page-home') {
-        // باقي الأقسام ترجع للرئيسية مباشرة
-        switchPage('page-home', null, false);
       }
     };
 
@@ -1046,16 +941,6 @@
 
     let selectedDate = getTodayString();
 
-    // 📿 الأذكار الافتراضية
-    const defaultDhikrList = [
-      { id: '1', text: 'سبحان الله وبحمده، سبحان الله العظيم', count: 0, total: 0, target: 33 },
-      { id: '2', text: 'أستغفر الله العظيم وأتوب إليه', count: 0, total: 0, target: 100 },
-      { id: '3', text: 'الحمد لله رب العالمين', count: 0, total: 0, target: 33 },
-      { id: '4', text: 'الله أكبر', count: 0, total: 0, target: 33 },
-      { id: '5', text: 'لا إله إلا الله وحده لا شريك له', count: 0, total: 0, target: 100 },
-      { id: '6', text: 'اللهم صلِّ وسلم على نبينا محمد', count: 0, total: 0, target: 100 }
-    ];
-
     let localState = {
       current_page: 'page-home',
       daily_history: {}, 
@@ -1076,8 +961,8 @@
       savings: 15000, followers: 1200,
       english_lessons_status: {},
       adhan_enabled: true,
-      dhikr_list: defaultDhikrList,
-      active_dhikr_id: '1'
+      tasbeeh_count: 0,
+      tasbeeh_text: "سبحان الله وبحمده، سبحان الله العظيم"
     };
 
     function saveStateLocally() { localStorage.setItem('dashboard_local_state', JSON.stringify(localState)); }
@@ -1093,12 +978,9 @@
       if (!localState.current_page) localState.current_page = 'page-home';
       if (!localState.english_lessons_status) localState.english_lessons_status = {};
       if (localState.adhan_enabled === undefined) localState.adhan_enabled = true;
+      if (localState.tasbeeh_count === undefined) localState.tasbeeh_count = 0;
+      if (!localState.tasbeeh_text) localState.tasbeeh_text = "سبحان الله وبحمده، سبحان الله العظيم";
       
-      if (!localState.dhikr_list || localState.dhikr_list.length === 0) {
-        localState.dhikr_list = defaultDhikrList;
-      }
-      if (!localState.active_dhikr_id) localState.active_dhikr_id = localState.dhikr_list[0].id;
-
       if (!localState.course_lectures) {
         localState.course_lectures = { decor: [], finishing: [] };
       }
@@ -1126,7 +1008,6 @@
       renderEnglishAcademy();
       renderCourseLectures('decor');
       renderCourseLectures('finishing');
-      renderDhikrList();
       renderTasbeeh();
       
       document.getElementById('quran-page-input').value = localState.quran_page || 2;
@@ -1138,8 +1019,16 @@
       document.getElementById('followers-count').value = localState.followers || 1200;
       updateFollowersUI();
 
-      history.replaceState({ page: 'page-home' }, '', '#page-home');
-      switchPage('page-home', null, false);
+      // التعرف الذكي على الصفحة عند التحديث
+      const hashPage = location.hash.replace('#', '');
+      let initialPage = localState.current_page || 'page-home';
+      
+      if (hashPage && document.getElementById(hashPage)) {
+        initialPage = hashPage;
+      }
+
+      history.replaceState({ page: initialPage }, '', '#' + initialPage);
+      switchPage(initialPage, null, false);
     }
 
     function changeSelectedDate(dateStr) {
@@ -1413,189 +1302,28 @@
       container.innerHTML = html;
     }
 
-    /* ==================== 📿 قسم المسبحة وإدارة الأذكار ==================== */
-    let currentEditingDhikrId = null;
-
-    function getActiveDhikr() {
-      let active = localState.dhikr_list.find(d => d.id === localState.active_dhikr_id);
-      if (!active && localState.dhikr_list.length > 0) {
-        active = localState.dhikr_list[0];
-        localState.active_dhikr_id = active.id;
-      }
-      return active;
-    }
-
     function renderTasbeeh() {
-      const dhikr = getActiveDhikr();
-      if (!dhikr) return;
-
-      const textDisplay = document.getElementById('active-dhikr-display-text');
-      const countDisplay = document.getElementById('tasbeeh-count-display');
-      const targetDisplay = document.getElementById('tasbeeh-target-display');
-      const totalDisplay = document.getElementById('tasbeeh-total-display');
-      const circleOuter = document.getElementById('tasbeeh-circle-progress');
-
-      if (textDisplay) textDisplay.innerText = dhikr.text;
-      if (countDisplay) countDisplay.innerText = dhikr.count;
-      if (targetDisplay) targetDisplay.innerText = `الدورة: ${dhikr.count} / ${dhikr.target}`;
-      if (totalDisplay) totalDisplay.innerText = `المجموع الكلي: ${dhikr.total || 0}`;
-
-      // 🌀 التكنيك الخاص بتطبيق conic-gradient لإلتفاف شريط التقدم الدائري بسلاسة
-      if (circleOuter) {
-        const percentage = Math.min(100, (dhikr.count / dhikr.target) * 100);
-        const degrees = (percentage / 100) * 360;
-        circleOuter.style.background = `conic-gradient(var(--accent-blue) ${degrees}deg, rgba(0,0,0,0.06) ${degrees}deg)`;
-      }
+      const display = document.getElementById('tasbeeh-count-display');
+      const input = document.getElementById('tasbeeh-text-input');
+      if (display) display.innerText = localState.tasbeeh_count || 0;
+      if (input) input.value = localState.tasbeeh_text || '';
     }
 
     function incrementTasbeeh() {
-      const dhikr = getActiveDhikr();
-      if (!dhikr) return;
-
-      dhikr.count = (dhikr.count || 0) + 1;
-      dhikr.total = (dhikr.total || 0) + 1;
-
-      // عند اكتمال الدورة (تخطي الهدف)
-      if (dhikr.count >= dhikr.target) {
-        dhikr.count = 0; // التصفير التلقائي للدورة فقط لبدء دورة جديدة
-        if (navigator.vibrate) navigator.vibrate(100); // اهتزاز خفيف للموبايل كإشعار إنجاز
-      }
-
+      localState.tasbeeh_count = (localState.tasbeeh_count || 0) + 1;
       saveStateLocally();
       renderTasbeeh();
-      renderDhikrList();
     }
 
-    function selectActiveDhikr(id) {
-      localState.active_dhikr_id = id;
+    function resetTasbeeh() {
+      localState.tasbeeh_count = 0;
       saveStateLocally();
-      renderDhikrList();
-      renderTasbeeh();
-      switchPage('page-tasbeeh-main');
-    }
-
-    function renderDhikrList() {
-      const container = document.getElementById('dhikr-list-container');
-      if (!container) return;
-
-      let html = '';
-      localState.dhikr_list.forEach(dhikr => {
-        const isActive = dhikr.id === localState.active_dhikr_id;
-        html += `
-          <div class="dhikr-card ${isActive ? 'active' : ''}" onclick="selectActiveDhikr('${dhikr.id}')">
-            <div class="dhikr-info">
-              <span class="dhikr-text">${dhikr.text}</span>
-              <div class="dhikr-meta">
-                <span>🎯 المستهدف: ${dhikr.target}</span>
-                <span>🔢 المجموع: ${dhikr.total || 0}</span>
-              </div>
-            </div>
-            <button class="dots-menu-btn" onclick="toggleDhikrDropdown(event, '${dhikr.id}')">⋮</button>
-            <div class="dropdown-menu" id="dropdown-${dhikr.id}">
-              <div class="dropdown-item" onclick="openEditDhikrModal(event, '${dhikr.id}')">✏️ تعديل الذكر</div>
-              <div class="dropdown-item" onclick="resetDhikrCounter(event, '${dhikr.id}')">🔄 تصفير العداد</div>
-              <div class="dropdown-item danger" onclick="deleteDhikr(event, '${dhikr.id}')">🗑️ حذف الذكر</div>
-            </div>
-          </div>`;
-      });
-
-      container.innerHTML = html;
-    }
-
-    function toggleDhikrDropdown(e, id) {
-      e.stopPropagation();
-      document.querySelectorAll('.dropdown-menu').forEach(m => {
-        if (m.id !== `dropdown-${id}`) m.classList.remove('show');
-      });
-      const menu = document.getElementById(`dropdown-${id}`);
-      if (menu) menu.classList.toggle('show');
-    }
-
-    // إغلاق القوائم المنسدلة عند الضغط في أي مكان
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-    });
-
-    function resetDhikrCounter(e, id) {
-      e.stopPropagation();
-      const dhikr = localState.dhikr_list.find(d => d.id === id);
-      if (dhikr) {
-        dhikr.count = 0;
-        dhikr.total = 0;
-        saveStateLocally();
-        renderTasbeeh();
-        renderDhikrList();
-      }
-    }
-
-    function deleteDhikr(e, id) {
-      e.stopPropagation();
-      if (localState.dhikr_list.length <= 1) {
-        alert("يجب أن يتبقى ذكر واحد على الأقل في القائمة.");
-        return;
-      }
-      localState.dhikr_list = localState.dhikr_list.filter(d => d.id !== id);
-      if (localState.active_dhikr_id === id) {
-        localState.active_dhikr_id = localState.dhikr_list[0].id;
-      }
-      saveStateLocally();
-      renderDhikrList();
       renderTasbeeh();
     }
 
-    function openEditDhikrModal(e, id) {
-      e.stopPropagation();
-      currentEditingDhikrId = id;
-      const dhikr = localState.dhikr_list.find(d => d.id === id);
-      if (dhikr) {
-        document.getElementById('dhikr-modal-title').innerText = "تعديل الذكر";
-        document.getElementById('dhikr-text-edit').value = dhikr.text;
-        document.getElementById('dhikr-target-edit').value = dhikr.target || 33;
-        openModal('dhikr-modal');
-      }
-    }
-
-    function openAddDhikrModal() {
-      currentEditingDhikrId = null;
-      document.getElementById('dhikr-modal-title').innerText = "إضافة ذكر جديد";
-      document.getElementById('dhikr-text-edit').value = "";
-      document.getElementById('dhikr-target-edit').value = 33;
-      openModal('dhikr-modal');
-    }
-
-    function saveDhikrModal() {
-      const textVal = document.getElementById('dhikr-text-edit').value.trim();
-      const targetVal = parseInt(document.getElementById('dhikr-target-edit').value) || 33;
-
-      if (!textVal) {
-        alert("يرجى كتابة نص الذكر!");
-        return;
-      }
-
-      if (currentEditingDhikrId) {
-        // تعديل ذكر حالي
-        const dhikr = localState.dhikr_list.find(d => d.id === currentEditingDhikrId);
-        if (dhikr) {
-          dhikr.text = textVal;
-          dhikr.target = targetVal;
-        }
-      } else {
-        // إضافة ذكر جديد
-        const newId = Date.now().toString();
-        localState.dhikr_list.push({
-          id: newId,
-          text: textVal,
-          count: 0,
-          total: 0,
-          target: targetVal
-        });
-        localState.active_dhikr_id = newId;
-      }
-
+    function updateTasbeehText(val) {
+      localState.tasbeeh_text = val;
       saveStateLocally();
-      renderDhikrList();
-      renderTasbeeh();
-      closeModal('dhikr-modal');
     }
 
     function renderCourseLectures(courseKey) {
